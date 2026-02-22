@@ -1,15 +1,10 @@
 #include <iostream>
 #include <raylib.h>
-
-namespace WindowConfig {
-    std::int32_t WindowWidth = 1600;
-    std::int32_t WindowHeight = 900;
-    std::string WindowTitle = "Raylib Pacman Game";
-}
+#include "config.h"
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
-    InitWindow(WindowConfig::WindowWidth,WindowConfig::WindowHeight, WindowConfig::WindowTitle.c_str()); // c_str is required because Raylib is written in C and expects a char* string.
+    InitWindow(WindowConfig::WindowWidth,WindowConfig::WindowHeight, WindowConfig::WindowTitle));
    SetTargetFPS(60);
     while (!WindowShouldClose()) {
         BeginDrawing();
