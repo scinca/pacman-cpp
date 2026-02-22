@@ -10,3 +10,11 @@ add_executable(pacman_cpp main.cpp
 
 find_package(raylib REQUIRED)
 target_link_libraries(pacman_cpp raylib)
+
+# copy assets folder to the build directory
+add_custom_command(
+        TARGET pacman_cpp POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/assets
+        $<TARGET_FILE_DIR:pacman_cpp>/assets
+)

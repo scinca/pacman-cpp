@@ -8,10 +8,10 @@
 #include <string>
 
 
-class map {
+class Map {
     public:
     std::expected<void, std::string> load(const std::string& filename);
-    std::expected<void, std::string> draw(const std::string& filename);
+    void draw() const;
 
     private:
     std::string loaded_map;
