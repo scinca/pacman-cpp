@@ -6,7 +6,7 @@
 
 #include <fstream>
 
-#include "config.h"
+#include "../config.h"
 #include <raylib.h>
 
 std::expected<void, std::string> Map::load(const std::string& filename) { // should expect a 50x 28 grid

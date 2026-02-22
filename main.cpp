@@ -1,7 +1,7 @@
 #include <iostream>
 #include <raylib.h>
 #include "config.h"
-#include "map.h" // for the game map class
+#include "map/map.h"
 
 
 int main() {
