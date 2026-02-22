@@ -17,7 +17,7 @@ int main() {
         std::cerr << "Failed to load map: " << loading_error << "\n";
         // handle error (e.g., exit or fallback)
     }else {
-        std::cout<< "Map loaded successfully\n";
+        std::cout << "Map loaded successfully\n";
     }
     while (!WindowShouldClose()) {
         BeginDrawing();

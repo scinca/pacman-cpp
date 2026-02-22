@@ -19,7 +19,7 @@ std::expected<void, std::string> Map::load(const std::string& filename) { // sho
                            std::istreambuf_iterator<char>());
         std::erase(loaded_map, '\n'); //remove newline so for loop can draw map.
         std::erase(loaded_map, '\r'); // needed on Windows
-        if (loaded_map.length() != 1400) {
+        if (loaded_map.length() != 1400) { // the grid is 50 x 28 so its total length is 1400
             return std::unexpected("Error loading Map, Map doesn't fit into the grid. Current Length:" + std::to_string(loaded_map.length()));
         }
 
