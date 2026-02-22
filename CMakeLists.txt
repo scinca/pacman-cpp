@@ -4,3 +4,6 @@ project(pacman_cpp)
 set(CMAKE_CXX_STANDARD 23)
 
 add_executable(pacman_cpp main.cpp)
+
+find_package(raylib REQUIRED)
+target_link_libraries(pacman_cpp raylib)
