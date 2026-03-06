@@ -1,14 +1,15 @@
 #include <iostream>
 #include <raylib.h>
 #include "config.h"
-#include "map.h" // for the game map class
-
+#include "map/map.h"
+#include "time/deltaTime.h"
 
 int main() {
     const std::string default_filename { "./assets/default_map.txt"};
 
     InitWindow(WindowConfig::WindowWidth,WindowConfig::WindowHeight, WindowConfig::WindowTitle);
     SetTargetFPS(60);
+    Time Timer;
     Map game_map;
     auto loading_result = game_map.load(default_filename);
     if (!loading_result) {
@@ -20,6 +21,7 @@ int main() {
         std::cout << "Map loaded successfully\n";
     }
     while (!WindowShouldClose()) {
+
         BeginDrawing();
         ClearBackground(BLACK);
 
