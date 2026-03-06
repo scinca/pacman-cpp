@@ -7,7 +7,9 @@ add_executable(pacman_cpp main.cpp
         config.h
         map/map.cpp
         map/map.h
-        players/player_base.h)
+        players/player_base.h
+        time/deltaTime.cpp
+        time/deltaTime.h)
 
 find_package(raylib REQUIRED)
 target_link_libraries(pacman_cpp raylib)
