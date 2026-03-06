@@ -25,6 +25,7 @@ private:
     int freeTileCount = 0;
     int exploredTileCount = 0;
 
+
 };
 
 

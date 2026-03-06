@@ -42,8 +42,14 @@ void Map::draw() const {
         const std::int32_t tile_x = (i % 50) * TileWidth + WindowConfig::WindowRoot;
         const std::int32_t tile_y = (i / 50) * TileWidth + WindowConfig::WindowRoot;
 
+        const int center_x = tile_x + TileWidth / 2;
+        const int center_y = tile_y + TileWidth / 2;
+
         if (loaded_map[i] == '#') {
             DrawRectangle(tile_x, tile_y, TileWidth, TileWidth, RAYWHITE);
+        }
+        if (loaded_map[i] == '0' && !explored_map[i]) {
+            DrawCircle(center_x, center_y, PointRadius, GREEN);
         }
     }
 }
