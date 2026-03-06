@@ -79,3 +79,8 @@ bool Map::isExplored(const int x, const int y) const {
     if (x < 0 || x >= 50 || y < 0 || y >= 28) return false;
     return explored_map[y * 50 + x];
 }
+
+bool Map::canMove(const int tileNumber) const {
+    return loaded_map[tileNumber] == '0';
+
+}

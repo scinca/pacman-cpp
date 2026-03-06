@@ -10,6 +10,7 @@ add_executable(pacman_cpp main.cpp
         players/player_base.h
         time/deltaTime.cpp
         time/deltaTime.h
+        players/player_base.cpp
 )
 
 find_package(raylib REQUIRED)
