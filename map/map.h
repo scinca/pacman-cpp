@@ -15,6 +15,7 @@ class Map {
 
     private:
     std::string loaded_map;
+
 };
 
 

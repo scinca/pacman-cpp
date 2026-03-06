@@ -11,15 +11,16 @@ int main() {
     SetTargetFPS(60);
     Time Timer;
     Map game_map;
-    auto loading_result = game_map.load(default_filename);
+    auto loading_result { game_map.load(default_filename)};
     if (!loading_result) {
         // result contains an error
         const std::string_view loading_error = loading_result.error();
         std::cerr << "Failed to load map: " << loading_error << "\n";
-        // handle error (e.g., exit or fallback)
+        return 1;
     }else {
         std::cout << "Map loaded successfully\n";
     }
+
     while (!WindowShouldClose()) {
 
         BeginDrawing();

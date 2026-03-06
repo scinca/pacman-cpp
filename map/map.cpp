@@ -36,7 +36,7 @@ std::expected<void, std::string> Map::load(const std::string& filename) { // sho
 
 
     void Map::draw() const {
-    for (std::int32_t i = 0; i < loaded_map.size(); i++) {
+    for (int i = 0; i < loaded_map.size(); i++) {
         const std::int32_t tile_x = (i % 50) * TileWidth + WindowConfig::WindowRoot;
         const std::int32_t tile_y = (i / 50) * TileWidth + WindowConfig::WindowRoot;
 
