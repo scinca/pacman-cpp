@@ -26,6 +26,8 @@ std::expected<void, std::string> Map::load(const std::string& filename) { // sho
         if (file.fail() && !file.eof()) {
             return std::unexpected("Error reading file: " + filename);
         }
+        explored_map.assign(loaded_map.size(), false);
+        freeTileCount = static_cast<int>(count(loaded_map.begin(), loaded_map.end(), '0'));
 
         return {};
 
@@ -35,18 +37,45 @@ std::expected<void, std::string> Map::load(const std::string& filename) { // sho
 
 
 
-    void Map::draw() const {
-    for (std::int32_t i = 0; i < loaded_map.size(); i++) {
+void Map::draw() const {
+    for (int i = 0; i < loaded_map.size(); i++) {
         const std::int32_t tile_x = (i % 50) * TileWidth + WindowConfig::WindowRoot;
         const std::int32_t tile_y = (i / 50) * TileWidth + WindowConfig::WindowRoot;
+
+        const int center_x = tile_x + TileWidth / 2;
+        const int center_y = tile_y + TileWidth / 2;
 
         if (loaded_map[i] == '#') {
             DrawRectangle(tile_x, tile_y, TileWidth, TileWidth, RAYWHITE);
         }
+        if (loaded_map[i] == '0' && !explored_map[i]) {
+            DrawCircle(center_x, center_y, PointRadius, GREEN);
+        }
+    }
+}
+
+std::string Map::getMap() {
+    return loaded_map;
+}
+
+bool Map::allExplored() const {
+    return freeTileCount == exploredTileCount;
+}
+
+
+
+void Map::explore(const int x, const int y) {
+    if (x < 0 || x >= 50 || y < 0 || y >= 28) return; // outside border
+    const int index = y * 50 + x;
+    if (!explored_map[index] && loaded_map[index] == '0') {
+        explored_map[index] = true;
+        exploredTileCount++;
     }
 }
 
 
 
-
-
+bool Map::isExplored(const int x, const int y) const {
+    if (x < 0 || x >= 50 || y < 0 || y >= 28) return false;
+    return explored_map[y * 50 + x];
+}
