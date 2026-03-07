@@ -25,9 +25,12 @@ class Map {
     std::string getMap();
     [[nodiscard]] bool allExplored() const;
     void explore(int x, int y);
+    void explore(int tile);
 
     [[nodiscard]] bool isExplored(int x, int y) const;
-    bool canMove(int tileNumber) const;
+    [[nodiscard]] bool canMove(int tileNumber) const;
+
+    char getTile(int x, int y) const;
 
 private:
     std::string loaded_map;

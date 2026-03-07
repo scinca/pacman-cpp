@@ -73,6 +73,14 @@ void Map::explore(const int x, const int y) {
     }
 }
 
+void Map::explore(const int tile) {
+    if (tile<0 || tile> loaded_map.size()) return;
+
+    if (!explored_map[tile]&& loaded_map[tile] == '0') {
+        explored_map[tile] = true;
+        exploredTileCount++;
+    }
+}
 
 
 bool Map::isExplored(const int x, const int y) const {
@@ -81,6 +89,15 @@ bool Map::isExplored(const int x, const int y) const {
 }
 
 bool Map::canMove(const int tileNumber) const {
+    if (tileNumber < 0 || tileNumber >= static_cast<int>(loaded_map.size()))
+        return false;
+
     return loaded_map[tileNumber] == '0';
 
+}
+
+char Map::getTile(int x, int y) const {
+    if (x < 0 || x >= 50 || y < 0 || y >= 28)
+        return '#';
+    return loaded_map[y * 50 + x];
 }

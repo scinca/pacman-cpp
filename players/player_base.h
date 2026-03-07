@@ -5,8 +5,8 @@
 #ifndef PACMAN_CPP_PLAYER_BASE_H
 #define PACMAN_CPP_PLAYER_BASE_H
 #include <vector>
-
-#include "../map/map.h"
+class Map;
+class Time;
 
 enum class Direction {
     UP,DOWN,LEFT,RIGHT, NONE
@@ -15,12 +15,20 @@ enum class Direction {
 
 class PlayerBase {
     public:
-    PlayerBase(Map *game_map);
+    virtual ~PlayerBase();
+
+    PlayerBase(Map *game_map, Time *time);
+    virtual void move(Direction requestedDirection)= 0;
+
+    virtual void move() { move(Direction::NONE); }
+    virtual void draw() const =0;
 
     protected:
-    int positionX;
-    int positionY;
+    bool checkMoveValidity(Direction move);
+    float positionX;
+    float positionY;
     int currentTile;
+    int velocity = 150;
     Direction currentDirection = Direction::NONE;
 
     void getTile();
@@ -28,6 +36,7 @@ class PlayerBase {
 
     std::vector<Direction> possibleMoves;
     Map *map = nullptr;
+    Time *time = nullptr;
 
 };
 

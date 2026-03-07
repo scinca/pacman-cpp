@@ -4,6 +4,7 @@
 
 #ifndef PACMAN_CPP_CONFIG_H
 #define PACMAN_CPP_CONFIG_H
+#include <cstdint>
 
 namespace WindowConfig {
     inline constexpr std::int32_t WindowWidth { 1601}; //50 tiles

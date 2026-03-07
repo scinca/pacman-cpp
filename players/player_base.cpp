@@ -3,16 +3,25 @@
 //
 
 #include "player_base.h"
+
+#include <algorithm>
+#include <raylib.h>
 #include "../config.h"
+#include "../time/deltaTime.h"
+#include "../map/map.h"
 
-PlayerBase::PlayerBase(Map *game_map)
-    :positionX(WindowConfig::WindowRoot+ TileWidth/2), positionY(WindowConfig::WindowRoot + TileWidth/2), map(game_map)
+PlayerBase::PlayerBase(Map *game_map, Time *time)// currentTile is 0 because I will implement a system to set currentTile starting Point in the map
+    :positionX(WindowConfig::WindowRoot+ TileWidth/2), positionY(WindowConfig::WindowRoot + TileWidth/2), currentTile(0), map(game_map), time(time)
+
 {
-
+    getTile();
+    printf("INIT: posX=%.1f posY=%.1f tile=%d\n", positionX, positionY, currentTile);
 }
 
 void PlayerBase::getTile() {
-    currentTile = ((positionY- WindowConfig::WindowRoot) / TileWidth) * 50 + ((positionX-WindowConfig::WindowRoot) / TileWidth);
+    const int tileX = static_cast<int>(positionX - WindowConfig::WindowRoot) / TileWidth;
+    const int tileY = static_cast<int>(positionY - WindowConfig::WindowRoot) / TileWidth;
+    currentTile = tileY * 50 + tileX;
 }
 
 
@@ -24,26 +33,40 @@ void PlayerBase::getTile() {
 (0, WindowHeight) ── (WindowWidth, WindowHeight)
  */
 
-void PlayerBase::checkSurroundingTiles() {
-    possibleMoves.clear(); // reset each invocation
-    // the following if statements check if the player can move in a direction
-    // by checking if there is a wall (#) or if it goes past an edge.
+void PlayerBase::checkSurroundingTiles() { // it's a 50x28 grid but arrays start at 0 so 49 and 27 aren't magic numbers.
 
-    if (positionX > WindowConfig::WindowRoot + TileWidth && map->canMove(currentTile - 1))
-        possibleMoves.push_back(Direction::LEFT);
+    possibleMoves.clear();
 
+    const int tileX = static_cast<int>(positionX - WindowConfig::WindowRoot) / TileWidth;
+    const int tileY = static_cast<int>(positionY - WindowConfig::WindowRoot) / TileWidth;
+    const int tile = tileY * 50 + tileX;
 
-    if (positionX < WindowConfig::WindowRoot + (50 * TileWidth) - TileWidth && map->canMove(currentTile + 1))
-        possibleMoves.push_back(Direction::RIGHT);
+        if (tileX > 0 && map->canMove(tile - 1))
+            possibleMoves.push_back(Direction::LEFT);
 
+        if (tileX < 49 && map->canMove(tile + 1))
+            possibleMoves.push_back(Direction::RIGHT);
 
-    if (positionY > WindowConfig::WindowRoot + TileWidth && map->canMove(currentTile - 50))
-        possibleMoves.push_back(Direction::UP);
+        if (tileY > 0 && map->canMove(tile - 50))
+            possibleMoves.push_back(Direction::UP);
 
-
-    if (positionY < WindowConfig::WindowRoot + (28 * TileWidth) - TileWidth && map->canMove(currentTile + 50))
-        possibleMoves.push_back(Direction::DOWN);
+        if (tileY < 27 && map->canMove(tile + 50))
+            possibleMoves.push_back(Direction::DOWN);
+    DrawText(TextFormat("tile:%d tileX:%d tileY:%d up_tile:%c up_valid:%d",
+    tile, tileX, tileY,
+    map->getTile(tileX, tileY - 1),
+    map->canMove(tile - 50)), 10, 10, 20, WHITE);
     }
 
 
 
+bool PlayerBase::checkMoveValidity(const Direction move) {
+    if (std::ranges::contains(possibleMoves, move)) {
+        return true;
+    }
+    return false;
+}
+
+
+
+PlayerBase::~PlayerBase() = default;
