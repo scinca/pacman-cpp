@@ -3,6 +3,8 @@
 //
 
 #include "deltaTime.h"
+
+#include <algorithm>
 #include <raylib.h>
 
 Time::Time(){
@@ -14,6 +16,7 @@ Time::Time(){
 void Time::calculateDeltaTime() {
    const double currentTime { GetTime()};
    deltaTime = currentTime - lastTime;
+   deltaTime = std::min(deltaTime, 0.05);
    lastTime = currentTime;
 }
 

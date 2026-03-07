@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include "config.h"
 #include "map/map.h"
+#include "players/HumanPlayer/HumanPlayer.h"
 #include "time/deltaTime.h"
 
 int main() {
@@ -21,18 +22,24 @@ int main() {
     }else {
         std::cout << "Map loaded successfully\n"; // for debugging might remove this later.
     }
-
+    HumanPlayer player = HumanPlayer(&game_map, &Timer);
     while (!WindowShouldClose()) {
 
         BeginDrawing();
         ClearBackground(BLACK);
 
         DrawRectangleLines(1,1, WindowConfig::WindowWidth -1 ,WindowConfig::WindowHeight -1, RAYWHITE); // tiny inset is required so border is visible.
-
         game_map.draw();
 
+        if (IsKeyDown(KEY_UP))         player.move(Direction::UP);
+        else if (IsKeyDown(KEY_DOWN))  player.move(Direction::DOWN);
+        else if (IsKeyDown(KEY_LEFT))  player.move(Direction::LEFT);
+        else if (IsKeyDown(KEY_RIGHT)) player.move(Direction::RIGHT);
+        else                           player.move();
+        player.draw();
         EndDrawing();
     }
     return 0;
 }
+
 
