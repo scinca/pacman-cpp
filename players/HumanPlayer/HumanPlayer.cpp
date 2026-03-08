@@ -23,9 +23,9 @@ void HumanPlayer::Move() {
     if (IsAtTileCenter()) {
         CheckSurroundingTiles();
 
-        if (CheckMoveValidity(m_nextDirection)) { //try buffered input.
-            current_direction_ = m_nextDirection;
-            m_nextDirection = Direction::NONE;
+        if (CheckMoveValidity(next_direction_)) { //try buffered input.
+            current_direction_ = next_direction_;
+            next_direction_ = Direction::NONE;
         }
         // stop if current direction is now blocked
         if (!CheckMoveValidity(current_direction_)) {
@@ -64,6 +64,13 @@ void HumanPlayer::Draw() const {
 }
 
 void HumanPlayer::SetNextDirection(const Direction nextDirection) {
-    m_nextDirection = nextDirection;
+    next_direction_ = nextDirection;
+}
 
+void HumanPlayer::Kill() {
+    is_alive_ = false;
+}
+
+bool HumanPlayer::CheckIfAlive() const {
+    return is_alive_;
 }

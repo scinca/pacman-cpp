@@ -13,10 +13,13 @@ class HumanPlayer : public PlayerBase {
 
     void Move() override;
     void Draw() const override;
-
+    void Kill();
+    [[nodiscard]] bool CheckIfAlive() const;
     void SetNextDirection(Direction nextDirection);
     private:
-    Direction m_nextDirection = Direction::NONE;  // buffered input
+    Direction next_direction_ = Direction::NONE;  // buffered input
+    bool is_alive_ = true;
+
 
 
 };

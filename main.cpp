@@ -31,6 +31,11 @@ int main() {
             DrawText("You won!", 100,100, 40, BLACK);
             EndDrawing();
         }
+        else if (!player.CheckIfAlive()){
+            BeginDrawing();
+            DrawText("You lost.", 100,100, 40, BLACK);
+            EndDrawing();
+        }
         else{
             BeginDrawing();
             ClearBackground(BLACK);
