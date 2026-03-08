@@ -35,9 +35,6 @@ void EnemyPlayer::Move() {
         FindBestDirection();
         }
 
-
-
-
     switch (current_direction_) {
         case Direction::UP:
             position_y_ -= velocity_ * time_->GetDeltaTime();
@@ -70,10 +67,6 @@ void EnemyPlayer::Move() {
 
 }
 
-
-
-
-
 int EnemyPlayer::CalculateManhattanDistance(const int tile) const {
     const int tile_x = tile % 50;
     const int tile_y = tile / 50;
@@ -81,10 +74,7 @@ int EnemyPlayer::CalculateManhattanDistance(const int tile) const {
     const int player_tile_x = player_tile % 50;
     const int player_tile_y = player_tile / 50;
     return std::abs(tile_x - player_tile_x) + std::abs(tile_y - player_tile_y);
-
-
 }
-
 
 
 void EnemyPlayer::FindBestDirection() {
@@ -101,7 +91,7 @@ void EnemyPlayer::FindBestDirection() {
     if (current_direction_ == Direction::RIGHT) {
         opposite = Direction::LEFT;
     }
-    if (GetRandomValue(0, 100) < 15) { // 15% chance of random move so that the gameplay doesn't feel repetitive.
+    if (GetRandomValue(0, 100) < failure_percentage) { // 15% chance of random move so that the gameplay doesn't feel repetitive.
         for (const auto& direction : possible_moves_) {
             if (direction != opposite) {
                 current_direction_ = direction;

@@ -16,4 +16,6 @@ namespace WindowConfig {
 inline constexpr std::int32_t TileWidth { 32 };
 inline constexpr double PointRadius { TileWidth * 0.8 / 2 };
 
+inline constexpr int failure_percentage { 17 };
+
 #endif //PACMAN_CPP_CONFIG_H

@@ -7,7 +7,7 @@
 #include "players/HumanPlayer/HumanPlayer.h"
 #include "time/deltaTime.h"
 
-int main() {
+int main(int argc, char** argv) {
     const std::string default_filename { "./assets/default_map.txt"}; // maybe I'll implement a map selection system later.
 
     InitWindow(WindowConfig::WindowWidth,WindowConfig::WindowHeight, WindowConfig::WindowTitle);
@@ -16,6 +16,7 @@ int main() {
     Time Timer;
     Map game_map;
     game_map.LoadDefaultMap();
+
     /*auto loading_result { game_map.Load(default_filename)};
     if (!loading_result) {
         // error returns since I don't have any way to do it better.
@@ -46,8 +47,10 @@ int main() {
             DrawText("You lost.", 100,100, 40, BLACK);
             DrawText("Press r to restart",300,300,40, SKYBLUE);
             if (IsKeyDown(KEY_R)) {
-                std::system("./pacman_cpp &"); // launch new instance
+                std::string cmd = std::string(argv[0]) + " &";
+                std::system(cmd.c_str());
                 exit(0);
+
             }
 
             EndDrawing();
