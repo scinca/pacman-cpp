@@ -15,7 +15,8 @@ int main() {
     SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
     Time Timer;
     Map game_map;
-    auto loading_result { game_map.Load(default_filename)};
+    game_map.LoadDefaultMap();
+    /*auto loading_result { game_map.Load(default_filename)};
     if (!loading_result) {
         // error returns since I don't have any way to do it better.
         const std::string_view loading_error = loading_result.error();
@@ -23,7 +24,7 @@ int main() {
         return 1;
     }else {
         std::cout << "Map loaded successfully\n"; // for debugging might remove this later.
-    }
+    }*/
     const int player_starting_position = game_map.FindPlayerStartTile();
     const std::vector<int>enemy_starting_positions = game_map.FindEnemyStartTiles();
 

@@ -3,6 +3,11 @@ project(pacman_cpp)
 
 set(CMAKE_CXX_STANDARD 23)
 
+# Release build flags
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_options(pacman_cpp PRIVATE -O2)
+endif()
+
 add_executable(pacman_cpp main.cpp
         config.h
         map/map.cpp
@@ -20,11 +25,3 @@ add_executable(pacman_cpp main.cpp
 find_package(raylib REQUIRED)
 target_link_libraries(pacman_cpp raylib)
 
-# copy assets folder to the build directory (Made by Claude because I didn't know of an elegant way to make this.
-# In a future version I might remove an assets directory and move to cpp variables.
-add_custom_command(
-        TARGET pacman_cpp POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/assets
-        $<TARGET_FILE_DIR:pacman_cpp>/assets
-)

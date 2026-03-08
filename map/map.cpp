@@ -5,6 +5,7 @@
 #include "map.h"
 
 #include <fstream>
+#include <iostream>
 
 #include "../config.h"
 #include <raylib.h>
@@ -34,7 +35,17 @@ std::expected<void, std::string> Map::Load(const std::string& filename) { // sho
     }
 
 
+void Map::LoadDefaultMap() {
+    loaded_map_ = default_map;
+    std::erase(loaded_map_, '\n');
+    std::erase(loaded_map_, '\r');
+    if (loaded_map_.length() != 1400) {
+        std::cout << ("Invalid map length: " + std::to_string(loaded_map_.length()));
+    }
+    explored_map_.assign(loaded_map_.size(), false);
+    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(), loaded_map_.end(), '0'));
 
+}
 
 
 void Map::Draw() const {
