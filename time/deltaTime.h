@@ -8,12 +8,12 @@
 
 class Time {
 private:
-    double deltaTime{};
-    double lastTime{};
-    void calculateDeltaTime();
+    double delta_time_{};
+    double last_time_{};
+    void CalculateDeltaTime();
     public:
     Time();
-    [[nodiscard]] double getDeltaTime();
+    [[nodiscard]] double GetDeltaTime();
 
 };
 

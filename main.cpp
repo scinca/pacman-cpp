@@ -13,7 +13,7 @@ int main() {
 
     Time Timer;
     Map game_map;
-    auto loading_result { game_map.load(default_filename)};
+    auto loading_result { game_map.Load(default_filename)};
     if (!loading_result) {
         // error returns since I don't have any way to do it better.
         const std::string_view loading_error = loading_result.error();
@@ -28,24 +28,24 @@ int main() {
         ClearBackground(BLACK);
 
         DrawRectangleLines(1,1, WindowConfig::WindowWidth -1 ,WindowConfig::WindowHeight -1, RAYWHITE); // tiny inset is required so border is visible.
-        game_map.draw();
+        game_map.Draw();
 
         if (IsKeyDown(KEY_UP)) {
-            player.setNextDirection(Direction::UP);
+            player.SetNextDirection(Direction::UP);
         }
         else if (IsKeyDown(KEY_DOWN)) {
-            player.setNextDirection(Direction::DOWN);
+            player.SetNextDirection(Direction::DOWN);
         }
         else if (IsKeyDown(KEY_LEFT)) {
-            player.setNextDirection(Direction::LEFT);
+            player.SetNextDirection(Direction::LEFT);
         }
         else if (IsKeyDown(KEY_RIGHT)) {
-            player.setNextDirection(Direction::RIGHT);
+            player.SetNextDirection(Direction::RIGHT);
         }
 
-            player.move();
+            player.Move();
 
-        player.draw();
+        player.Draw();
         EndDrawing();
     }
     return 0;

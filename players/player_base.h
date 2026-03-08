@@ -18,28 +18,28 @@ class PlayerBase {
     virtual ~PlayerBase();
 
     PlayerBase(Map *game_map, Time *time);
-    virtual void move(Direction requestedDirection)= 0;
 
-    virtual void move() { move(Direction::NONE); }
-    virtual void draw() const =0;
+
+    virtual void Move() = 0;
+    virtual void Draw() const =0;
 
     protected:
-    bool checkMoveValidity(Direction move);
-    float margin = 2.0f;
+    bool CheckMoveValidity(Direction move);
+    float margin_ = 2.0f;
 
-    float positionX;
-    float positionY;
-    int currentTile;
-    int velocity = 150;
-    Direction currentDirection = Direction::NONE;
-    bool isAtTileCenter() const;
+    float position_x_;
+    float position_y_;
+    int current_tile_;
+    int velocity_ = 150;
+    Direction current_direction_ = Direction::NONE;
+    [[nodiscard]] bool IsAtTileCenter() const;
 
-    void getTile();
-    void checkSurroundingTiles();
+    void GetTile();
+    void CheckSurroundingTiles();
 
-    std::vector<Direction> possibleMoves;
-    Map *map = nullptr;
-    Time *time = nullptr;
+    std::vector<Direction> possible_moves_;
+    Map *map_ = nullptr;
+    Time *time_ = nullptr;
 
 };
 

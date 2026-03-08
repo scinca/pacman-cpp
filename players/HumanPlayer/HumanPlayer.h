@@ -10,11 +10,11 @@
 class HumanPlayer : public PlayerBase {
     public:
     explicit HumanPlayer(Map *map, Time *time);
-    void move(Direction requestedDirection) override;
-    void move() override;
-    void draw() const override;
 
-    void setNextDirection(Direction nextDirection);
+    void Move() override;
+    void Draw() const override;
+
+    void SetNextDirection(Direction nextDirection);
     private:
     Direction m_nextDirection = Direction::NONE;  // buffered input
 

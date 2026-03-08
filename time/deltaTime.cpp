@@ -8,19 +8,19 @@
 #include <raylib.h>
 
 Time::Time(){
-   deltaTime= 0.0;
-   lastTime = GetTime();
+   delta_time_= 0.0;
+   last_time_ = GetTime();
 }
 
 
-void Time::calculateDeltaTime() {
+void Time::CalculateDeltaTime() {
    const double currentTime { GetTime()};
-   deltaTime = currentTime - lastTime;
-   deltaTime = std::min(deltaTime, 0.05); // min value to make movement more smooth
-   lastTime = currentTime;
+   delta_time_ = currentTime - last_time_;
+   delta_time_ = std::min(delta_time_, 0.05); // min value to make movement more smooth
+   last_time_ = currentTime;
 }
 
-double Time::getDeltaTime() {
-   calculateDeltaTime();
-   return deltaTime;
+double Time::GetDeltaTime() {
+   CalculateDeltaTime();
+   return delta_time_;
 }
