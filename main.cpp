@@ -44,6 +44,12 @@ int main() {
             BeginDrawing();
             ClearBackground(RAYWHITE);
             DrawText("You lost.", 100,100, 40, BLACK);
+            DrawText("Press r to restart",300,300,40, SKYBLUE);
+            if (IsKeyDown(KEY_R)) {
+                std::system("./pacman_cpp &"); // launch new instance
+                exit(0);
+            }
+
             EndDrawing();
         }
         else{
