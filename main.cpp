@@ -31,20 +31,20 @@ int main() {
         game_map.draw();
 
         if (IsKeyDown(KEY_UP)) {
-            player.move(Direction::UP);
+            player.setNextDirection(Direction::UP);
         }
         else if (IsKeyDown(KEY_DOWN)) {
-            player.move(Direction::DOWN);
+            player.setNextDirection(Direction::DOWN);
         }
         else if (IsKeyDown(KEY_LEFT)) {
-            player.move(Direction::LEFT);
+            player.setNextDirection(Direction::LEFT);
         }
         else if (IsKeyDown(KEY_RIGHT)) {
-            player.move(Direction::RIGHT);
+            player.setNextDirection(Direction::RIGHT);
         }
-        else {
+
             player.move();
-        }
+
         player.draw();
         EndDrawing();
     }

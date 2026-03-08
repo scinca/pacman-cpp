@@ -14,6 +14,10 @@ class HumanPlayer : public PlayerBase {
     void move() override;
     void draw() const override;
 
+    void setNextDirection(Direction nextDirection);
+    private:
+    Direction m_nextDirection = Direction::NONE;  // buffered input
+
 
 };
 
