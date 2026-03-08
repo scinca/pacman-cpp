@@ -7,7 +7,7 @@
 #include "players/HumanPlayer/HumanPlayer.h"
 #include "time/deltaTime.h"
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
     const std::string default_filename { "./assets/default_map.txt"}; // maybe I'll implement a map selection system later.
 
     InitWindow(WindowConfig::WindowWidth,WindowConfig::WindowHeight, WindowConfig::WindowTitle);
