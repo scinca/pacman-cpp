@@ -14,6 +14,10 @@ This project Features
 + a simple enemy ai that finds shortest path to the player (you) via [manhattan distance](https://en.wikipedia.org/wiki/Taxicab_geometry)
 
 
+## Screenshots
+![Gameplay Screenshot](/assets/pic1.png)
+![Defeat Screen](/assets/pic2.png)
+
 ## Create your own map:
 If you want to make your own map you need to make a txt file with exactly 1400 characters (It's a 50x28 grid)
 
