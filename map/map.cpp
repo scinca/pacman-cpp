@@ -102,3 +102,19 @@ std::pair<float, float> Map::GetTileCenter(const int tile) {
     const float center_y = WindowConfig::WindowRoot + (tile / 50) * TileWidth + TileWidth / 2;
     return {center_x, center_y};
 }
+
+int Map::FindPlayerStartTile() const {
+    const auto pos = loaded_map_.find('X');
+    if (pos == std::string::npos) {
+        return 0; // default value should never be called
+    }
+    return static_cast<int>(pos);
+}
+
+std::vector<int> Map::FindEnemyStartTiles() const {
+    std::vector<int> positions;
+    for (int i = 0; i < loaded_map_.size(); ++i) {
+        if (loaded_map_[i] == '?') positions.push_back(i);
+    }
+    return positions;
+}

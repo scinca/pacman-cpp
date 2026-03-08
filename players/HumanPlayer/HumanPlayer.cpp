@@ -11,8 +11,11 @@
 #include "../../time/deltaTime.h"
 #include "../../map/map.h"
 
-HumanPlayer::HumanPlayer(Map *map, Time *time)
-    :PlayerBase(map, time, 0){
+HumanPlayer::HumanPlayer(Map *map, Time *time, int starting_tile, Color color)
+    :PlayerBase(map, time, starting_tile, color){
+    std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
+    GetTile();
+    color_ = color;
 }
 
 
@@ -60,7 +63,7 @@ void HumanPlayer::Draw() const {
     DrawCircle(
         static_cast<int>(position_x_),
         static_cast<int>(position_y_),
-        TileWidth * 0.4f, RED);
+        TileWidth * 0.4f, color_);
 }
 
 void HumanPlayer::SetNextDirection(const Direction nextDirection) {

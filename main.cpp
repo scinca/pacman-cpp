@@ -1,5 +1,6 @@
 #include <iostream>
 #include <raylib.h>
+#include <ctime>
 #include "config.h"
 #include "map/map.h"
 #include "players/EnemyAI/EnemyPlayer.h"
@@ -11,7 +12,7 @@ int main() {
 
     InitWindow(WindowConfig::WindowWidth,WindowConfig::WindowHeight, WindowConfig::WindowTitle);
     SetTargetFPS(60);
-
+    SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
     Time Timer;
     Map game_map;
     auto loading_result { game_map.Load(default_filename)};
@@ -23,9 +24,11 @@ int main() {
     }else {
         std::cout << "Map loaded successfully\n"; // for debugging might remove this later.
     }
-    auto player = HumanPlayer(&game_map, &Timer);
-    auto enemy = EnemyPlayer(&game_map, &Timer, &player, 70);
-
+    const int player_starting_position = game_map.FindPlayerStartTile();
+    const std::vector<int>enemy_starting_positions = game_map.FindEnemyStartTiles();
+    auto player = HumanPlayer(&game_map, &Timer, player_starting_position, YELLOW);
+    auto red_enemy = EnemyPlayer(&game_map, &Timer, &player, enemy_starting_positions[0], RED);
+    auto blue_enemy = EnemyPlayer(&game_map, &Timer, &player, enemy_starting_positions[1],BLUE);
     while (!WindowShouldClose()) {
         Timer.CalculateDeltaTime();
         if (game_map.AllExplored()) {
@@ -62,8 +65,10 @@ int main() {
 
             player.Move();
             player.Draw();
-            enemy.Move();
-            enemy.Draw();
+            red_enemy.Move();
+            red_enemy.Draw();
+            blue_enemy.Move();
+            blue_enemy.Draw();
 
 
             EndDrawing();

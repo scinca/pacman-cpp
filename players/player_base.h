@@ -4,6 +4,7 @@
 
 #ifndef PACMAN_CPP_PLAYER_BASE_H
 #define PACMAN_CPP_PLAYER_BASE_H
+#include <raylib.h>
 #include <vector>
 class Map;
 class Time; // forward declaration because linker complains if I include header. Might investigate later.
@@ -17,7 +18,7 @@ class PlayerBase {
     public:
     virtual ~PlayerBase();
 
-    PlayerBase(Map *game_map, Time *time, int tile);
+    PlayerBase(Map *game_map, Time *time, int tile, Color color);
 
     [[nodiscard]] int GetCurrentTile() const { return current_tile_; }
 
@@ -33,6 +34,7 @@ class PlayerBase {
     int current_tile_;
     int velocity_ = 150;
     float margin_ = 3.0f;
+    Color color_;
 
     Direction current_direction_ = Direction::NONE;
     [[nodiscard]] bool IsAtTileCenter() const;

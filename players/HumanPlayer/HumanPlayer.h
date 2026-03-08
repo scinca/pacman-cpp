@@ -9,7 +9,7 @@
 
 class HumanPlayer : public PlayerBase {
     public:
-    explicit HumanPlayer(Map *map, Time *time);
+    explicit HumanPlayer(Map *map, Time *time, int starting_tile, Color color);
 
     void Move() override;
     void Draw() const override;
