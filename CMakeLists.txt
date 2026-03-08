@@ -13,6 +13,8 @@ add_executable(pacman_cpp main.cpp
         players/player_base.cpp
         players/HumanPlayer/HumanPlayer.cpp
         players/HumanPlayer/HumanPlayer.h
+        players/EnemyAI/EnemyPlayer.cpp
+        players/EnemyAI/EnemyPlayer.h
 )
 
 find_package(raylib REQUIRED)

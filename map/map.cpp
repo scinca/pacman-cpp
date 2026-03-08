@@ -49,7 +49,7 @@ void Map::Draw() const {
             DrawRectangle(tile_x, tile_y, TileWidth, TileWidth, RAYWHITE);
         }
         if (loaded_map_[i] == '0' && !explored_map_[i]) {
-            DrawCircle(center_x, center_y, PointRadius, GREEN);
+            DrawCircle(center_x, center_y, PointRadius * 0.5, GREEN);
         }
     }
 }
@@ -96,3 +96,9 @@ bool Map::CanMove(const int tileNumber) const {
 
 }
 
+
+std::pair<float, float> Map::GetTileCenter(const int tile) {
+    const float center_x = WindowConfig::WindowRoot + (tile % 50) * TileWidth + TileWidth / 2;
+    const float center_y = WindowConfig::WindowRoot + (tile / 50) * TileWidth + TileWidth / 2;
+    return {center_x, center_y};
+}

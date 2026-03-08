@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include "config.h"
 #include "map/map.h"
+#include "players/EnemyAI/EnemyPlayer.h"
 #include "players/HumanPlayer/HumanPlayer.h"
 #include "time/deltaTime.h"
 
@@ -23,6 +24,7 @@ int main() {
         std::cout << "Map loaded successfully\n"; // for debugging might remove this later.
     }
     auto player = HumanPlayer(&game_map, &Timer);
+    auto enemy = EnemyPlayer(&game_map, &Timer, &player, 70);
 
     while (!WindowShouldClose()) {
         if (game_map.AllExplored()) {
@@ -43,22 +45,25 @@ int main() {
             DrawRectangleLines(1,1, WindowConfig::WindowWidth -1 ,WindowConfig::WindowHeight -1, RAYWHITE); // tiny inset is required so border is visible.
             game_map.Draw();
 
-            if (IsKeyDown(KEY_UP)) {
+            if (IsKeyDown(KEY_UP )||IsKeyDown(KEY_W)) {
                 player.SetNextDirection(Direction::UP);
             }
-            else if (IsKeyDown(KEY_DOWN)) {
+            else if (IsKeyDown(KEY_DOWN)||IsKeyDown(KEY_S)) {
                 player.SetNextDirection(Direction::DOWN);
             }
-            else if (IsKeyDown(KEY_LEFT)) {
+            else if (IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)) {
                 player.SetNextDirection(Direction::LEFT);
             }
-            else if (IsKeyDown(KEY_RIGHT)) {
+            else if (IsKeyDown(KEY_RIGHT)||IsKeyDown(KEY_D)) {
                 player.SetNextDirection(Direction::RIGHT);
             }
 
             player.Move();
-
             player.Draw();
+            enemy.Move();
+            enemy.Draw();
+
+
             EndDrawing();
         }
     }

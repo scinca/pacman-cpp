@@ -26,7 +26,7 @@ class Map {
     [[nodiscard]] bool AllExplored() const;
     void Explore(int x, int y);
     void Explore(int tile);
-
+    static std::pair<float, float> GetTileCenter(int tile) ;
     [[nodiscard]] bool IsExplored(int x, int y) const;
     [[nodiscard]] bool CanMove(int tileNumber) const;
 

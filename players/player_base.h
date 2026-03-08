@@ -17,7 +17,7 @@ class PlayerBase {
     public:
     virtual ~PlayerBase();
 
-    PlayerBase(Map *game_map, Time *time);
+    PlayerBase(Map *game_map, Time *time, int tile);
 
 
     virtual void Move() = 0;
