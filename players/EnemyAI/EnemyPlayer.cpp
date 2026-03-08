@@ -12,8 +12,9 @@
 #include "../../time/deltaTime.h"  // ← add this
 #include "../../map/map.h"
 
-EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int starting_tile) : PlayerBase(map, time, 0) {
+EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int starting_tile, const Color color) : PlayerBase(map, time, starting_tile, color) {
     player_ = player;
+    color_ = color;
     std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
     GetTile();
 
@@ -23,7 +24,7 @@ void EnemyPlayer::Draw() const {
     DrawCircle(
         static_cast<int>(position_x_),
         static_cast<int>(position_y_),
-        TileWidth * 0.4f, YELLOW);
+        TileWidth * 0.4f, color_);
 }
 
 void EnemyPlayer::Move() {
@@ -84,10 +85,9 @@ int EnemyPlayer::CalculateManhattanDistance(const int tile) const {
 
 }
 
-void EnemyPlayer::FindBestDirection() {
-    int min_distance = std::numeric_limits<int>::max();
-    auto best_direction = Direction::NONE;
 
+
+void EnemyPlayer::FindBestDirection() {
     auto opposite = Direction::NONE;
     if (current_direction_ == Direction::UP) {
         opposite = Direction::DOWN;
@@ -101,35 +101,39 @@ void EnemyPlayer::FindBestDirection() {
     if (current_direction_ == Direction::RIGHT) {
         opposite = Direction::LEFT;
     }
+    if (GetRandomValue(0, 100) < 20) { // 20% chance of random move so that the gameplay doesn't feel repetetive
+        for (const auto& direction : possible_moves_) {
+            if (direction != opposite) {
+                current_direction_ = direction;
+                return;
+            }
+        }
+    }
+
+    int min_distance = std::numeric_limits<int>::max();
+    Direction best_direction = Direction::NONE;
+
     for (const auto& direction : possible_moves_) {
-        if (direction == opposite) continue; // avoids reversing
+        if (direction == opposite) continue;
         int tile = -1;
         switch (direction) {
-            case Direction::UP:
-                tile = current_tile_ - 50; break;
-            case Direction::DOWN:
-                tile = current_tile_ + 50; break;
-            case Direction::LEFT:
-                tile = current_tile_ - 1;  break;
-            case Direction::RIGHT:
-                tile = current_tile_ + 1;  break;
-            case Direction::NONE:
-                continue;
+            case Direction::UP:    tile = current_tile_ - 50; break;
+            case Direction::DOWN:  tile = current_tile_ + 50; break;
+            case Direction::LEFT:  tile = current_tile_ - 1;  break;
+            case Direction::RIGHT: tile = current_tile_ + 1;  break;
+            case Direction::NONE:  continue;
         }
-
         int distance = CalculateManhattanDistance(tile);
         if (distance < min_distance) {
             min_distance = distance;
             best_direction = direction;
         }
+    }
 
-        }
     if (best_direction != Direction::NONE) {
         current_direction_ = best_direction;
     }
 }
-
-
 
 
 

@@ -4,12 +4,14 @@
 
 #ifndef PACMAN_CPP_ENEMYPLAYER_H
 #define PACMAN_CPP_ENEMYPLAYER_H
+#include <raylib.h>
+
 #include "../player_base.h"
 #include "../HumanPlayer/HumanPlayer.h"
 
 class EnemyPlayer : public PlayerBase {
     public:
-    explicit EnemyPlayer(Map *map, Time *time, HumanPlayer *player, int starting_tile);
+    explicit EnemyPlayer(Map *map, Time *time, HumanPlayer *player, int starting_tile, Color color);
     void Draw() const override;
     void Move() override;
 

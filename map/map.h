@@ -20,23 +20,25 @@
 
 class Map {
     public:
-    std::expected<void, std::string> Load(const std::string& filename);
-    void Draw() const;
-    std::string GetMap();
-    [[nodiscard]] bool AllExplored() const;
-    void Explore(int x, int y);
-    void Explore(int tile);
-    static std::pair<float, float> GetTileCenter(int tile) ;
-    [[nodiscard]] bool IsExplored(int x, int y) const;
-    [[nodiscard]] bool CanMove(int tileNumber) const;
+        std::expected<void, std::string> Load(const std::string& filename);
+        void Draw() const;
+        std::string GetMap();
+        [[nodiscard]] bool AllExplored() const;
+        void Explore(int x, int y);
+        void Explore(int tile);
+        static std::pair<float, float> GetTileCenter(int tile) ;
+        [[nodiscard]] bool IsExplored(int x, int y) const;
+        [[nodiscard]] bool CanMove(int tileNumber) const;
+        [[nodiscard]] int FindPlayerStartTile() const;
+        [[nodiscard]] std::vector<int> FindEnemyStartTiles() const;
 
 
 
-private:
-    std::string loaded_map_;
-    std::vector<bool> explored_map_;
-    int free_tile_count_ = 0;
-    int explored_tile_count_ = 0;
+    private:
+        std::string loaded_map_;
+        std::vector<bool> explored_map_;
+        int free_tile_count_ = 0;
+        int explored_tile_count_ = 0;
 };
 
 
