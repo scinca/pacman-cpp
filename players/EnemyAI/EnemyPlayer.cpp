@@ -101,7 +101,7 @@ void EnemyPlayer::FindBestDirection() {
     if (current_direction_ == Direction::RIGHT) {
         opposite = Direction::LEFT;
     }
-    if (GetRandomValue(0, 100) < 20) { // 20% chance of random move so that the gameplay doesn't feel repetetive
+    if (GetRandomValue(0, 100) < 15) { // 15% chance of random move so that the gameplay doesn't feel repetitive.
         for (const auto& direction : possible_moves_) {
             if (direction != opposite) {
                 current_direction_ = direction;

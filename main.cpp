@@ -26,9 +26,11 @@ int main() {
     }
     const int player_starting_position = game_map.FindPlayerStartTile();
     const std::vector<int>enemy_starting_positions = game_map.FindEnemyStartTiles();
+
     auto player = HumanPlayer(&game_map, &Timer, player_starting_position, YELLOW);
     auto red_enemy = EnemyPlayer(&game_map, &Timer, &player, enemy_starting_positions[0], RED);
-    auto blue_enemy = EnemyPlayer(&game_map, &Timer, &player, enemy_starting_positions[1],BLUE);
+    auto blue_enemy = EnemyPlayer(&game_map, &Timer, &player, enemy_starting_positions[1],SKYBLUE);
+
     while (!WindowShouldClose()) {
         Timer.CalculateDeltaTime();
         if (game_map.AllExplored()) {
