@@ -23,32 +23,40 @@ int main() {
         std::cout << "Map loaded successfully\n"; // for debugging might remove this later.
     }
     auto player = HumanPlayer(&game_map, &Timer);
+
     while (!WindowShouldClose()) {
-        BeginDrawing();
-        ClearBackground(BLACK);
+        if (game_map.AllExplored()) {
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
+            DrawText("You won!", 100,100, 40, BLACK);
+            EndDrawing();
+        }
+        else{
+            BeginDrawing();
+            ClearBackground(BLACK);
 
-        DrawRectangleLines(1,1, WindowConfig::WindowWidth -1 ,WindowConfig::WindowHeight -1, RAYWHITE); // tiny inset is required so border is visible.
-        game_map.Draw();
+            DrawRectangleLines(1,1, WindowConfig::WindowWidth -1 ,WindowConfig::WindowHeight -1, RAYWHITE); // tiny inset is required so border is visible.
+            game_map.Draw();
 
-        if (IsKeyDown(KEY_UP)) {
-            player.SetNextDirection(Direction::UP);
-        }
-        else if (IsKeyDown(KEY_DOWN)) {
-            player.SetNextDirection(Direction::DOWN);
-        }
-        else if (IsKeyDown(KEY_LEFT)) {
-            player.SetNextDirection(Direction::LEFT);
-        }
-        else if (IsKeyDown(KEY_RIGHT)) {
-            player.SetNextDirection(Direction::RIGHT);
-        }
+            if (IsKeyDown(KEY_UP)) {
+                player.SetNextDirection(Direction::UP);
+            }
+            else if (IsKeyDown(KEY_DOWN)) {
+                player.SetNextDirection(Direction::DOWN);
+            }
+            else if (IsKeyDown(KEY_LEFT)) {
+                player.SetNextDirection(Direction::LEFT);
+            }
+            else if (IsKeyDown(KEY_RIGHT)) {
+                player.SetNextDirection(Direction::RIGHT);
+            }
 
             player.Move();
 
-        player.Draw();
-        EndDrawing();
+            player.Draw();
+            EndDrawing();
+        }
     }
     return 0;
 }
-
 
