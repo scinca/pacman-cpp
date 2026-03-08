@@ -19,18 +19,21 @@ class PlayerBase {
 
     PlayerBase(Map *game_map, Time *time, int tile);
 
+    [[nodiscard]] int GetCurrentTile() const { return current_tile_; }
 
     virtual void Move() = 0;
     virtual void Draw() const =0;
 
     protected:
     bool CheckMoveValidity(Direction move);
-    float margin_ = 2.0f;
+
 
     float position_x_;
     float position_y_;
     int current_tile_;
     int velocity_ = 150;
+    float margin_ = 3.0f;
+
     Direction current_direction_ = Direction::NONE;
     [[nodiscard]] bool IsAtTileCenter() const;
 

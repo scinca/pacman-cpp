@@ -20,7 +20,6 @@ void Time::CalculateDeltaTime() {
    last_time_ = currentTime;
 }
 
-double Time::GetDeltaTime() {
-   CalculateDeltaTime();
+double Time::GetDeltaTime() const {
    return delta_time_;
 }

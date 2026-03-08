@@ -92,7 +92,7 @@ bool Map::CanMove(const int tileNumber) const {
     if (tileNumber < 0 || tileNumber >= static_cast<int>(loaded_map_.size()))
         return false;
 
-    return loaded_map_[tileNumber] == '0';
+    return loaded_map_[tileNumber] != '#';
 
 }
 

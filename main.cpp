@@ -27,6 +27,7 @@ int main() {
     auto enemy = EnemyPlayer(&game_map, &Timer, &player, 70);
 
     while (!WindowShouldClose()) {
+        Timer.CalculateDeltaTime();
         if (game_map.AllExplored()) {
             BeginDrawing();
             ClearBackground(RAYWHITE);
@@ -35,6 +36,7 @@ int main() {
         }
         else if (!player.CheckIfAlive()){
             BeginDrawing();
+            ClearBackground(RAYWHITE);
             DrawText("You lost.", 100,100, 40, BLACK);
             EndDrawing();
         }

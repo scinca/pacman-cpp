@@ -4,6 +4,7 @@
 
 #include "EnemyPlayer.h"
 
+#include <algorithm>
 #include <limits>
 
 #include "raylib.h"
@@ -14,7 +15,7 @@
 EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int starting_tile) : PlayerBase(map, time, 0) {
     player_ = player;
     std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
-
+    GetTile();
 
 }
 
@@ -26,13 +27,11 @@ void EnemyPlayer::Draw() const {
 }
 
 void EnemyPlayer::Move() {
-    auto [player_x, player_y] = player_->GetPosition();
-    GetTile();
 
+    GetTile();
     if (IsAtTileCenter()) {
         CheckSurroundingTiles();
         FindBestDirection();
-
         }
 
 
@@ -53,7 +52,21 @@ void EnemyPlayer::Move() {
             break;
         case Direction::NONE:
             break;
+
     }
+    position_x_ = std::clamp(position_x_,
+    static_cast<float>(WindowConfig::WindowRoot + TileWidth / 2),
+    static_cast<float>(WindowConfig::WindowRoot + 49 * TileWidth + TileWidth / 2));
+        position_y_ = std::clamp(position_y_,
+        static_cast<float>(WindowConfig::WindowRoot + TileWidth / 2),
+        static_cast<float>(WindowConfig::WindowRoot + 27 * TileWidth + TileWidth / 2));
+
+        auto player_tile = player_->GetCurrentTile();
+        if (player_tile== current_tile_) {
+            player_->Kill();
+        }
+
+
 }
 
 
@@ -61,13 +74,13 @@ void EnemyPlayer::Move() {
 
 
 int EnemyPlayer::CalculateManhattanDistance(const int tile) const {
+    const int tile_x = tile % 50;
+    const int tile_y = tile / 50;
+    const int player_tile = player_->GetCurrentTile();
+    const int player_tile_x = player_tile % 50;
+    const int player_tile_y = player_tile / 50;
+    return std::abs(tile_x - player_tile_x) + std::abs(tile_y - player_tile_y);
 
-
-    auto [current_x, current_y] = Map::GetTileCenter(tile);
-    auto [player_x, player_y] = player_->GetPosition();
-    const float difference_x = std::abs(current_x - player_x);
-    const float difference_y = std::abs(current_y - player_y);
-    return static_cast<int>(difference_x + difference_y);
 
 }
 
