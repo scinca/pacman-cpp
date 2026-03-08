@@ -16,6 +16,7 @@ class HumanPlayer : public PlayerBase {
     void Kill();
     [[nodiscard]] bool CheckIfAlive() const;
     void SetNextDirection(Direction nextDirection);
+    [[nodiscard]] std::pair<int, int> GetPosition() const;
     private:
     Direction next_direction_ = Direction::NONE;  // buffered input
     bool is_alive_ = true;

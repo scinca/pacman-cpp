@@ -10,10 +10,11 @@ class Time {
 private:
     double delta_time_{};
     double last_time_{};
-    void CalculateDeltaTime();
+
     public:
     Time();
-    [[nodiscard]] double GetDeltaTime();
+    [[nodiscard]] double GetDeltaTime() const;
+    void CalculateDeltaTime();
 
 };
 

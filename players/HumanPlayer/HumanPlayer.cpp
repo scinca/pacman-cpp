@@ -12,7 +12,7 @@
 #include "../../map/map.h"
 
 HumanPlayer::HumanPlayer(Map *map, Time *time)
-    :PlayerBase(map, time){
+    :PlayerBase(map, time, 0){
 }
 
 
@@ -73,4 +73,8 @@ void HumanPlayer::Kill() {
 
 bool HumanPlayer::CheckIfAlive() const {
     return is_alive_;
+}
+
+std::pair<int, int> HumanPlayer::GetPosition() const {
+    return {position_x_, position_y_};
 }
