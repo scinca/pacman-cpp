@@ -14,8 +14,7 @@ PlayerBase::PlayerBase(Map *game_map, Time *time)// currentTile is 0 because I w
     :positionX(WindowConfig::WindowRoot+ TileWidth/2), positionY(WindowConfig::WindowRoot + TileWidth/2), currentTile(0), map(game_map), time(time)
 
 {
-    getTile();
-    printf("INIT: posX=%.1f posY=%.1f tile=%d\n", positionX, positionY, currentTile);
+
 }
 
 void PlayerBase::getTile() {
@@ -52,21 +51,22 @@ void PlayerBase::checkSurroundingTiles() { // it's a 50x28 grid but arrays start
 
         if (tileY < 27 && map->canMove(tile + 50))
             possibleMoves.push_back(Direction::DOWN);
-    DrawText(TextFormat("tile:%d tileX:%d tileY:%d up_tile:%c up_valid:%d",
-    tile, tileX, tileY,
-    map->getTile(tileX, tileY - 1),
-    map->canMove(tile - 50)), 10, 10, 20, WHITE);
+
     }
 
 
 
 bool PlayerBase::checkMoveValidity(const Direction move) {
-    if (std::ranges::contains(possibleMoves, move)) {
-        return true;
-    }
-    return false;
+    return std::ranges::contains(possibleMoves, move);
 }
 
 
+bool PlayerBase::isAtTileCenter() const {
+        const float tileCenterX = WindowConfig::WindowRoot + (currentTile % 50) * TileWidth + TileWidth / 2;
+        const float tileCenterY = WindowConfig::WindowRoot + (currentTile / 50) * TileWidth + TileWidth / 2;
+        return std::abs(positionX - tileCenterX) < margin &&
+               std::abs(positionY - tileCenterY) < margin;
+
+}
 
 PlayerBase::~PlayerBase() = default;

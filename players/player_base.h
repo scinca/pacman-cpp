@@ -6,7 +6,7 @@
 #define PACMAN_CPP_PLAYER_BASE_H
 #include <vector>
 class Map;
-class Time;
+class Time; // forward declaration because linker complains if I include header. Might investigate later.
 
 enum class Direction {
     UP,DOWN,LEFT,RIGHT, NONE
@@ -25,11 +25,14 @@ class PlayerBase {
 
     protected:
     bool checkMoveValidity(Direction move);
+    float margin = 2.0f;
+
     float positionX;
     float positionY;
     int currentTile;
     int velocity = 150;
     Direction currentDirection = Direction::NONE;
+    bool isAtTileCenter() const;
 
     void getTile();
     void checkSurroundingTiles();

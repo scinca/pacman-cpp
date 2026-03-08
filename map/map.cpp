@@ -65,7 +65,7 @@ bool Map::allExplored() const {
 
 
 void Map::explore(const int x, const int y) {
-    if (x < 0 || x >= 50 || y < 0 || y >= 28) return; // outside border
+
     const int index = y * 50 + x;
     if (!explored_map[index] && loaded_map[index] == '0') {
         explored_map[index] = true;
@@ -96,8 +96,3 @@ bool Map::canMove(const int tileNumber) const {
 
 }
 
-char Map::getTile(int x, int y) const {
-    if (x < 0 || x >= 50 || y < 0 || y >= 28)
-        return '#';
-    return loaded_map[y * 50 + x];
-}

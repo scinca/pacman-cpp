@@ -30,7 +30,7 @@ class Map {
     [[nodiscard]] bool isExplored(int x, int y) const;
     [[nodiscard]] bool canMove(int tileNumber) const;
 
-    char getTile(int x, int y) const;
+
 
 private:
     std::string loaded_map;

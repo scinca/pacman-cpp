@@ -16,7 +16,7 @@ Time::Time(){
 void Time::calculateDeltaTime() {
    const double currentTime { GetTime()};
    deltaTime = currentTime - lastTime;
-   deltaTime = std::min(deltaTime, 0.05);
+   deltaTime = std::min(deltaTime, 0.05); // min value to make movement more smooth
    lastTime = currentTime;
 }
 
