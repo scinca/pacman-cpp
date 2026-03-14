@@ -18,18 +18,13 @@ Game::~Game() {
 }
 
 void Game::Initialize() {
-    InitWindow(WindowConfig::WindowWidth, WindowConfig::WindowHeight, WindowConfig::WindowTitle);
-    SetTargetFPS(60);
-    SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
-
-
     game_map.LoadDefaultMap();
 
     // Find starting positions
     const int player_starting_position = game_map.FindPlayerStartTile();
     const std::vector<int> enemy_starting_positions = game_map.FindEnemyStartTiles();
 
-    // Create players NEEDS TO BE REDONE LATER
+    // create players NEEDS TO BE REDONE LATER via vector
     player = std::make_unique<HumanPlayer>(&game_map, &time, player_starting_position, YELLOW);
     red_enemy = std::make_unique<EnemyPlayer>(&game_map, &time, player.get(), enemy_starting_positions[0], RED);
     blue_enemy = std::make_unique<EnemyPlayer>(&game_map, &time, player.get(), enemy_starting_positions[1], SKYBLUE);
@@ -76,7 +71,7 @@ void Game::Update() {
     }
 }
 
-void Game::Draw() {
+void Game::DrawFrame() {
     BeginDrawing();
 
     switch (state) {
@@ -112,7 +107,8 @@ void Game::DrawLoseScreen() {
     DrawText("Press r to restart", 300, 300, 40, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
-       //this works but i will make a proper system later.
+       //this doesnt work but i will make a proper system later.
+
         CloseWindow();
         Initialize();
     }

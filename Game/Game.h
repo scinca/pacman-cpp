@@ -2,8 +2,6 @@
 #define GAME_H
 
 #include <memory>
-#include <string>
-#include <raylib.h>
 #include "../map/map.h"
 #include "../players/HumanPlayer/HumanPlayer.h"
 #include "../players/EnemyAI/EnemyPlayer.h"
@@ -23,7 +21,7 @@ public:
     void Initialize();
     void ProcessInput() const;
     void Update();
-    void Draw();
+    void DrawFrame();
 
     static bool ShouldClose();
 
