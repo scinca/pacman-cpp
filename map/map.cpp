@@ -28,7 +28,7 @@ std::expected<void, std::string> Map::Load(const std::string& filename) { // sho
             return std::unexpected("Error reading file: " + filename);
         }
         explored_map_.assign(loaded_map_.size(), false);
-        free_tile_count_ = static_cast<int>(count(loaded_map_.begin(), loaded_map_.end(), '0'));
+        free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(), loaded_map_.end(), '0'));
 
         return {};
 
@@ -36,7 +36,7 @@ std::expected<void, std::string> Map::Load(const std::string& filename) { // sho
 
 
 void Map::LoadDefaultMap() {
-    loaded_map_ = default_map;
+    loaded_map_ = default_map_;
     std::erase(loaded_map_, '\n');
     std::erase(loaded_map_, '\r');
     if (loaded_map_.length() != 1400) {
@@ -75,7 +75,7 @@ bool Map::AllExplored() const {
 
 
 
-void Map::Explore(const int x, const int y) {
+void Map::Explore(const int x, const int y) { // can be removed now
 
     const int index = y * 50 + x;
     if (!explored_map_[index] && loaded_map_[index] == '0') {
@@ -94,7 +94,7 @@ void Map::Explore(const int tile) {
 }
 
 
-bool Map::IsExplored(const int x, const int y) const {
+bool Map::IsExplored(const int x, const int y) const { //tbr
     if (x < 0 || x >= 50 || y < 0 || y >= 28) return false;
     return explored_map_[y * 50 + x];
 }

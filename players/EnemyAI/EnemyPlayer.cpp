@@ -52,6 +52,9 @@ void EnemyPlayer::Move() {
             break;
 
     }
+    // this block was needed because the direction change only happens when at the center of a tile, and it could happen that
+    // the enemy overshoots the center and continues to go out of map. Now during a refactor I changed some things and I technically could remove these but I
+    // to do more testing in order to be sure.
     position_x_ = std::clamp(position_x_,
     static_cast<float>(WindowConfig::WindowRoot + TileWidth / 2),
     static_cast<float>(WindowConfig::WindowRoot + 49 * TileWidth + TileWidth / 2));
@@ -101,7 +104,7 @@ void EnemyPlayer::FindBestDirection() {
     }
 
     int min_distance = std::numeric_limits<int>::max();
-    Direction best_direction = Direction::NONE;
+    auto best_direction = Direction::NONE;
 
     for (const auto& direction : possible_moves_) {
         if (direction == opposite) continue;
@@ -120,7 +123,7 @@ void EnemyPlayer::FindBestDirection() {
         }
     }
 
-    if (best_direction != Direction::NONE) {
+    if (best_direction != Direction::NONE) { // sanity check
         current_direction_ = best_direction;
     }
 }
