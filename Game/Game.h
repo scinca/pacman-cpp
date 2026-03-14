@@ -2,6 +2,8 @@
 #define GAME_H
 
 #include <memory>
+#include <optional>
+
 #include "../map/map.h"
 #include "../players/HumanPlayer/HumanPlayer.h"
 #include "../players/EnemyAI/EnemyPlayer.h"
@@ -18,10 +20,12 @@ public:
     Game();
     ~Game();
 
-    void Initialize();
+    void Initialize(const std::optional<std::string> &map_path = std::nullopt);
     void ProcessInput() const;
     void Update();
     void DrawFrame();
+
+    bool HasStarted() const;
 
     static bool ShouldClose();
 
@@ -35,6 +39,7 @@ private:
     std::unique_ptr<HumanPlayer> player;
     std::unique_ptr<EnemyPlayer> red_enemy;
     std::unique_ptr<EnemyPlayer> blue_enemy;
+    bool is_game_running_;
 
 
 };

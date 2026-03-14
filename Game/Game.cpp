@@ -14,11 +14,23 @@ Game::Game() : state(GameState::PLAYING) {
 }
 
 Game::~Game() {
-    CloseWindow();
+
 }
 
-void Game::Initialize() {
-    game_map.LoadDefaultMap();
+void Game::Initialize(const std::optional<std::string> &map_path) {
+    is_game_running_ = true;
+    if (!map_path.has_value()) {
+        game_map.LoadDefaultMap();
+    }
+    else {
+        auto loading_result = game_map.Load(map_path.value());
+        if (!loading_result) {
+            const std::string_view loading_error = loading_result.error();
+            std::cerr << "Failed to load map: " << loading_error << "\n";
+            game_map.LoadDefaultMap();
+        }
+    }
+
 
     // Find starting positions
     const int player_starting_position = game_map.FindPlayerStartTile();
@@ -72,7 +84,6 @@ void Game::Update() {
 }
 
 void Game::DrawFrame() {
-    BeginDrawing();
 
     switch (state) {
         case GameState::PLAYING:
@@ -93,7 +104,7 @@ void Game::DrawFrame() {
             break;
     }
 
-    EndDrawing();
+
 }
 
 void Game::DrawWinScreen() {
@@ -107,13 +118,17 @@ void Game::DrawLoseScreen() {
     DrawText("Press r to restart", 300, 300, 40, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
-       //this doesnt work but i will make a proper system later.
 
-        CloseWindow();
-        Initialize();
+        is_game_running_ = false;
+
+
     }
 }
 
 bool Game::ShouldClose() { // currently a wrapper because I need to make the map selector ui etc first.
     return WindowShouldClose();
+}
+
+bool Game::HasStarted() const {
+    return is_game_running_;
 }

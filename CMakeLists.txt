@@ -41,9 +41,10 @@ add_executable(pacman_cpp main.cpp
         players/HumanPlayer/HumanPlayer.h
         players/EnemyAI/EnemyPlayer.cpp
         players/EnemyAI/EnemyPlayer.h
-        main.h
         Game/Game.cpp
         Game/Game.h
+        GameMenu/GameMenu.cpp
+        GameMenu/GameMenu.h
 )
 
 # Add raygui include directory
