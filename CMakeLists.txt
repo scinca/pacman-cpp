@@ -20,7 +20,7 @@ if(NOT raylib_FOUND)
     FetchContent_MakeAvailable(raylib)
 endif()
 
-# Fetch raygui
+
 include(FetchContent)
 FetchContent_Declare(
         raygui
@@ -28,15 +28,6 @@ FetchContent_Declare(
         GIT_TAG 4.0
 )
 FetchContent_MakeAvailable(raygui)
-
-# Create raygui library
-add_library(raygui SHARED ${raygui_SOURCE_DIR}/src/raygui.h)
-set_target_properties(raygui PROPERTIES
-        LINKER_LANGUAGE C
-)
-target_include_directories(raygui PUBLIC ${raygui_SOURCE_DIR}/src)
-target_compile_definitions(raygui PUBLIC RAYGUI_IMPLEMENTATION)
-target_link_libraries(raygui PUBLIC raylib)
 
 add_executable(pacman_cpp main.cpp
         config.h
@@ -50,9 +41,13 @@ add_executable(pacman_cpp main.cpp
         players/HumanPlayer/HumanPlayer.h
         players/EnemyAI/EnemyPlayer.cpp
         players/EnemyAI/EnemyPlayer.h
+        main.h
 )
 
-target_link_libraries(pacman_cpp raylib raygui)
+# Add raygui include directory
+target_include_directories(pacman_cpp PRIVATE ${raygui_SOURCE_DIR}/src)
+
+target_link_libraries(pacman_cpp raylib)
 
 # Release build flags
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
