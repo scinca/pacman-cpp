@@ -35,12 +35,37 @@ X -> Player Starting Position
 
 0 -> Coin
 
-? -> Ghost starting position(s) There are 2 ghosts
+? -> Ghost starting position(s) There are 3 ghosts on the default map. There can be a maximum of 4 ghosts.
 
 Note that you do not need outer walls since the program treats the windows borders as walls.
 
 
+### Map Rules so an LLM can generate the map better
+#### Map File Format
 
+The map must be stored in a .txt file representing a 50×28 grid.
+
+Format rules:
+- The file must have 1400 characters in it ( excluding newlines etc)
+- Do not include any extra spaces.
+- Line breaks do not count as grid characters.
+- \n and \r characters will be erased by the program.
+
+Allowed characters:
+
+X  -> Player starting position (exactly one required)
+#  -> Wall
+0  -> Coin
+?  -> Ghost starting position
+
+
+Ghost rules:
+- Minimum: 0
+- Maximum: 4
+
+Notes:
+- Outer walls are not required because the window borders are treated as walls by the program.
+-  After generating the map, verify that the total number of characters (excluding line breaks) is exactly 1400.
 
 ## How to Run
 

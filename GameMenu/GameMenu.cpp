@@ -4,20 +4,18 @@
 
 #include "GameMenu.h"
 #include "../Game/Game.h"
-#include <raygui.h>
-
 #include "../config.h"
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
 
-GameMenu::~GameMenu() {
 
+GameMenu::~GameMenu() {
 }
 
 GameMenu::GameMenu(Game *game): game_(game) {
 }
 
-void GameMenu::ShowMenu() {
+void GameMenu::ShowMenu() const {
     DrawText("PAC-MAN GAME",
              WindowConfig::WindowWidth / 2 - 150,
              100,
@@ -25,7 +23,7 @@ void GameMenu::ShowMenu() {
              BLACK);
 
     // Default Map Button
-    const Rectangle defaultMapButton = {
+    constexpr Rectangle defaultMapButton = {
         static_cast<float>(WindowConfig::WindowWidth / 2 - 100),
         static_cast<float>(WindowConfig::WindowHeight / 2 - 25),
         200,
@@ -36,5 +34,6 @@ void GameMenu::ShowMenu() {
         game_->Initialize();
 
     }
+
 }
 

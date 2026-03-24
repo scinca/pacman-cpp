@@ -40,6 +40,8 @@ private:
     std::unique_ptr<EnemyPlayer> red_enemy;
     std::unique_ptr<EnemyPlayer> blue_enemy;
     bool is_game_running_;
+    std::vector<std::unique_ptr<EnemyPlayer>> enemy_players;
+    std::vector<Color>enemy_colors = {RED, SKYBLUE, PINK, LIME};
 
 
 };
