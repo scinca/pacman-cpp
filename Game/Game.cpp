@@ -16,10 +16,14 @@ Game::Game() : state(GameState::PLAYING) {
 Game::~Game() {
 }
 
-void Game::Initialize(const std::optional<std::string> &map_path) {
+void Game::Initialize(const std::optional<std::string> &map_path, const std::optional<int> map_number) {
+    HideCursor();
     enemy_players.clear();
     is_game_running_ = true;
-    if (!map_path.has_value()) {
+    if (map_number== 2) {
+        game_map.LoadMap2();
+    }
+    else if (!map_path.has_value()) {
         game_map.LoadDefaultMap();
     }
     else {
@@ -123,7 +127,7 @@ void Game::DrawLoseScreen() {
 
     if (IsKeyDown(KEY_R)) {
 
-        Initialize();
+        Initialize(game_map.GetMap());
 
 
     }

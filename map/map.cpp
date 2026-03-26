@@ -47,6 +47,17 @@ void Map::LoadDefaultMap() {
 
 }
 
+void Map::LoadMap2() {
+    loaded_map_ = map_2_;
+    std::erase(loaded_map_, '\n');
+    std::erase(loaded_map_, '\r');
+    if (loaded_map_.length() != 1400) {
+        std::cout << ("Invalid map length: " + std::to_string(loaded_map_.length()));
+    }
+    explored_map_.assign(loaded_map_.size(), false);
+    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(),loaded_map_.end(), '0'));
+}
+
 
 void Map::Draw() const {
     for (int i = 0; i < loaded_map_.size(); i++) {
@@ -129,3 +140,5 @@ std::vector<int> Map::FindEnemyStartTiles() const {
     }
     return positions;
 }
+
+

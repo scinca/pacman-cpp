@@ -20,7 +20,7 @@ public:
     Game();
     ~Game();
 
-    void Initialize(const std::optional<std::string> &map_path = std::nullopt);
+    void Initialize(const std::optional<std::string> &map_path = std::nullopt, std::optional<int> map_number = 1);
     void ProcessInput() const;
     void Update();
     void DrawFrame();
