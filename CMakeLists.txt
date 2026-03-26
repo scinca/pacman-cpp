@@ -49,8 +49,9 @@ add_executable(pacman_cpp main.cpp
 
 # Add raygui include directory
 target_include_directories(pacman_cpp PRIVATE ${raygui_SOURCE_DIR}/src)
-
-target_link_libraries(pacman_cpp raylib)
+add_library(sqlite3_lib STATIC third_party/sqlite/sqlite3.c)
+target_include_directories(sqlite3_lib PUBLIC third_party/sqlite)
+target_link_libraries(pacman_cpp raylib sqlite3_lib)
 
 # Release build flags
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
