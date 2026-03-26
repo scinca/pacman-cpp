@@ -10,7 +10,7 @@ class GameMenu {
     public:
     explicit GameMenu(Game *game);
         ~GameMenu();
-    void ShowMenu();
+    void ShowMenu() const;
     private:
    Game* game_;
 

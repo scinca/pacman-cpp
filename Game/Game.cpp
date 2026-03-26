@@ -14,17 +14,20 @@ Game::Game() : state(GameState::PLAYING) {
 }
 
 Game::~Game() {
-
 }
 
-void Game::Initialize(const std::optional<std::string> &map_path) {
+void Game::Initialize(const std::optional<std::string> &map_path, const std::optional<int> map_number) {
+    HideCursor();
+    enemy_players.clear();
     is_game_running_ = true;
-    if (!map_path.has_value()) {
+    if (map_number== 2) {
+        game_map.LoadMap2();
+    }
+    else if (!map_path.has_value()) {
         game_map.LoadDefaultMap();
     }
     else {
-        auto loading_result = game_map.Load(map_path.value());
-        if (!loading_result) {
+        if (auto loading_result = game_map.Load(map_path.value()); !loading_result) {
             const std::string_view loading_error = loading_result.error();
             std::cerr << "Failed to load map: " << loading_error << "\n";
             game_map.LoadDefaultMap();
@@ -38,8 +41,11 @@ void Game::Initialize(const std::optional<std::string> &map_path) {
 
     // create players NEEDS TO BE REDONE LATER via vector
     player = std::make_unique<HumanPlayer>(&game_map, &time, player_starting_position, YELLOW);
-    red_enemy = std::make_unique<EnemyPlayer>(&game_map, &time, player.get(), enemy_starting_positions[0], RED);
-    blue_enemy = std::make_unique<EnemyPlayer>(&game_map, &time, player.get(), enemy_starting_positions[1], SKYBLUE);
+
+    for (int i = 0; i < enemy_starting_positions.size(); i++) {
+        enemy_players.push_back(std::make_unique<EnemyPlayer>(&game_map, &time, player.get(), enemy_starting_positions[i], enemy_colors[i]));
+    }
+
 
     state = GameState::PLAYING;
 }
@@ -77,8 +83,9 @@ void Game::Update() {
         else {
             // Update game entities
             player->Move();
-            red_enemy->Move();
-            blue_enemy->Move();
+           for (const auto& enemy : enemy_players) {
+               enemy->Move();
+           }
         }
     }
 }
@@ -91,8 +98,9 @@ void Game::DrawFrame() {
             DrawRectangleLines(1, 1, WindowConfig::WindowWidth - 1, WindowConfig::WindowHeight - 1, RAYWHITE);
             game_map.Draw();
             player->Draw();
-            red_enemy->Draw();
-            blue_enemy->Draw();
+            for (const auto& enemy : enemy_players) {
+                enemy->Draw();
+            }
             break;
 
         case GameState::WON:
@@ -119,7 +127,7 @@ void Game::DrawLoseScreen() {
 
     if (IsKeyDown(KEY_R)) {
 
-        is_game_running_ = false;
+        Initialize(game_map.GetMap());
 
 
     }
