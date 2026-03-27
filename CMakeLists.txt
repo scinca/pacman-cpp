@@ -45,11 +45,15 @@ add_executable(pacman_cpp main.cpp
         Game/Game.h
         GameMenu/GameMenu.cpp
         GameMenu/GameMenu.h
+        third_party/sqlite/sqlite3.h
+        Database/Database.cpp
+        Database/Database.h
 )
 
 # Add raygui include directory
 target_include_directories(pacman_cpp PRIVATE ${raygui_SOURCE_DIR}/src)
-add_library(sqlite3_lib STATIC third_party/sqlite/sqlite3.c)
+add_library(sqlite3_lib STATIC third_party/sqlite/sqlite3.c
+        third_party/sqlite/sqlite3.h)
 target_include_directories(sqlite3_lib PUBLIC third_party/sqlite)
 target_link_libraries(pacman_cpp raylib sqlite3_lib)
 

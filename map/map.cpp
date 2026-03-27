@@ -3,60 +3,18 @@
 //
 
 #include "map.h"
-
+#include "../Database/Database.h"
 #include <fstream>
 #include <iostream>
 
 #include "../config.h"
 #include <raylib.h>
 
-std::expected<void, std::string> Map::Load(const std::string& filename) { // should expect a 50x 28 grid
-        std::ifstream file(filename, std::ios::binary);
-        if (!file) {
-            return std::unexpected("Failed to open file: " + filename);
-        }
-
-        loaded_map_.assign((std::istreambuf_iterator<char>(file)),
-                           std::istreambuf_iterator<char>());
-        std::erase(loaded_map_, '\n'); //remove newline so for loop can draw map.
-        std::erase(loaded_map_, '\r'); // needed on Windows
-        if (loaded_map_.length() != 1400) { // the grid is 50 x 28 so its total length is 1400
-            return std::unexpected("Error loading Map, Map doesn't fit into the grid. Current Length:" + std::to_string(loaded_map_.length()));
-        }
-
-        if (file.fail() && !file.eof()) {
-            return std::unexpected("Error reading file: " + filename);
-        }
-        explored_map_.assign(loaded_map_.size(), false);
-        free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(), loaded_map_.end(), '0'));
-
-        return {};
-
-    }
-
-
-void Map::LoadDefaultMap() {
-    loaded_map_ = default_map_;
-    std::erase(loaded_map_, '\n');
-    std::erase(loaded_map_, '\r');
-    if (loaded_map_.length() != 1400) {
-        std::cout << ("Invalid map length: " + std::to_string(loaded_map_.length()));
-    }
-    explored_map_.assign(loaded_map_.size(), false);
-    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(), loaded_map_.end(), '0'));
-
+Map::Map(Database* db){
+ database_ = db;
 }
 
-void Map::LoadMap2() {
-    loaded_map_ = map_2_;
-    std::erase(loaded_map_, '\n');
-    std::erase(loaded_map_, '\r');
-    if (loaded_map_.length() != 1400) {
-        std::cout << ("Invalid map length: " + std::to_string(loaded_map_.length()));
-    }
-    explored_map_.assign(loaded_map_.size(), false);
-    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(),loaded_map_.end(), '0'));
-}
+
 
 
 void Map::Draw() const {
@@ -82,17 +40,6 @@ std::string Map::GetMap() {
 
 bool Map::AllExplored() const {
     return free_tile_count_ == explored_tile_count_;
-}
-
-
-
-void Map::Explore(const int x, const int y) { // can be removed now
-
-    const int index = y * 50 + x;
-    if (!explored_map_[index] && loaded_map_[index] == '0') {
-        explored_map_[index] = true;
-        explored_tile_count_++;
-    }
 }
 
 void Map::Explore(const int tile) {
@@ -142,3 +89,69 @@ std::vector<int> Map::FindEnemyStartTiles() const {
 }
 
 
+
+std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {
+    auto result = database_->GetMap(map_number);
+    if (!result) {
+        return std::unexpected("Map " + std::to_string(map_number) + " not found");
+    }
+
+    loaded_map_ = std::move(result.value()); //move avoids copy
+    std::erase(loaded_map_, '\n');
+    std::erase(loaded_map_, '\r');
+
+    explored_map_.assign(loaded_map_.size(), false);
+    free_tile_count_ = static_cast<int>(
+        std::count(loaded_map_.begin(), loaded_map_.end(), '0')
+    );
+
+    return {};
+}
+
+std::expected<void, std::string> Map::Load(const std::string& filename) { // should expect a 50x 28 grid
+    std::ifstream file(filename, std::ios::binary);
+    if (!file) {
+        return std::unexpected("Failed to open file: " + filename);
+    }
+
+    loaded_map_.assign((std::istreambuf_iterator<char>(file)),
+                       std::istreambuf_iterator<char>());
+    std::erase(loaded_map_, '\n'); //remove newline so for loop can draw map.
+    std::erase(loaded_map_, '\r'); // needed on Windows
+    if (loaded_map_.length() != 1400) { // the grid is 50 x 28 so its total length is 1400
+        return std::unexpected("Error loading Map, Map doesn't fit into the grid. Current Length:" + std::to_string(loaded_map_.length()));
+    }
+
+    if (file.fail() && !file.eof()) {
+        return std::unexpected("Error reading file: " + filename);
+    }
+    explored_map_.assign(loaded_map_.size(), false);
+    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(), loaded_map_.end(), '0'));
+
+    return {};
+
+}
+
+
+void Map::LoadDefaultMap() {
+    loaded_map_ = default_map_;
+    std::erase(loaded_map_, '\n');
+    std::erase(loaded_map_, '\r');
+    if (loaded_map_.length() != 1400) {
+        std::cout << ("Invalid map length: " + std::to_string(loaded_map_.length()));
+    }
+    explored_map_.assign(loaded_map_.size(), false);
+    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(), loaded_map_.end(), '0'));
+
+}
+
+void Map::LoadMap2() {
+    loaded_map_ = map_2_;
+    std::erase(loaded_map_, '\n');
+    std::erase(loaded_map_, '\r');
+    if (loaded_map_.length() != 1400) {
+        std::cout << ("Invalid map length: " + std::to_string(loaded_map_.length()));
+    }
+    explored_map_.assign(loaded_map_.size(), false);
+    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(),loaded_map_.end(), '0'));
+}

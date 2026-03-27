@@ -10,11 +10,11 @@
 #include <ctime>
 #include <cstdlib>
 
-Game::Game() : state(GameState::PLAYING) {
+
+Game::Game(Database *db) : db_(db), state(GameState::PLAYING), game_map(db_) {
 }
 
-Game::~Game() {
-}
+Game::~Game() = default;
 
 void Game::Initialize(const std::optional<std::string> &map_path, const std::optional<int> map_number) {
     HideCursor();
