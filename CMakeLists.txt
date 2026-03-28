@@ -31,8 +31,8 @@ FetchContent_MakeAvailable(raygui)
 
 add_executable(pacman_cpp main.cpp
         config.h
-        map/map.cpp
-        map/map.h
+        Map/Map.cpp
+        Map/Map.h
         players/player_base.h
         time/deltaTime.cpp
         time/deltaTime.h
@@ -45,12 +45,17 @@ add_executable(pacman_cpp main.cpp
         Game/Game.h
         GameMenu/GameMenu.cpp
         GameMenu/GameMenu.h
+        third_party/sqlite/sqlite3.h
+        Database/Database.cpp
+        Database/Database.h
 )
 
 # Add raygui include directory
 target_include_directories(pacman_cpp PRIVATE ${raygui_SOURCE_DIR}/src)
-
-target_link_libraries(pacman_cpp raylib)
+add_library(sqlite3_lib STATIC third_party/sqlite/sqlite3.c
+        third_party/sqlite/sqlite3.h)
+target_include_directories(sqlite3_lib PUBLIC third_party/sqlite)
+target_link_libraries(pacman_cpp raylib sqlite3_lib)
 
 # Release build flags
 if(CMAKE_BUILD_TYPE STREQUAL "Release")

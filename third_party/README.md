@@ -1,0 +1,1 @@
+# This directory contains 3rd party dependencies such as sqlite3

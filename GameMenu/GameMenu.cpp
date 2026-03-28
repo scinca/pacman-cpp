@@ -14,7 +14,7 @@ GameMenu::~GameMenu() = default;
 GameMenu::GameMenu(Game *game): game_(game) {
 }
 
-void GameMenu::ShowMenu() const {
+void GameMenu::Show() const {
     DrawText("PAC-MAN GAME",
              WindowConfig::WindowWidth / 2 - 150,
              100,
@@ -36,10 +36,10 @@ void GameMenu::ShowMenu() const {
     };
 
     if (GuiButton(default_map_button_, "Use Default Map")) {
-        game_->Initialize();
+        game_->Initialize(1);
     }
     if (GuiButton(map_2_button_, "Use Map2")) {
-        game_->Initialize(std::nullopt,2);
+        game_->Initialize(2);
     }
 
 }

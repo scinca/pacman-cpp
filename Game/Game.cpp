@@ -10,36 +10,31 @@
 #include <ctime>
 #include <cstdlib>
 
-Game::Game() : state(GameState::PLAYING) {
+
+Game::Game(Database *db) : db_(db), state(GameState::PLAYING), game_map(db_) {
 }
 
-Game::~Game() {
-}
+Game::~Game() = default;
 
-void Game::Initialize(const std::optional<std::string> &map_path, const std::optional<int> map_number) {
+void Game::Initialize(const std::optional<int> map_number) {
     HideCursor();
     enemy_players.clear();
     is_game_running_ = true;
-    if (map_number== 2) {
-        game_map.LoadMap2();
-    }
-    else if (!map_path.has_value()) {
-        game_map.LoadDefaultMap();
-    }
+   if (map_number.has_value()) {
+       game_map.LoadMapFromDB(map_number.value());
+   }
     else {
-        if (auto loading_result = game_map.Load(map_path.value()); !loading_result) {
-            const std::string_view loading_error = loading_result.error();
-            std::cerr << "Failed to load map: " << loading_error << "\n";
-            game_map.LoadDefaultMap();
-        }
+        game_map.LoadMapFromDB(current_map_number_);
     }
+
+
 
 
     // Find starting positions
     const int player_starting_position = game_map.FindPlayerStartTile();
     const std::vector<int> enemy_starting_positions = game_map.FindEnemyStartTiles();
 
-    // create players NEEDS TO BE REDONE LATER via vector
+
     player = std::make_unique<HumanPlayer>(&game_map, &time, player_starting_position, YELLOW);
 
     for (int i = 0; i < enemy_starting_positions.size(); i++) {
@@ -50,7 +45,7 @@ void Game::Initialize(const std::optional<std::string> &map_path, const std::opt
     state = GameState::PLAYING;
 }
 
-void Game::ProcessInput() const {
+void Game::HandlePlayerInput() const {
     if (state != GameState::PLAYING) {
         return;
     }
@@ -127,7 +122,7 @@ void Game::DrawLoseScreen() {
 
     if (IsKeyDown(KEY_R)) {
 
-        Initialize(game_map.GetMap());
+        Initialize();
 
 
     }
