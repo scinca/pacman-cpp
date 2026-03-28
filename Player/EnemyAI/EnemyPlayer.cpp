@@ -8,7 +8,7 @@
 #include <limits>
 
 #include "raylib.h"
-#include "../../config.h"
+#include "../../ApplicationConfig.h"
 #include "../../time/deltaTime.h"
 #include "../../Map/Map.h"
 
@@ -21,10 +21,11 @@ EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int st
 }
 
 void EnemyPlayer::Draw() const {
+    const auto& config = ApplicationConfig::GetInstance();
     DrawCircle(
         static_cast<int>(position_x_),
         static_cast<int>(position_y_),
-        TileWidth * 0.4f, color_);
+        config.TileWidth * 0.4f, color_);
 }
 
 void EnemyPlayer::Move() {
@@ -71,6 +72,7 @@ int EnemyPlayer::CalculateManhattanDistance(const int tile) const {
 
 
 void EnemyPlayer::FindBestDirection() {
+    const auto& config = ApplicationConfig::GetInstance();
     auto opposite = Direction::NONE;
     if (current_direction_ == Direction::UP) {
         opposite = Direction::DOWN;
@@ -85,7 +87,7 @@ void EnemyPlayer::FindBestDirection() {
         opposite = Direction::LEFT;
     }
 
-    if (GetRandomValue(0, 100) < failure_percentage) { // 15% chance of random move so that the gameplay doesn't feel repetitive.
+    if (GetRandomValue(0, 100) < config.failure_percentage) { // 15% chance of random move so that the gameplay doesn't feel repetitive.
         for (const auto& direction : possible_moves_) {
             if (direction != opposite) {
                 current_direction_ = direction;

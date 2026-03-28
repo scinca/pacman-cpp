@@ -8,7 +8,8 @@
 #include <raygui.h>
 #include <raylib.h>
 #include "Game.h"
-#include "../config.h"
+#include "../ApplicationConfig.h"
+
 
 
 Game::Game(Database *db) : db_(db), state(GameState::PLAYING), game_map(db_) {
@@ -106,21 +107,28 @@ void Game::Resume() {
 }
 
 void Game::DrawFrame() {
-    DrawRectangleLines(WindowConfig::WindowRoot,WindowConfig::WindowRoot, WindowConfig::ScreenWidth-1,WindowConfig::ScreenHeight-1, RAYWHITE);
+    const auto& config = ApplicationConfig::GetInstance();
+    DrawRectangleLines(config.WindowRoot,config.WindowRoot, GetScreenWidth()-1,GetScreenHeight()-1, RAYWHITE);
     switch (state) {
         case GameState::PLAYING: {
+            //these are the outer borders that get drawn when there is a small gap
+            DrawRectangle(0, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //left
+            DrawRectangle(GetScreenWidth() -config.GameMapRootX, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //right
+            DrawRectangle(0, config.GameMapRootY - config.GameMapRootX, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
+            DrawRectangle(0, config.GameMapRootY + config.GameMapHeight, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
             if (silent_pause_) {
                 ClearBackground(BLACK);
-                DrawFPS(WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+5);
-                DrawText("The game hasn't started, press any of the Direction Keys to continue",WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+20, 50, SKYBLUE);
+                DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
+                DrawText("The game hasn't started, press any of the Direction Keys to continue",config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
                 if (IsKeyPressed(KEY_W)||IsKeyPressed(KEY_A)|| IsKeyPressed(KEY_S)|| IsKeyPressed(KEY_D) || IsKeyPressed(KEY_P)|| IsKeyPressed(KEY_UP)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_RIGHT)) {
                     silent_pause_ = false;
                     Resume();
                 }
 
 
-                DrawRectangleLines(WindowConfig::WindowRoot, WindowConfig::WindowRoot, WindowConfig::GameMapWidth - 1, WindowConfig::GameMapHeight - 1, RAYWHITE);
-                DrawLine(WindowConfig::GameMapRootX,WindowConfig::GameMapRootY,WindowConfig::GameMapWidth,WindowConfig::GameMapRootY,RAYWHITE);
+
+                DrawLine(config.GameMapRootX,config.GameMapRootY,GetScreenWidth(),config.GameMapRootY,RAYWHITE);
+
                 game_map.Draw();
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
@@ -128,10 +136,9 @@ void Game::DrawFrame() {
                 }
             }else {
                 ClearBackground(BLACK);
-                DrawFPS(WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+5);
-                DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+20, 50, SKYBLUE);
-                DrawRectangleLines(WindowConfig::WindowRoot, WindowConfig::WindowRoot, WindowConfig::GameMapWidth - 1, WindowConfig::GameMapHeight - 1, RAYWHITE);
-                DrawLine(WindowConfig::GameMapRootX,WindowConfig::GameMapRootY,WindowConfig::GameMapWidth,WindowConfig::GameMapRootY,RAYWHITE);
+                DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
+                DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
+                DrawLine(config.GameMapRootX,config.GameMapRootY,GetScreenWidth(),config.GameMapRootY,RAYWHITE);
                 game_map.Draw();
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
@@ -145,9 +152,9 @@ void Game::DrawFrame() {
                 ClearBackground(RAYWHITE);
                 ShowCursor();
                 DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
-                constexpr Rectangle resume_game_button = {
-                    static_cast<float>(WindowConfig::GameMapWidth / 2 - 100),
-                    static_cast<float>(WindowConfig::GameMapHeight / 2 - 50),
+                const Rectangle resume_game_button = {
+                    static_cast<float>(config.GameMapWidth / 2 - 100),
+                    static_cast<float>(config.GameMapHeight / 2 - 50),
                     200,
                     50
                 };
@@ -174,15 +181,15 @@ void Game::DrawFrame() {
 void Game::DrawWinScreen() {
     ClearBackground(RAYWHITE);
     ShowCursor();
-    DrawText("You won!", WindowConfig::WindowRoot + 300, WindowConfig::WindowRoot + 300, font_size, BLACK);
-    DrawText("Press r to restart", WindowConfig::WindowRoot+ 300, WindowConfig::WindowRoot+ 300, font_size, SKYBLUE);
+    DrawText("You won!", ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().font_size, BLACK);
+    DrawText("Press r to restart", ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().font_size, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
         Initialize();
     }
-    constexpr Rectangle back_to_menu_button = {
-        static_cast<float>(WindowConfig::GameMapWidth / 2 - 100),
-        static_cast<float>(WindowConfig::GameMapHeight / 2 - 50),
+    const Rectangle back_to_menu_button = {
+        static_cast<float>(ApplicationConfig::GetInstance().GameMapWidth / 2 - 100),
+        static_cast<float>(ApplicationConfig::GetInstance().GameMapHeight / 2 - 50),
         200,
         50
     };
@@ -195,15 +202,15 @@ void Game::DrawWinScreen() {
 void Game::DrawLoseScreen() {
     ShowCursor();
     ClearBackground(RAYWHITE);
-    DrawText("You lost.", 100, 100, font_size, BLACK);
-    DrawText("Press r to restart", WindowConfig::WindowRoot+ 300, WindowConfig::WindowRoot+ 300, font_size, SKYBLUE);
+    DrawText("You lost.", 100, 100, ApplicationConfig::GetInstance().font_size, BLACK);
+    DrawText("Press r to restart", ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().font_size, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
         Initialize();
     }
-    constexpr Rectangle back_to_menu_button = {
-        static_cast<float>(WindowConfig::GameMapWidth / 2 - 100),
-        static_cast<float>(WindowConfig::GameMapHeight / 2 - 50),
+    const Rectangle back_to_menu_button = {
+        static_cast<float>(ApplicationConfig::GetInstance().GameMapWidth / 2 - 100),
+        static_cast<float>(ApplicationConfig::GetInstance().GameMapHeight / 2 - 50),
         200,
         50
     };

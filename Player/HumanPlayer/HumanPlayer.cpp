@@ -4,11 +4,10 @@
 
 #include "HumanPlayer.h"
 #include <algorithm>
-
-#include "../../config.h"
 #include <raylib.h>
 #include "../../time/deltaTime.h"
 #include "../../Map/Map.h"
+#include "../../ApplicationConfig.h"
 
 HumanPlayer::HumanPlayer(Map *map, Time *time, const int starting_tile, const Color color)
     :PlayerBase(map, time, starting_tile, color){
@@ -60,10 +59,11 @@ void HumanPlayer::Move() {
 
 
 void HumanPlayer::Draw() const {
+    const auto& config = ApplicationConfig::GetInstance();
     DrawCircle(
         static_cast<int>(position_x_),
         static_cast<int>(position_y_),
-        TileWidth * 0.4f, color_);
+        config.TileWidth * 0.4f, color_);
 }
 
 void HumanPlayer::SetNextDirection(const Direction next_direction) {

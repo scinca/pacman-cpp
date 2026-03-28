@@ -7,7 +7,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "../config.h"
+#include "../ApplicationConfig.h"
 #include <raylib.h>
 #include <regex>
 
@@ -16,21 +16,20 @@ Map::Map(Database* db){
 }
 
 
-
-
 void Map::Draw() const {
+    const auto& config = ApplicationConfig::GetInstance();
     for (int i = 0; i < loaded_map_.size(); i++) {
-        const std::int32_t tile_x = (i % 50) * TileWidth + WindowConfig::GameMapRootX;
-        const std::int32_t tile_y = (i / 50) * TileWidth + WindowConfig::GameMapRootY;
+        const std::int32_t tile_x = (i % config.TilesX) * config.TileWidth + config.GameMapRootX;
+        const std::int32_t tile_y = (i / config.TilesX) * config.TileWidth + config.GameMapRootY;
 
-        const int center_x = tile_x + TileWidth / 2;
-        const int center_y = tile_y + TileWidth / 2;
+        const int center_x = tile_x + config.TileWidth / 2;
+        const int center_y = tile_y + config.TileWidth / 2;
 
         if (loaded_map_[i] == '#') {
-            DrawRectangle(tile_x, tile_y, TileWidth, TileWidth, RAYWHITE);
+            DrawRectangle(tile_x, tile_y, config.TileWidth, config.TileWidth, RAYWHITE);
         }
         if (loaded_map_[i] == '0' && !explored_map_[i]) {
-            DrawCircle(center_x, center_y, PointRadius * 0.5, GREEN);
+            DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN); // the coins should be smaller than player
         }
     }
 }
@@ -53,10 +52,6 @@ void Map::Explore(const int tile) {
 }
 
 
-bool Map::IsExplored(const int x, const int y) const { //tbr
-    if (x < 0 || x >= 50 || y < 0 || y >= 28) return false;
-    return explored_map_[y * 50 + x];
-}
 
 bool Map::CanMove(const int tileNumber) const {
     if (tileNumber < 0 || tileNumber >= static_cast<int>(loaded_map_.size()))
@@ -68,8 +63,9 @@ bool Map::CanMove(const int tileNumber) const {
 
 
 std::pair<float, float> Map::GetTileCenter(const int tile) {
-    const float center_x = WindowConfig::GameMapRootX + (tile % 50) * TileWidth + TileWidth / 2;
-    const float center_y = WindowConfig::GameMapRootY + (tile / 50) * TileWidth + TileWidth / 2;
+    const auto& config = ApplicationConfig::GetInstance();
+    const float center_x = config.GameMapRootX + (tile % config.TilesX) * config.TileWidth + config.TileWidth / 2;
+    const float center_y = config.GameMapRootY + (tile / config.TilesX) * config.TileWidth + config.TileWidth / 2;
     return {center_x, center_y};
 }
 

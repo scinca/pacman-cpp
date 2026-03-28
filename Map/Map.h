@@ -20,13 +20,12 @@ public:
     [[nodiscard]] bool AllExplored() const;
     void Explore(int tile);
     static std::pair<float, float> GetTileCenter(int tile) ;
-    [[nodiscard]] bool IsExplored(int x, int y) const;
     [[nodiscard]] bool CanMove(int tileNumber) const;
     [[nodiscard]] int FindPlayerStartTile() const;
     [[nodiscard]] std::vector<int> FindEnemyStartTiles() const;
     static bool ValidateMap(const std::string& map);
-    int GetExploredTileCount() const {return explored_tile_count_;}
-    int GetFreeTileCount() const {return free_tile_count_;}
+    [[nodiscard]] int GetExploredTileCount() const {return explored_tile_count_;}
+    [[nodiscard]] int GetFreeTileCount() const {return free_tile_count_;}
 
 private:
     Database* database_;

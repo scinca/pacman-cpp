@@ -48,6 +48,8 @@ add_executable(pacman_cpp main.cpp
         third_party/sqlite/sqlite3.h
         Database/Database.cpp
         Database/Database.h
+        ApplicationConfig.cpp
+        ApplicationConfig.h
 )
 
 # Add raygui include directory
