@@ -19,6 +19,7 @@ Database::Database(const std::string& db_path) {
         sqlite3_close(db_);
         throw std::runtime_error(error_message);
     }
+
     sqlite3_exec(db_, "PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;", nullptr, nullptr, nullptr);
     std::cout << "SQLite version: " << sqlite3_libversion() << std::endl;
     std::cout << "DB opened successfully!" << std::endl;

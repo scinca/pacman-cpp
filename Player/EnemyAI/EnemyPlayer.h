@@ -6,7 +6,7 @@
 #define PACMAN_CPP_ENEMYPLAYER_H
 #include <raylib.h>
 
-#include "../player_base.h"
+#include "../PlayerBase.h"
 #include "../HumanPlayer/HumanPlayer.h"
 
 class EnemyPlayer : public PlayerBase {
@@ -16,10 +16,11 @@ class EnemyPlayer : public PlayerBase {
     void Move() override;
 
     private:
-    HumanPlayer *player_;
-    std::vector<int> surrounding_tiles_;
     [[nodiscard]] int CalculateManhattanDistance(int tile) const;
     void FindBestDirection();
+
+    HumanPlayer *player_;
+    std::vector<int> surrounding_tiles_;
 };
 
 

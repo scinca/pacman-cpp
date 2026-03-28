@@ -4,19 +4,19 @@
 
 #ifndef PACMAN_CPP_HUMANPLAYER_H
 #define PACMAN_CPP_HUMANPLAYER_H
-#include "../player_base.h"
+#include "../PlayerBase.h"
 
 
 class HumanPlayer : public PlayerBase {
     public:
     explicit HumanPlayer(Map *map, Time *time, int starting_tile, Color color);
-
     void Move() override;
     void Draw() const override;
     void Kill();
     [[nodiscard]] bool CheckIfAlive() const;
-    void SetNextDirection(Direction nextDirection);
+    void SetNextDirection(Direction next_direction);
     [[nodiscard]] std::pair<int, int> GetPosition() const;
+
     private:
     Direction next_direction_ = Direction::NONE;  // buffered input
     bool is_alive_ = true;

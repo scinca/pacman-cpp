@@ -24,7 +24,7 @@ void Game::Initialize(const std::optional<int> map_number) {
        game_map.LoadMapFromDB(map_number.value());
    }
     else {
-        game_map.LoadMapFromDB(current_map_number_);
+        game_map.LoadMapFromDB(last_played_map_number_);
     }
 
 

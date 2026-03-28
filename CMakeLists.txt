@@ -33,14 +33,14 @@ add_executable(pacman_cpp main.cpp
         config.h
         Map/Map.cpp
         Map/Map.h
-        players/player_base.h
+        Player/PlayerBase.h
         time/deltaTime.cpp
         time/deltaTime.h
-        players/player_base.cpp
-        players/HumanPlayer/HumanPlayer.cpp
-        players/HumanPlayer/HumanPlayer.h
-        players/EnemyAI/EnemyPlayer.cpp
-        players/EnemyAI/EnemyPlayer.h
+        Player/PlayerBase.cpp
+        Player/HumanPlayer/HumanPlayer.cpp
+        Player/HumanPlayer/HumanPlayer.h
+        Player/EnemyAI/EnemyPlayer.cpp
+        Player/EnemyAI/EnemyPlayer.h
         Game/Game.cpp
         Game/Game.h
         GameMenu/GameMenu.cpp

@@ -3,7 +3,6 @@
 //
 
 #include "HumanPlayer.h"
-
 #include <algorithm>
 
 #include "../../config.h"
@@ -11,7 +10,7 @@
 #include "../../time/deltaTime.h"
 #include "../../Map/Map.h"
 
-HumanPlayer::HumanPlayer(Map *map, Time *time, int starting_tile, Color color)
+HumanPlayer::HumanPlayer(Map *map, Time *time, const int starting_tile, const Color color)
     :PlayerBase(map, time, starting_tile, color){
     std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
     GetTile();
@@ -36,6 +35,7 @@ void HumanPlayer::Move() {
         }
 
     }
+
     switch (current_direction_) {
         case Direction::UP:
             position_y_ -= velocity_ * time_->GetDeltaTime();
@@ -66,8 +66,8 @@ void HumanPlayer::Draw() const {
         TileWidth * 0.4f, color_);
 }
 
-void HumanPlayer::SetNextDirection(const Direction nextDirection) {
-    next_direction_ = nextDirection;
+void HumanPlayer::SetNextDirection(const Direction next_direction) {
+    next_direction_ = next_direction;
 }
 
 void HumanPlayer::Kill() {

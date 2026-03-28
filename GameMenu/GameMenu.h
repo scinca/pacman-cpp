@@ -7,11 +7,12 @@
 class Game;
 
 class GameMenu {
-    public:
+public:
     explicit GameMenu(Game *game);
-        ~GameMenu();
+    ~GameMenu();
     void Show() const;
-    private:
+
+private:
    Game* game_;
 
 };

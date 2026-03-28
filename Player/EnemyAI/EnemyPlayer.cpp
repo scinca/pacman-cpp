@@ -9,7 +9,7 @@
 
 #include "raylib.h"
 #include "../../config.h"
-#include "../../time/deltaTime.h"  // ← add this
+#include "../../time/deltaTime.h"
 #include "../../Map/Map.h"
 
 EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int starting_tile, const Color color) : PlayerBase(map, time, starting_tile, color) {
@@ -52,18 +52,8 @@ void EnemyPlayer::Move() {
             break;
 
     }
-    // this block was needed because the direction change only happens when at the center of a tile, and it could happen that
-    // the enemy overshoots the center and continues to go out of map. Now during a refactor I changed some things and I technically could remove these but I
-    // to do more testing in order to be sure.
-    position_x_ = std::clamp(position_x_,
-    static_cast<float>(WindowConfig::WindowRoot + TileWidth / 2),
-    static_cast<float>(WindowConfig::WindowRoot + 49 * TileWidth + TileWidth / 2));
-        position_y_ = std::clamp(position_y_,
-        static_cast<float>(WindowConfig::WindowRoot + TileWidth / 2),
-        static_cast<float>(WindowConfig::WindowRoot + 27 * TileWidth + TileWidth / 2));
 
-        auto player_tile = player_->GetCurrentTile();
-        if (player_tile== current_tile_) {
+    if (player_->GetCurrentTile() == current_tile_) {
             player_->Kill();
         }
 
@@ -94,6 +84,7 @@ void EnemyPlayer::FindBestDirection() {
     if (current_direction_ == Direction::RIGHT) {
         opposite = Direction::LEFT;
     }
+
     if (GetRandomValue(0, 100) < failure_percentage) { // 15% chance of random move so that the gameplay doesn't feel repetitive.
         for (const auto& direction : possible_moves_) {
             if (direction != opposite) {

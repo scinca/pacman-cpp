@@ -27,7 +27,9 @@ class PlayerBase {
 
     protected:
     bool CheckMoveValidity(Direction move);
-
+    [[nodiscard]] bool IsAtTileCenter() const;
+    void GetTile();
+    void CheckSurroundingTiles();
 
     float position_x_;
     float position_y_;
@@ -35,13 +37,7 @@ class PlayerBase {
     int velocity_ = 150;
     float margin_ = 3.0f;
     Color color_;
-
     Direction current_direction_ = Direction::NONE;
-    [[nodiscard]] bool IsAtTileCenter() const;
-
-    void GetTile();
-    void CheckSurroundingTiles();
-
     std::vector<Direction> possible_moves_;
     Map *map_ = nullptr;
     Time *time_ = nullptr;

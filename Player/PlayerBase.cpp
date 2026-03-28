@@ -2,16 +2,15 @@
 // Created by simon on 06.03.26.
 //
 
-#include "player_base.h"
+#include "PlayerBase.h"
 
 #include <algorithm>
 #include <raylib.h>
 #include "../config.h"
-#include "../time/deltaTime.h"
 #include "../Map/Map.h"
 
-PlayerBase::PlayerBase(Map *game_map, Time *time, const int tile, Color color)// currentTile is 0 because I will implement a system to set currentTile starting Point in the map
-    :position_x_(WindowConfig::WindowRoot+ TileWidth/2), position_y_(WindowConfig::WindowRoot + TileWidth/2), current_tile_(tile), map_(game_map), time_(time), color_(color)
+PlayerBase::PlayerBase(Map *game_map, Time *time, const int tile, const Color color)
+    :position_x_(WindowConfig::WindowRoot+ TileWidth/2), position_y_(WindowConfig::WindowRoot + TileWidth/2), current_tile_(tile), color_(color), map_(game_map), time_(time)
 
 {
 
@@ -40,19 +39,19 @@ void PlayerBase::CheckSurroundingTiles() { // it's a 50x28 grid but arrays start
     const int tile_y = static_cast<int>(position_y_ - WindowConfig::WindowRoot) / TileWidth;
     const int tile = tile_y * 50 + tile_x;
 
-        if (tile_x > 0 && map_->CanMove(tile - 1))
+        if (tile_x > 0 && map_->CanMove(tile - 1)) {
             possible_moves_.push_back(Direction::LEFT);
-
-        if (tile_x < 49 && map_->CanMove(tile + 1))
+        }
+        if (tile_x < 49 && map_->CanMove(tile + 1)) {
             possible_moves_.push_back(Direction::RIGHT);
-
-        if (tile_y > 0 && map_->CanMove(tile - 50))
+        }
+        if (tile_y > 0 && map_->CanMove(tile - 50)) {
             possible_moves_.push_back(Direction::UP);
-
-        if (tile_y < 27 && map_->CanMove(tile + 50))
+        }
+        if (tile_y < 27 && map_->CanMove(tile + 50)) {
             possible_moves_.push_back(Direction::DOWN);
-
-    }
+        }
+}
 
 
 
