@@ -4,7 +4,7 @@
 #include <memory>
 #include <optional>
 
-#include "../map/map.h"
+#include "../Map/Map.h"
 #include "../players/HumanPlayer/HumanPlayer.h"
 #include "../players/EnemyAI/EnemyPlayer.h"
 #include "../time/deltaTime.h"
@@ -25,13 +25,14 @@ public:
     ~Game();
 
     void Initialize(const std::optional<std::string> &map_path = std::nullopt, std::optional<int> map_number = 1);
-    void ProcessInput() const;
+    void HandlePlayerInput() const;
     void Update();
     void DrawFrame();
 
     bool HasStarted() const;
 
     static bool ShouldClose();
+    void SetCurrentMapNumber(const int number) {current_map_number_ = number;}
 
 private:
     static void DrawWinScreen();
@@ -41,14 +42,13 @@ private:
     GameState state;
     Time time;
     Map game_map;
-
+    int current_map_number_;
     std::unique_ptr<HumanPlayer> player;
     std::unique_ptr<EnemyPlayer> red_enemy;
     std::unique_ptr<EnemyPlayer> blue_enemy;
     bool is_game_running_{};
     std::vector<std::unique_ptr<EnemyPlayer>> enemy_players;
     std::vector<Color>enemy_colors = {RED, SKYBLUE, PINK, LIME};
-
 
 };
 

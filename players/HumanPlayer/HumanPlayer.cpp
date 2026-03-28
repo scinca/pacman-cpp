@@ -9,7 +9,7 @@
 #include "../../config.h"
 #include <raylib.h>
 #include "../../time/deltaTime.h"
-#include "../../map/map.h"
+#include "../../Map/Map.h"
 
 HumanPlayer::HumanPlayer(Map *map, Time *time, int starting_tile, Color color)
     :PlayerBase(map, time, starting_tile, color){

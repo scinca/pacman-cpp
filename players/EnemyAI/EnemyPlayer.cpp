@@ -10,7 +10,7 @@
 #include "raylib.h"
 #include "../../config.h"
 #include "../../time/deltaTime.h"  // ← add this
-#include "../../map/map.h"
+#include "../../Map/Map.h"
 
 EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int starting_tile, const Color color) : PlayerBase(map, time, starting_tile, color) {
     player_ = player;

@@ -31,8 +31,8 @@ FetchContent_MakeAvailable(raygui)
 
 add_executable(pacman_cpp main.cpp
         config.h
-        map/map.cpp
-        map/map.h
+        Map/Map.cpp
+        Map/Map.h
         players/player_base.h
         time/deltaTime.cpp
         time/deltaTime.h

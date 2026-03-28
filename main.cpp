@@ -15,6 +15,7 @@ int main(int argc, char* argv[]) {
     InitWindow(WindowConfig::WindowWidth, WindowConfig::WindowHeight, WindowConfig::WindowTitle);
     SetTargetFPS(60);
     SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
+
     Game game{ & database};
     const GameMenu game_menu{&game};
 
@@ -23,11 +24,10 @@ int main(int argc, char* argv[]) {
     while (!Game::ShouldClose()) {
         BeginDrawing();
         if (!game.HasStarted()) {
-
             ClearBackground(RAYWHITE);
-            game_menu.ShowMenu();
+            game_menu.Show();
         }else{
-            game.ProcessInput();
+            game.HandlePlayerInput();
             game.Update();
             game.DrawFrame();
         }
@@ -35,6 +35,7 @@ int main(int argc, char* argv[]) {
         EndDrawing();
 
     }
+
     CloseWindow();
     return 0;
 }

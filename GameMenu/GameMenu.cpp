@@ -14,7 +14,7 @@ GameMenu::~GameMenu() = default;
 GameMenu::GameMenu(Game *game): game_(game) {
 }
 
-void GameMenu::ShowMenu() const {
+void GameMenu::Show() const {
     DrawText("PAC-MAN GAME",
              WindowConfig::WindowWidth / 2 - 150,
              100,

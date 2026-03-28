@@ -2,13 +2,14 @@
 // Created by simon on 22.02.26.
 //
 
-#include "map.h"
+#include "Map.h"
 #include "../Database/Database.h"
 #include <fstream>
 #include <iostream>
 
 #include "../config.h"
 #include <raylib.h>
+#include <regex>
 
 Map::Map(Database* db){
  database_ = db;
@@ -108,6 +109,7 @@ std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {
     return {};
 }
 
+/*
 std::expected<void, std::string> Map::Load(const std::string& filename) { // should expect a 50x 28 grid
     std::ifstream file(filename, std::ios::binary);
     if (!file) {
@@ -131,15 +133,17 @@ std::expected<void, std::string> Map::Load(const std::string& filename) { // sho
     return {};
 
 }
-
+*/
 
 void Map::LoadDefaultMap() {
-    loaded_map_ = default_map_;
-    std::erase(loaded_map_, '\n');
-    std::erase(loaded_map_, '\r');
-    if (loaded_map_.length() != 1400) {
-        std::cout << ("Invalid map length: " + std::to_string(loaded_map_.length()));
+    const auto result = database_->GetMap(1);
+    if (!result) {
+        std::cerr << "Map " + std::to_string(1) + " not found\n";
+        return;
     }
+    loaded_map_ = result.value();
+
+
     explored_map_.assign(loaded_map_.size(), false);
     free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(), loaded_map_.end(), '0'));
 
@@ -154,4 +158,36 @@ void Map::LoadMap2() {
     }
     explored_map_.assign(loaded_map_.size(), false);
     free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(),loaded_map_.end(), '0'));
+}
+
+bool Map::ValidateMap(const std::string& map) {
+    /*
+     *ValidateMap() Checks if the map has correct length,
+     *only allowed symbols
+     *and the correct number of starting positions
+     */
+    static const std::regex valid_chars(R"(^[X#0? ]+$)");
+
+    if (map.length() != 1400) {
+        return false;
+    }
+
+    if (!std::regex_match(map, valid_chars)) {
+        std::cerr << "Invalid characters found.\n";
+        return false;
+    }
+
+    int player_starting_positions_count = std::count(map.begin(), map.end(), 'X');
+    if (player_starting_positions_count != 1) {
+        std::cerr << "Invalid player count: " << player_starting_positions_count << " (expected exactly 1)\n";
+        return false;
+    }
+
+    int ghost_starting_positions_count = std::count(map.begin(), map.end(), '?');
+    if (ghost_starting_positions_count > 4 || ghost_starting_positions_count < 1) {
+        std::cerr << "Invalid ghost count: (Must be between 1 and 4) current count: " << ghost_starting_positions_count << "\n";
+        return false;
+    }
+
+    return true;
 }

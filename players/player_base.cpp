@@ -8,7 +8,7 @@
 #include <raylib.h>
 #include "../config.h"
 #include "../time/deltaTime.h"
-#include "../map/map.h"
+#include "../Map/Map.h"
 
 PlayerBase::PlayerBase(Map *game_map, Time *time, const int tile, Color color)// currentTile is 0 because I will implement a system to set currentTile starting Point in the map
     :position_x_(WindowConfig::WindowRoot+ TileWidth/2), position_y_(WindowConfig::WindowRoot + TileWidth/2), current_tile_(tile), map_(game_map), time_(time), color_(color)

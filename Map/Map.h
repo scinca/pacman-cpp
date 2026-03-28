@@ -13,7 +13,6 @@
 class Map {
 public:
     explicit Map(Database* db);
-    std::expected<void, std::string> Load(const std::string& filename);
     void LoadDefaultMap();
     void LoadMap2();// temporary until proper db for storage is added
     std::expected<void, std::string> LoadMapFromDB(int map_number);
@@ -27,7 +26,9 @@ public:
     [[nodiscard]] int FindPlayerStartTile() const;
     [[nodiscard]] std::vector<int> FindEnemyStartTiles() const;
 
+    static bool ValidateMap(const std::string& map);
 
+    //std::expected<void, std::string> Load(const std::string& filename);
 
 private:
     Database* database_;

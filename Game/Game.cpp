@@ -26,20 +26,21 @@ void Game::Initialize(const std::optional<std::string> &map_path, const std::opt
     else if (!map_path.has_value()) {
         game_map.LoadDefaultMap();
     }
+    /*
     else {
         if (auto loading_result = game_map.Load(map_path.value()); !loading_result) {
             const std::string_view loading_error = loading_result.error();
             std::cerr << "Failed to load map: " << loading_error << "\n";
             game_map.LoadDefaultMap();
         }
-    }
+    }*/
 
 
     // Find starting positions
     const int player_starting_position = game_map.FindPlayerStartTile();
     const std::vector<int> enemy_starting_positions = game_map.FindEnemyStartTiles();
 
-    // create players NEEDS TO BE REDONE LATER via vector
+
     player = std::make_unique<HumanPlayer>(&game_map, &time, player_starting_position, YELLOW);
 
     for (int i = 0; i < enemy_starting_positions.size(); i++) {
@@ -50,7 +51,7 @@ void Game::Initialize(const std::optional<std::string> &map_path, const std::opt
     state = GameState::PLAYING;
 }
 
-void Game::ProcessInput() const {
+void Game::HandlePlayerInput() const {
     if (state != GameState::PLAYING) {
         return;
     }
@@ -127,7 +128,7 @@ void Game::DrawLoseScreen() {
 
     if (IsKeyDown(KEY_R)) {
 
-        Initialize(game_map.GetMap());
+        Initialize();
 
 
     }
