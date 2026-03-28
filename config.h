@@ -5,10 +5,13 @@
 #ifndef PACMAN_CPP_CONFIG_H
 #define PACMAN_CPP_CONFIG_H
 #include <cstdint>
+#include <raylib.h>
 
 namespace WindowConfig {
-    inline constexpr std::int32_t WindowWidth { 1601}; //50 tiles
-    inline constexpr std::int32_t WindowHeight = { 1001 }; // 28 tiles
+    inline const std::int32_t ScreenWidth {GetScreenWidth()};
+    inline const std::int32_t ScreenHeight {GetScreenHeight()};
+    inline constexpr std::int32_t GameMapWidth { 1601}; //50 tiles
+    inline constexpr std::int32_t GameMapHeight = { 1001 }; // 28 tiles
     inline constexpr std::int32_t GameMapRootX { 1 };
     inline constexpr std::int32_t GameMapRootY { 101 };
     inline constexpr std::int32_t WindowRoot { 1 };

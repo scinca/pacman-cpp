@@ -106,6 +106,7 @@ void Game::Resume() {
 }
 
 void Game::DrawFrame() {
+    DrawRectangleLines(WindowConfig::WindowRoot,WindowConfig::WindowRoot, WindowConfig::ScreenWidth-1,WindowConfig::ScreenHeight-1, RAYWHITE);
     switch (state) {
         case GameState::PLAYING: {
             if (silent_pause_) {
@@ -118,8 +119,8 @@ void Game::DrawFrame() {
                 }
 
 
-                DrawRectangleLines(WindowConfig::WindowRoot, WindowConfig::WindowRoot, WindowConfig::WindowWidth - 1, WindowConfig::WindowHeight - 1, RAYWHITE);
-                DrawLine(WindowConfig::GameMapRootX,WindowConfig::GameMapRootY,WindowConfig::WindowWidth,WindowConfig::GameMapRootY,RAYWHITE);
+                DrawRectangleLines(WindowConfig::WindowRoot, WindowConfig::WindowRoot, WindowConfig::GameMapWidth - 1, WindowConfig::GameMapHeight - 1, RAYWHITE);
+                DrawLine(WindowConfig::GameMapRootX,WindowConfig::GameMapRootY,WindowConfig::GameMapWidth,WindowConfig::GameMapRootY,RAYWHITE);
                 game_map.Draw();
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
@@ -129,8 +130,8 @@ void Game::DrawFrame() {
                 ClearBackground(BLACK);
                 DrawFPS(WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+5);
                 DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+20, 50, SKYBLUE);
-                DrawRectangleLines(WindowConfig::WindowRoot, WindowConfig::WindowRoot, WindowConfig::WindowWidth - 1, WindowConfig::WindowHeight - 1, RAYWHITE);
-                DrawLine(WindowConfig::GameMapRootX,WindowConfig::GameMapRootY,WindowConfig::WindowWidth,WindowConfig::GameMapRootY,RAYWHITE);
+                DrawRectangleLines(WindowConfig::WindowRoot, WindowConfig::WindowRoot, WindowConfig::GameMapWidth - 1, WindowConfig::GameMapHeight - 1, RAYWHITE);
+                DrawLine(WindowConfig::GameMapRootX,WindowConfig::GameMapRootY,WindowConfig::GameMapWidth,WindowConfig::GameMapRootY,RAYWHITE);
                 game_map.Draw();
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
@@ -145,8 +146,8 @@ void Game::DrawFrame() {
                 ShowCursor();
                 DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
                 constexpr Rectangle resume_game_button = {
-                    static_cast<float>(WindowConfig::WindowWidth / 2 - 100),
-                    static_cast<float>(WindowConfig::WindowHeight / 2 - 50),
+                    static_cast<float>(WindowConfig::GameMapWidth / 2 - 100),
+                    static_cast<float>(WindowConfig::GameMapHeight / 2 - 50),
                     200,
                     50
                 };
@@ -180,8 +181,8 @@ void Game::DrawWinScreen() {
         Initialize();
     }
     constexpr Rectangle back_to_menu_button = {
-        static_cast<float>(WindowConfig::WindowWidth / 2 - 100),
-        static_cast<float>(WindowConfig::WindowHeight / 2 - 50),
+        static_cast<float>(WindowConfig::GameMapWidth / 2 - 100),
+        static_cast<float>(WindowConfig::GameMapHeight / 2 - 50),
         200,
         50
     };
@@ -201,8 +202,8 @@ void Game::DrawLoseScreen() {
         Initialize();
     }
     constexpr Rectangle back_to_menu_button = {
-        static_cast<float>(WindowConfig::WindowWidth / 2 - 100),
-        static_cast<float>(WindowConfig::WindowHeight / 2 - 50),
+        static_cast<float>(WindowConfig::GameMapWidth / 2 - 100),
+        static_cast<float>(WindowConfig::GameMapHeight / 2 - 50),
         200,
         50
     };

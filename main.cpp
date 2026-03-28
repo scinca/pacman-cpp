@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
 
     Database database;
 
-    InitWindow(WindowConfig::WindowWidth, WindowConfig::WindowHeight, WindowConfig::WindowTitle);
+    InitWindow(GetScreenWidth(), GetScreenHeight(), WindowConfig::WindowTitle);
     SetTargetFPS(60);
     SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
 
