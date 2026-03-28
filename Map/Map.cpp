@@ -109,57 +109,6 @@ std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {
     return {};
 }
 
-/*
-std::expected<void, std::string> Map::Load(const std::string& filename) { // should expect a 50x 28 grid
-    std::ifstream file(filename, std::ios::binary);
-    if (!file) {
-        return std::unexpected("Failed to open file: " + filename);
-    }
-
-    loaded_map_.assign((std::istreambuf_iterator<char>(file)),
-                       std::istreambuf_iterator<char>());
-    std::erase(loaded_map_, '\n'); //remove newline so for loop can draw map.
-    std::erase(loaded_map_, '\r'); // needed on Windows
-    if (loaded_map_.length() != 1400) { // the grid is 50 x 28 so its total length is 1400
-        return std::unexpected("Error loading Map, Map doesn't fit into the grid. Current Length:" + std::to_string(loaded_map_.length()));
-    }
-
-    if (file.fail() && !file.eof()) {
-        return std::unexpected("Error reading file: " + filename);
-    }
-    explored_map_.assign(loaded_map_.size(), false);
-    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(), loaded_map_.end(), '0'));
-
-    return {};
-
-}
-*/
-
-void Map::LoadDefaultMap() {
-    const auto result = database_->GetMap(1);
-    if (!result) {
-        std::cerr << "Map " + std::to_string(1) + " not found\n";
-        return;
-    }
-    loaded_map_ = result.value();
-
-
-    explored_map_.assign(loaded_map_.size(), false);
-    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(), loaded_map_.end(), '0'));
-
-}
-
-void Map::LoadMap2() {
-    loaded_map_ = map_2_;
-    std::erase(loaded_map_, '\n');
-    std::erase(loaded_map_, '\r');
-    if (loaded_map_.length() != 1400) {
-        std::cout << ("Invalid map length: " + std::to_string(loaded_map_.length()));
-    }
-    explored_map_.assign(loaded_map_.size(), false);
-    free_tile_count_ = static_cast<int>(std::count(loaded_map_.begin(),loaded_map_.end(), '0'));
-}
-
 bool Map::ValidateMap(const std::string& map) {
     /*
      *ValidateMap() Checks if the map has correct length,

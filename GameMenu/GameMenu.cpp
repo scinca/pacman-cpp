@@ -36,10 +36,10 @@ void GameMenu::Show() const {
     };
 
     if (GuiButton(default_map_button_, "Use Default Map")) {
-        game_->Initialize();
+        game_->Initialize(1);
     }
     if (GuiButton(map_2_button_, "Use Map2")) {
-        game_->Initialize(std::nullopt,2);
+        game_->Initialize(2);
     }
 
 }
