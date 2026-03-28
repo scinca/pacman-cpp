@@ -2,15 +2,13 @@
 // Created by simon on 14.03.26.
 //
 
-#include "Game.h"
 
-#include "Game.h"
-#include "../config.h"
 #include <iostream>
 #include <ctime>
-#include <cstdlib>
 #include <raygui.h>
 #include <raylib.h>
+#include "Game.h"
+#include "../config.h"
 
 
 Game::Game(Database *db) : db_(db), state(GameState::PLAYING), game_map(db_) {
@@ -164,7 +162,7 @@ void Game::DrawLoseScreen() {
     }
 }
 
-bool Game::ShouldClose() { // currently a wrapper because I need to make the map selector ui etc first.
+bool Game::ShouldClose() { // currently a wrapper because I need to make the map selector ui etc. first.
     return WindowShouldClose();
 }
 
