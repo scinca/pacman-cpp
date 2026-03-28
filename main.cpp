@@ -29,7 +29,6 @@ int main(int argc, char* argv[]) {
             game.Update();
             game.DrawFrame();
         }
-
         EndDrawing();
 
     }

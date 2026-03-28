@@ -22,11 +22,13 @@ public:
     std::int32_t WindowRoot { 1 };
     std::int32_t GameMapWidth { 1601}; //50 tiles
     std::int32_t GameMapHeight = { 1001 }; // 28 tiles
-    std::int32_t GameMapRootX { 1 };
-    std::int32_t GameMapRootY { 101 };
+    std::int32_t GameMapRootX;
+    std::int32_t GameMapRootY;
+    int TilesX = 50;
+    int TilesY = 28;
 
-    std::int32_t TileWidth { 32 };
-    float PointRadius = TileWidth * 0.8 / 2;
+    std::int32_t TileWidth;
+    float PointRadius;
 
     int failure_percentage { 15 };
     int font_size { 40 };

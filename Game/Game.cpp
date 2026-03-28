@@ -107,21 +107,28 @@ void Game::Resume() {
 }
 
 void Game::DrawFrame() {
-    DrawRectangleLines(ApplicationConfig::GetInstance().WindowRoot,ApplicationConfig::GetInstance().WindowRoot, GetScreenWidth()-1,GetScreenHeight()-1, RAYWHITE);
+    const auto& config = ApplicationConfig::GetInstance();
+    DrawRectangleLines(config.WindowRoot,config.WindowRoot, GetScreenWidth()-1,GetScreenHeight()-1, RAYWHITE);
     switch (state) {
         case GameState::PLAYING: {
+            //these are the outer borders that get drawn when there is a small gap
+            DrawRectangle(0, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //left
+            DrawRectangle(GetScreenWidth() -config.GameMapRootX, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //right
+            DrawRectangle(0, config.GameMapRootY - config.GameMapRootX, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
+            DrawRectangle(0, config.GameMapRootY + config.GameMapHeight, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
             if (silent_pause_) {
                 ClearBackground(BLACK);
-                DrawFPS(ApplicationConfig::GetInstance().WindowRoot + 5, ApplicationConfig::GetInstance().WindowRoot+5);
-                DrawText("The game hasn't started, press any of the Direction Keys to continue",ApplicationConfig::GetInstance().WindowRoot + 5, ApplicationConfig::GetInstance().WindowRoot+20, ApplicationConfig::GetInstance().font_size, SKYBLUE);
+                DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
+                DrawText("The game hasn't started, press any of the Direction Keys to continue",config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
                 if (IsKeyPressed(KEY_W)||IsKeyPressed(KEY_A)|| IsKeyPressed(KEY_S)|| IsKeyPressed(KEY_D) || IsKeyPressed(KEY_P)|| IsKeyPressed(KEY_UP)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_RIGHT)) {
                     silent_pause_ = false;
                     Resume();
                 }
 
 
-                DrawRectangleLines(ApplicationConfig::GetInstance().WindowRoot, ApplicationConfig::GetInstance().WindowRoot, ApplicationConfig::GetInstance().GameMapWidth - 1, ApplicationConfig::GetInstance().GameMapHeight - 1, RAYWHITE);
-                DrawLine(ApplicationConfig::GetInstance().GameMapRootX,ApplicationConfig::GetInstance().GameMapRootY,ApplicationConfig::GetInstance().GameMapWidth,ApplicationConfig::GetInstance().GameMapRootY,RAYWHITE);
+
+                DrawLine(config.GameMapRootX,config.GameMapRootY,GetScreenWidth(),config.GameMapRootY,RAYWHITE);
+
                 game_map.Draw();
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
@@ -129,10 +136,9 @@ void Game::DrawFrame() {
                 }
             }else {
                 ClearBackground(BLACK);
-                DrawFPS(ApplicationConfig::GetInstance().WindowRoot + 5, ApplicationConfig::GetInstance().WindowRoot+5);
-                DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),ApplicationConfig::GetInstance().WindowRoot + 5, ApplicationConfig::GetInstance().WindowRoot+20, ApplicationConfig::GetInstance().font_size, SKYBLUE);
-                DrawRectangleLines(ApplicationConfig::GetInstance().WindowRoot, ApplicationConfig::GetInstance().WindowRoot, ApplicationConfig::GetInstance().GameMapWidth - 1, ApplicationConfig::GetInstance().GameMapHeight - 1, RAYWHITE);
-                DrawLine(ApplicationConfig::GetInstance().GameMapRootX,ApplicationConfig::GetInstance().GameMapRootY,ApplicationConfig::GetInstance().GameMapWidth,ApplicationConfig::GetInstance().GameMapRootY,RAYWHITE);
+                DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
+                DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
+                DrawLine(config.GameMapRootX,config.GameMapRootY,GetScreenWidth(),config.GameMapRootY,RAYWHITE);
                 game_map.Draw();
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
@@ -147,8 +153,8 @@ void Game::DrawFrame() {
                 ShowCursor();
                 DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
                 const Rectangle resume_game_button = {
-                    static_cast<float>(ApplicationConfig::GetInstance().GameMapWidth / 2 - 100),
-                    static_cast<float>(ApplicationConfig::GetInstance().GameMapHeight / 2 - 50),
+                    static_cast<float>(config.GameMapWidth / 2 - 100),
+                    static_cast<float>(config.GameMapHeight / 2 - 50),
                     200,
                     50
                 };

@@ -16,13 +16,11 @@ Map::Map(Database* db){
 }
 
 
-
-
 void Map::Draw() const {
     const auto& config = ApplicationConfig::GetInstance();
     for (int i = 0; i < loaded_map_.size(); i++) {
-        const std::int32_t tile_x = (i % 50) * config.TileWidth + config.GameMapRootX;
-        const std::int32_t tile_y = (i / 50) * config.TileWidth + config.GameMapRootY;
+        const std::int32_t tile_x = (i % config.TilesX) * config.TileWidth + config.GameMapRootX;
+        const std::int32_t tile_y = (i / config.TilesX) * config.TileWidth + config.GameMapRootY;
 
         const int center_x = tile_x + config.TileWidth / 2;
         const int center_y = tile_y + config.TileWidth / 2;
@@ -31,7 +29,7 @@ void Map::Draw() const {
             DrawRectangle(tile_x, tile_y, config.TileWidth, config.TileWidth, RAYWHITE);
         }
         if (loaded_map_[i] == '0' && !explored_map_[i]) {
-            DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN);
+            DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN); // the coins should be smaller than player
         }
     }
 }
@@ -54,10 +52,6 @@ void Map::Explore(const int tile) {
 }
 
 
-bool Map::IsExplored(const int x, const int y) const { //tbr
-    if (x < 0 || x >= 50 || y < 0 || y >= 28) return false;
-    return explored_map_[y * 50 + x];
-}
 
 bool Map::CanMove(const int tileNumber) const {
     if (tileNumber < 0 || tileNumber >= static_cast<int>(loaded_map_.size()))
@@ -70,8 +64,8 @@ bool Map::CanMove(const int tileNumber) const {
 
 std::pair<float, float> Map::GetTileCenter(const int tile) {
     const auto& config = ApplicationConfig::GetInstance();
-    const float center_x = config.GameMapRootX + (tile % 50) * config.TileWidth + config.TileWidth / 2;
-    const float center_y = config.GameMapRootY + (tile / 50) * config.TileWidth + config.TileWidth / 2;
+    const float center_x = config.GameMapRootX + (tile % config.TilesX) * config.TileWidth + config.TileWidth / 2;
+    const float center_y = config.GameMapRootY + (tile / config.TilesX) * config.TileWidth + config.TileWidth / 2;
     return {center_x, center_y};
 }
 

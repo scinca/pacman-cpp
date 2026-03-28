@@ -11,7 +11,12 @@ ApplicationConfig::ApplicationConfig() {
     SetTargetFPS(60);
     screen_width_ = GetScreenWidth();
     screen_height_ = GetScreenHeight();
-
+    TileWidth = std::min(screen_width_ / TilesX,screen_height_ / TilesY);
+    PointRadius = TileWidth * 0.8 / 2;
+    GameMapWidth = TileWidth * TilesX;
+    GameMapHeight = TileWidth * TilesY;
+    GameMapRootY = (screen_height_ - GameMapHeight) - (GetScreenWidth()- GameMapWidth)/2;
+    GameMapRootX = (screen_width_ - GameMapWidth) / 2;
 
 }
 

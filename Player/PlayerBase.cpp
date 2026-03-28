@@ -38,18 +38,18 @@ void PlayerBase::CheckSurroundingTiles() { // it's a 50x28 grid but arrays start
 
     const int tile_x = static_cast<int>(position_x_ -config.GameMapRootX) / config.TileWidth;
     const int tile_y = static_cast<int>(position_y_ - config.GameMapRootY) / config.TileWidth;
-    const int tile = tile_y * 50 + tile_x;
+    const int tile = tile_y * config.TilesX + tile_x;
 
         if (tile_x > 0 && map_->CanMove(tile - 1)) {
             possible_moves_.push_back(Direction::LEFT);
         }
-        if (tile_x < 49 && map_->CanMove(tile + 1)) {
+        if (tile_x < config.TilesX-1 && map_->CanMove(tile + 1)) {
             possible_moves_.push_back(Direction::RIGHT);
         }
-        if (tile_y > 0 && map_->CanMove(tile - 50)) {
+        if (tile_y > 0 && map_->CanMove(tile - config.TilesX)) {
             possible_moves_.push_back(Direction::UP);
         }
-        if (tile_y < 27 && map_->CanMove(tile + 50)) {
+        if (tile_y < config.TilesY -1 && map_->CanMove(tile + config.TilesX)) {
             possible_moves_.push_back(Direction::DOWN);
         }
 }
@@ -63,8 +63,8 @@ bool PlayerBase::CheckMoveValidity(const Direction move) {
 
 bool PlayerBase::IsAtTileCenter() const {
     const auto& config = ApplicationConfig::GetInstance();
-        const float tile_center_x = config.GameMapRootX + (current_tile_ % 50) * config.TileWidth + config.TileWidth / 2;
-        const float tile_center_y = config.GameMapRootY + (current_tile_ / 50) * config.TileWidth + config.TileWidth / 2;
+        const float tile_center_x = config.GameMapRootX + (current_tile_ % config.TilesX) * config.TileWidth + config.TileWidth / 2;
+        const float tile_center_y = config.GameMapRootY + (current_tile_ / config.TilesX) * config.TileWidth + config.TileWidth / 2;
         return std::abs(position_x_ - tile_center_x) < margin_ &&
                std::abs(position_y_ - tile_center_y) < margin_;
 
