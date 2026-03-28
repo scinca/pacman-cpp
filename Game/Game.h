@@ -13,7 +13,8 @@
 enum class GameState {
     PLAYING,
     WON,
-    LOST
+    LOST,
+    PAUSED,
 };
 
 class Game {
@@ -25,7 +26,7 @@ public:
     ~Game();
 
     void Initialize(std::optional<int> map_number = 1);
-    void HandlePlayerInput() const;
+    void HandlePlayerInput();
     void Update();
     void DrawFrame();
 
@@ -33,6 +34,8 @@ public:
 
     static bool ShouldClose();
     void SetCurrentMapNumber(const int number) {last_played_map_number_ = number;}
+    void Pause();
+    void Resume();
 
 private:
     static void DrawWinScreen();

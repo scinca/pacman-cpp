@@ -9,6 +9,8 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <raygui.h>
+#include <raylib.h>
 
 
 Game::Game(Database *db) : db_(db), state(GameState::PLAYING), game_map(db_) {
@@ -45,12 +47,17 @@ void Game::Initialize(const std::optional<int> map_number) {
     state = GameState::PLAYING;
 }
 
-void Game::HandlePlayerInput() const {
+void Game::HandlePlayerInput() {
     if (state != GameState::PLAYING) {
+        if (IsKeyPressed(KEY_P)&& state == GameState::PAUSED) {
+             Resume();
+        }
         return;
     }
-
-    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
+    if (IsKeyPressed(KEY_P)) {
+        Pause();
+    }
+    else if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
         player->SetNextDirection(Direction::UP);
     }
     else if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) {
@@ -62,6 +69,7 @@ void Game::HandlePlayerInput() const {
     else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
         player->SetNextDirection(Direction::RIGHT);
     }
+
 }
 
 void Game::Update() {
@@ -85,10 +93,18 @@ void Game::Update() {
     }
 }
 
+
+void Game::Pause() {
+    state = GameState::PAUSED;
+}
+void Game::Resume() {
+    state = GameState::PLAYING;
+}
+
 void Game::DrawFrame() {
 
     switch (state) {
-        case GameState::PLAYING:
+        case GameState::PLAYING: {
             ClearBackground(BLACK);
             DrawRectangleLines(1, 1, WindowConfig::WindowWidth - 1, WindowConfig::WindowHeight - 1, RAYWHITE);
             game_map.Draw();
@@ -97,14 +113,34 @@ void Game::DrawFrame() {
                 enemy->Draw();
             }
             break;
+        }
 
-        case GameState::WON:
+        case GameState::PAUSED: {
+            ClearBackground(RAYWHITE);
+            ShowCursor();
+            DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
+            constexpr Rectangle resume_game_button = {
+                static_cast<float>(WindowConfig::WindowWidth / 2 - 100),
+                static_cast<float>(WindowConfig::WindowHeight / 2 - 50),
+                200,
+                50
+            };
+            if (GuiButton(resume_game_button, "Resume game")) {
+                Resume();
+            }
+
+            break;
+        }
+
+        case GameState::WON: {
             DrawWinScreen();
             break;
+        }
 
-        case GameState::LOST:
+        case GameState::LOST: {
             DrawLoseScreen();
             break;
+        }
     }
 
 
