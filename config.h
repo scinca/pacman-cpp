@@ -8,7 +8,9 @@
 
 namespace WindowConfig {
     inline constexpr std::int32_t WindowWidth { 1601}; //50 tiles
-    inline constexpr std::int32_t WindowHeight = { 901 }; // 28 tiles
+    inline constexpr std::int32_t WindowHeight = { 1001 }; // 28 tiles
+    inline constexpr std::int32_t GameMapRootX { 1 };
+    inline constexpr std::int32_t GameMapRootY { 101 };
     inline constexpr std::int32_t WindowRoot { 1 };
     inline constexpr char WindowTitle[] { "Raylib Pacman Game"}; // C-Style string bc Raylib expects it.
 }

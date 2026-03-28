@@ -20,8 +20,8 @@ Map::Map(Database* db){
 
 void Map::Draw() const {
     for (int i = 0; i < loaded_map_.size(); i++) {
-        const std::int32_t tile_x = (i % 50) * TileWidth + WindowConfig::WindowRoot;
-        const std::int32_t tile_y = (i / 50) * TileWidth + WindowConfig::WindowRoot;
+        const std::int32_t tile_x = (i % 50) * TileWidth + WindowConfig::GameMapRootX;
+        const std::int32_t tile_y = (i / 50) * TileWidth + WindowConfig::GameMapRootY;
 
         const int center_x = tile_x + TileWidth / 2;
         const int center_y = tile_y + TileWidth / 2;
@@ -68,8 +68,8 @@ bool Map::CanMove(const int tileNumber) const {
 
 
 std::pair<float, float> Map::GetTileCenter(const int tile) {
-    const float center_x = WindowConfig::WindowRoot + (tile % 50) * TileWidth + TileWidth / 2;
-    const float center_y = WindowConfig::WindowRoot + (tile / 50) * TileWidth + TileWidth / 2;
+    const float center_x = WindowConfig::GameMapRootX + (tile % 50) * TileWidth + TileWidth / 2;
+    const float center_y = WindowConfig::GameMapRootY + (tile / 50) * TileWidth + TileWidth / 2;
     return {center_x, center_y};
 }
 

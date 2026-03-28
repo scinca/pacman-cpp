@@ -52,6 +52,7 @@ private:
     bool is_game_running_{};
     std::vector<std::unique_ptr<EnemyPlayer>> enemy_players;
     const std::vector<Color>enemy_colors = {RED, SKYBLUE, PINK, LIME};
+    bool silent_pause_ = true;
 
 };
 

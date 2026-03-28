@@ -17,6 +17,7 @@ Game::Game(Database *db) : db_(db), state(GameState::PLAYING), game_map(db_) {
 Game::~Game() = default;
 
 void Game::Initialize(const std::optional<int> map_number) {
+    silent_pause_ = true;
     HideCursor();
     enemy_players.clear();
     is_game_running_ = true;
@@ -71,25 +72,30 @@ void Game::HandlePlayerInput() {
 }
 
 void Game::Update() {
+    if (silent_pause_) {
+        return;
+    }
+    if (state != GameState::PLAYING) {
+        return;
+    }
+
     time.CalculateDeltaTime();
 
-    if (state == GameState::PLAYING) {
-
-        if (game_map.AllExplored()) {
-            state = GameState::WON;
-        }
-        else if (!player->CheckIfAlive()) {
-            state = GameState::LOST;
-        }
-        else {
-            // Update game entities
-            player->Move();
-           for (const auto& enemy : enemy_players) {
-               enemy->Move();
-           }
+    if (game_map.AllExplored()) {
+        state = GameState::WON;
+    }
+    else if (!player->CheckIfAlive()) {
+        state = GameState::LOST;
+    }
+    else {
+        // Update game entities
+        player->Move();
+        for (const auto& enemy : enemy_players) {
+            enemy->Move();
         }
     }
 }
+
 
 
 void Game::Pause() {
@@ -100,33 +106,53 @@ void Game::Resume() {
 }
 
 void Game::DrawFrame() {
-
     switch (state) {
         case GameState::PLAYING: {
-            ClearBackground(BLACK);
-            DrawRectangleLines(1, 1, WindowConfig::WindowWidth - 1, WindowConfig::WindowHeight - 1, RAYWHITE);
-            game_map.Draw();
-            player->Draw();
-            for (const auto& enemy : enemy_players) {
-                enemy->Draw();
+            if (silent_pause_) {
+                ClearBackground(BLACK);
+                DrawFPS(WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+5);
+                DrawText("The game hasn't started, press any of the Direction Keys to continue",WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+20, 50, SKYBLUE);
+                if (IsKeyPressed(KEY_W)||IsKeyPressed(KEY_A)|| IsKeyPressed(KEY_S)|| IsKeyPressed(KEY_D) || IsKeyPressed(KEY_P)|| IsKeyPressed(KEY_UP)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_RIGHT)) {
+                    silent_pause_ = false;
+                    Resume();
+                }
+
+
+                DrawRectangleLines(WindowConfig::WindowRoot, WindowConfig::WindowRoot, WindowConfig::WindowWidth - 1, WindowConfig::WindowHeight - 1, RAYWHITE);
+                DrawLine(WindowConfig::GameMapRootX,WindowConfig::GameMapRootY,WindowConfig::WindowWidth,WindowConfig::GameMapRootY,RAYWHITE);
+                game_map.Draw();
+                player->Draw();
+                for (const auto& enemy : enemy_players) {
+                    enemy->Draw();
+                }
+            }else {
+                ClearBackground(BLACK);
+                DrawFPS(WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+5);
+                DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),WindowConfig::WindowRoot + 5, WindowConfig::WindowRoot+20, 50, SKYBLUE);
+                DrawRectangleLines(WindowConfig::WindowRoot, WindowConfig::WindowRoot, WindowConfig::WindowWidth - 1, WindowConfig::WindowHeight - 1, RAYWHITE);
+                DrawLine(WindowConfig::GameMapRootX,WindowConfig::GameMapRootY,WindowConfig::WindowWidth,WindowConfig::GameMapRootY,RAYWHITE);
+                game_map.Draw();
+                player->Draw();
+                for (const auto& enemy : enemy_players) {
+                    enemy->Draw();
+                }
             }
             break;
         }
 
         case GameState::PAUSED: {
-            ClearBackground(RAYWHITE);
-            ShowCursor();
-            DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
-            constexpr Rectangle resume_game_button = {
-                static_cast<float>(WindowConfig::WindowWidth / 2 - 100),
-                static_cast<float>(WindowConfig::WindowHeight / 2 - 50),
-                200,
-                50
-            };
-            if (GuiButton(resume_game_button, "Resume game")) {
-                Resume();
-            }
-
+                ClearBackground(RAYWHITE);
+                ShowCursor();
+                DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
+                constexpr Rectangle resume_game_button = {
+                    static_cast<float>(WindowConfig::WindowWidth / 2 - 100),
+                    static_cast<float>(WindowConfig::WindowHeight / 2 - 50),
+                    200,
+                    50
+                };
+                if (GuiButton(resume_game_button, "Resume game")) {
+                    Resume();
+                }
             break;
         }
 

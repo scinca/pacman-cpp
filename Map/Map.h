@@ -25,6 +25,8 @@ public:
     [[nodiscard]] int FindPlayerStartTile() const;
     [[nodiscard]] std::vector<int> FindEnemyStartTiles() const;
     static bool ValidateMap(const std::string& map);
+    int GetExploredTileCount() const {return explored_tile_count_;}
+    int GetFreeTileCount() const {return free_tile_count_;}
 
 private:
     Database* database_;
