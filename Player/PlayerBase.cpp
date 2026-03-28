@@ -6,19 +6,20 @@
 
 #include <algorithm>
 #include <raylib.h>
-#include "../config.h"
+#include "../ApplicationConfig.h"
 #include "../Map/Map.h"
 
 PlayerBase::PlayerBase(Map *game_map, Time *time, const int tile, const Color color)
-    :position_x_(WindowConfig::GameMapRootX+ TileWidth/2), position_y_(WindowConfig::GameMapRootY + TileWidth/2), current_tile_(tile), color_(color), map_(game_map), time_(time)
-
+    :position_x_(ApplicationConfig::GetInstance().GameMapRootX+ ApplicationConfig::GetInstance().TileWidth /2), position_y_(ApplicationConfig::GetInstance().GameMapRootY + ApplicationConfig::GetInstance().TileWidth/2), current_tile_(tile), color_(color), map_(game_map), time_(time)
 {
 
 }
 
 void PlayerBase::GetTile() {
-    const int tileX = static_cast<int>(position_x_ - WindowConfig::GameMapRootX) / TileWidth;
-    const int tileY = static_cast<int>(position_y_ - WindowConfig::GameMapRootY) / TileWidth;
+    const auto& config = ApplicationConfig::GetInstance();
+
+    const int tileX = static_cast<int>(position_x_ - config.GameMapRootX) / config.TileWidth;
+    const int tileY = static_cast<int>(position_y_ -  config.GameMapRootY) /  config.TileWidth;
     current_tile_ = tileY * 50 + tileX;
 }
 
@@ -32,11 +33,11 @@ void PlayerBase::GetTile() {
  */
 
 void PlayerBase::CheckSurroundingTiles() { // it's a 50x28 grid but arrays start at 0 so 49 and 27 aren't magic numbers.
-
+    const auto& config = ApplicationConfig::GetInstance();
     possible_moves_.clear();
 
-    const int tile_x = static_cast<int>(position_x_ - WindowConfig::GameMapRootX) / TileWidth;
-    const int tile_y = static_cast<int>(position_y_ - WindowConfig::GameMapRootY) / TileWidth;
+    const int tile_x = static_cast<int>(position_x_ -config.GameMapRootX) / config.TileWidth;
+    const int tile_y = static_cast<int>(position_y_ - config.GameMapRootY) / config.TileWidth;
     const int tile = tile_y * 50 + tile_x;
 
         if (tile_x > 0 && map_->CanMove(tile - 1)) {
@@ -61,8 +62,9 @@ bool PlayerBase::CheckMoveValidity(const Direction move) {
 
 
 bool PlayerBase::IsAtTileCenter() const {
-        const float tile_center_x = WindowConfig::GameMapRootX + (current_tile_ % 50) * TileWidth + TileWidth / 2;
-        const float tile_center_y = WindowConfig::GameMapRootY + (current_tile_ / 50) * TileWidth + TileWidth / 2;
+    const auto& config = ApplicationConfig::GetInstance();
+        const float tile_center_x = config.GameMapRootX + (current_tile_ % 50) * config.TileWidth + config.TileWidth / 2;
+        const float tile_center_y = config.GameMapRootY + (current_tile_ / 50) * config.TileWidth + config.TileWidth / 2;
         return std::abs(position_x_ - tile_center_x) < margin_ &&
                std::abs(position_y_ - tile_center_y) < margin_;
 

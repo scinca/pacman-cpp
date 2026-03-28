@@ -2,15 +2,16 @@
 #include <iostream>
 #include "Database/Database.h"
 #include "Game/Game.h"
-#include "config.h"
 #include "GameMenu/GameMenu.h"
+#include "ApplicationConfig.h"
 
 int main(int argc, char* argv[]) {
 
     Database database;
+    ApplicationConfig::GetInstance();
 
-    InitWindow(GetScreenWidth(), GetScreenHeight(), WindowConfig::WindowTitle);
-    SetTargetFPS(60);
+
+    ToggleFullscreen();
     SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
 
     Game game{&database};
@@ -32,7 +33,6 @@ int main(int argc, char* argv[]) {
         EndDrawing();
 
     }
-
-    CloseWindow();
+    // WindowConfig destructor closes window
     return 0;
 }

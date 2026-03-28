@@ -4,7 +4,7 @@
 
 #include "GameMenu.h"
 #include "../Game/Game.h"
-#include "../config.h"
+#include "../ApplicationConfig.h"
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
 
@@ -15,22 +15,23 @@ GameMenu::GameMenu(Game *game): game_(game) {
 }
 
 void GameMenu::Show() const {
+    const auto& config = ApplicationConfig::GetInstance();
     DrawText("PAC-MAN GAME",
-             WindowConfig::GameMapWidth / 2 - 150,
+             config.GameMapWidth / 2 - 150,
              100,
              40,
              BLACK);
 
 
-    constexpr Rectangle default_map_button_ = {
-        static_cast<float>(WindowConfig::GameMapWidth / 2 - 100),
-        static_cast<float>(WindowConfig::GameMapHeight / 2 - 50),
+    const Rectangle default_map_button_ = {
+        static_cast<float>(config.GameMapWidth / 2 - 100),
+        static_cast<float>(config.GameMapHeight / 2 - 50),
         200,
         50
     };
-    constexpr Rectangle map_2_button_ = {
-        static_cast<float>(WindowConfig::GameMapWidth / 2 - 100),
-        static_cast<float>(WindowConfig::GameMapHeight / 2 - 0),
+    const Rectangle map_2_button_ = {
+        static_cast<float>(config.GameMapWidth / 2 - 100),
+        static_cast<float>(config.GameMapHeight / 2 - 0),
         200,
         50
     };
