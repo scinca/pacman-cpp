@@ -36,9 +36,10 @@ public:
     void SetCurrentMapNumber(const int number) {last_played_map_number_ = number;}
     void Pause();
     void Resume();
+    void Stop(){is_game_running_ = false;}
 
 private:
-    static void DrawWinScreen();
+    void DrawWinScreen();
     void DrawLoseScreen();
 
     Database* db_{};

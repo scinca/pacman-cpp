@@ -172,20 +172,44 @@ void Game::DrawFrame() {
 
 void Game::DrawWinScreen() {
     ClearBackground(RAYWHITE);
-    DrawText("You won!", 100, 100, 40, BLACK);
+    ShowCursor();
+    DrawText("You won!", WindowConfig::WindowRoot + 300, WindowConfig::WindowRoot + 300, font_size, BLACK);
+    DrawText("Press r to restart", WindowConfig::WindowRoot+ 300, WindowConfig::WindowRoot+ 300, font_size, SKYBLUE);
+
+    if (IsKeyDown(KEY_R)) {
+        Initialize();
+    }
+    constexpr Rectangle back_to_menu_button = {
+        static_cast<float>(WindowConfig::WindowWidth / 2 - 100),
+        static_cast<float>(WindowConfig::WindowHeight / 2 - 50),
+        200,
+        50
+    };
+    if (GuiButton(back_to_menu_button, "Back to Menu")) {
+        Stop();
+    }
+
 }
 
 void Game::DrawLoseScreen() {
+    ShowCursor();
     ClearBackground(RAYWHITE);
-    DrawText("You lost.", 100, 100, 40, BLACK);
-    DrawText("Press r to restart", 300, 300, 40, SKYBLUE);
+    DrawText("You lost.", 100, 100, font_size, BLACK);
+    DrawText("Press r to restart", WindowConfig::WindowRoot+ 300, WindowConfig::WindowRoot+ 300, font_size, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
-
         Initialize();
-
-
     }
+    constexpr Rectangle back_to_menu_button = {
+        static_cast<float>(WindowConfig::WindowWidth / 2 - 100),
+        static_cast<float>(WindowConfig::WindowHeight / 2 - 50),
+        200,
+        50
+    };
+    if (GuiButton(back_to_menu_button, "Back to Menu")) {
+    Stop();
+    }
+
 }
 
 bool Game::ShouldClose() { // currently a wrapper because I need to make the map selector ui etc. first.

@@ -13,11 +13,13 @@ namespace WindowConfig {
     inline constexpr std::int32_t GameMapRootY { 101 };
     inline constexpr std::int32_t WindowRoot { 1 };
     inline constexpr char WindowTitle[] { "Raylib Pacman Game"}; // C-Style string bc Raylib expects it.
+
 }
 
 inline constexpr std::int32_t TileWidth { 32 };
 inline constexpr double PointRadius { TileWidth * 0.8 / 2 };
 
 inline constexpr int failure_percentage { 15 };
+inline constexpr int font_size { 40 };
 
 #endif //PACMAN_CPP_CONFIG_H
