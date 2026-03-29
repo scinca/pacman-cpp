@@ -20,17 +20,10 @@ enum class Tile {
 class MapCreator {
     public:
     explicit MapCreator(Database *database);
-
     void DrawFrame();
-
-    void Update();
-
     void DrawToolBox();
-
     void HandlePlayerInput();
-
     void Initialize();
-
     static void DrawGrid();
     void SetCurrentTool(const Tile tool){current_tool_ = tool;}
     [[nodiscard]] bool IsActive() const{return is_active_;}

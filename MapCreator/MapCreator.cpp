@@ -26,12 +26,6 @@ void MapCreator::DrawFrame() {
     DrawGrid();
 }
 
-void MapCreator::Update() {
-    const auto& config = ApplicationConfig::GetInstance();
-
-    map_class_.LoadFromString(temporary_map_);
-}
-
 
 
 void MapCreator::DrawToolBox() {
@@ -103,6 +97,7 @@ void MapCreator::DrawToolBox() {
 void MapCreator::HandlePlayerInput() {
     const auto& config = ApplicationConfig::GetInstance();
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+
         const int current_x = GetMouseX()- config.GameMapRootX;
         const int current_y = GetMouseY()- config.GameMapRootY;
         const int tile = Map::GetTileFromXY(current_x, current_y);
@@ -131,6 +126,7 @@ void MapCreator::HandlePlayerInput() {
         }
 
         temporary_map_[tile] = tile_char;
+        map_class_.LoadFromString(temporary_map_);
 
     }
     
