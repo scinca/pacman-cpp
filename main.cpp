@@ -4,18 +4,20 @@
 #include "Game/Game.h"
 #include "GameMenu/GameMenu.h"
 #include "ApplicationConfig.h"
+#include "MapCreator/MapCreator.h"
 
 int main(int argc, char* argv[]) {
 
     Database database;
     ApplicationConfig::GetInstance();
+    MapCreator map_creator{&database};
 
 
     ToggleFullscreen();
     SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
 
     Game game{&database};
-    const GameMenu game_menu{&game};
+    const GameMenu game_menu{&game, &map_creator};
 
 
 

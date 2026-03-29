@@ -11,7 +11,7 @@
 
 GameMenu::~GameMenu() = default;
 
-GameMenu::GameMenu(Game *game): game_(game) {
+GameMenu::GameMenu(Game *game, MapCreator *map_creator): game_(game), map_creator_(map_creator) {
 }
 
 void GameMenu::Show() const {
@@ -41,7 +41,7 @@ void GameMenu::Show() const {
         game_->Initialize(1);
     }
     if (GuiButton(create_map_button, "Create  your own Map")) {
-        game_->Initialize(1);
+
     }
 }
 
