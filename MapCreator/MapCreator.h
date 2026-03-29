@@ -34,6 +34,7 @@ private:
     std::string temporary_map_;
     Database *db_{};
     Tile current_tool_ = Tile::None;
+    bool auto_fill_empty_tiles_ = false;
 
 
 

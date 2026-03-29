@@ -4,6 +4,7 @@
 
 #include "MapCreator.h"
 
+#include <algorithm>
 #include <raygui.h>
 #include <raylib.h>
 
@@ -72,6 +73,19 @@ void MapCreator::DrawToolBox() {
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
+   const Rectangle autofill_button = {
+       static_cast<float>(20 + 6 * (button_width + spacing)),
+       static_cast<float>(button_y),
+       static_cast<float>(button_width),
+       static_cast<float>(button_height)
+   };
+   const Rectangle save_map_button = {
+       static_cast<float>(20 + 7 * (button_width + spacing)),
+        static_cast<float>(button_y),
+        static_cast<float>(button_width),
+        static_cast<float>(button_height)
+   };
+
 
     if (GuiButton(wall_button, "Wall")) {
         SetCurrentTool(Tile::Wall);
@@ -90,8 +104,13 @@ void MapCreator::DrawToolBox() {
     }
     if (GuiButton(clear_button, "Empty Map")) {
         temporary_map_.assign(1400, ' ');
+        map_class_.LoadFromString(temporary_map_);
     }
+    if (GuiToggle(autofill_button, "Autofill Empty Tiles with coins",&auto_fill_empty_tiles_)) {} //empty on purpose since toggle changes boolean
+    if (GuiButton(save_map_button, "Save Map")) {
 
+        db_->AddMap(temporary_map_,);
+    }
 }
 
 void MapCreator::HandlePlayerInput() {
@@ -126,6 +145,9 @@ void MapCreator::HandlePlayerInput() {
         }
 
         temporary_map_[tile] = tile_char;
+        if (auto_fill_empty_tiles_) {
+            std::ranges::replace(temporary_map_, ' ', '0');
+        }
         map_class_.LoadFromString(temporary_map_);
 
     }
