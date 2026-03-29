@@ -21,10 +21,15 @@ MapCreator::MapCreator(Database *database): db_(database)
 void MapCreator::DrawFrame() {
     const auto& config = ApplicationConfig::GetInstance();
 
-    ClearBackground(BLACK);
-    DrawToolBox();
-    map_class_.Draw(true);
-    DrawGrid();
+
+
+        ClearBackground(BLACK);
+        DrawToolBox();
+        map_class_.Draw(true);
+        DrawGrid();
+    if (show_save_dialog_) {
+        SaveMapDialog();
+    }
 }
 
 
@@ -37,7 +42,7 @@ void MapCreator::DrawToolBox() {
     constexpr int button_y = 20; // top bar
     constexpr int spacing = 10;
 
-    const Rectangle wall_button = {
+    constexpr Rectangle wall_button = {
         static_cast<float>(20 + 0 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
@@ -106,14 +111,19 @@ void MapCreator::DrawToolBox() {
         temporary_map_.assign(1400, ' ');
         map_class_.LoadFromString(temporary_map_);
     }
-    if (GuiToggle(autofill_button, "Autofill Empty Tiles with coins",&auto_fill_empty_tiles_)) {} //empty on purpose since toggle changes boolean
+    if (GuiButton(autofill_button, "Autofill Empty Tiles with coins")) {
+        std::ranges::replace(temporary_map_, ' ', '0');
+        map_class_.LoadFromString(temporary_map_);
+    }
     if (GuiButton(save_map_button, "Save Map")) {
-
-        db_->AddMap(temporary_map_,);
+        show_save_dialog_ = true;
     }
 }
 
 void MapCreator::HandlePlayerInput() {
+    if (show_save_dialog_) {
+        return;
+    }
     const auto& config = ApplicationConfig::GetInstance();
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
 
@@ -145,9 +155,6 @@ void MapCreator::HandlePlayerInput() {
         }
 
         temporary_map_[tile] = tile_char;
-        if (auto_fill_empty_tiles_) {
-            std::ranges::replace(temporary_map_, ' ', '0');
-        }
         map_class_.LoadFromString(temporary_map_);
 
     }
@@ -175,4 +182,36 @@ void MapCreator::DrawGrid() {
 }
 
 
+void MapCreator::SaveMapDialog() {
+    const auto& config = ApplicationConfig::GetInstance();
+    constexpr int dialog_width = 800;
+    constexpr int dialog_height = 200;
+
+    const Rectangle dialog = {
+        .x = static_cast<float>(GetScreenWidth() / 2 - dialog_width / 2),
+        .y = static_cast<float>(GetScreenHeight() / 2 - dialog_height / 2),
+        .width = static_cast<float>(dialog_width),
+        .height = static_cast<float>(dialog_height)
+    };
+    DrawRectangle(dialog.x, dialog.y, dialog_width, dialog_height, LIGHTGRAY);
+
+    GuiLabel({dialog.x, dialog.y + 10, dialog.width, 30}, "Map Name:");
+    if (GuiTextBox({dialog.x, dialog.y + 40, dialog.width, 30},map_name_buffer_,config.font_size,edit_name_)) {
+        edit_name_ = true;
+        edit_author_ = false;
+    }
+
+    GuiLabel({dialog.x, dialog.y + 80, dialog.width, 30}, "Map Author:");
+    if (GuiTextBox({dialog.x, dialog.y + 110, dialog.width, 30}, map_author_buffer_,config.font_size,edit_author_)) {
+        edit_author_ = true;
+        edit_name_ = false;
+    }
+
+    if (GuiButton({dialog.x, dialog.y + 160, dialog.width / 2 - 5, 30}, "Save")) {
+        show_save_dialog_ = false;
+    }
+    if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
+        show_save_dialog_ = false;
+    }
+}
 

@@ -25,6 +25,9 @@ class MapCreator {
     void HandlePlayerInput();
     void Initialize();
     static void DrawGrid();
+
+    void SaveMapDialog();
+
     void SetCurrentTool(const Tile tool){current_tool_ = tool;}
     [[nodiscard]] bool IsActive() const{return is_active_;}
 
@@ -34,7 +37,12 @@ private:
     std::string temporary_map_;
     Database *db_{};
     Tile current_tool_ = Tile::None;
-    bool auto_fill_empty_tiles_ = false;
+    bool show_save_dialog_ = false;
+    char map_name_buffer_[64] = {};
+    char map_author_buffer_[64] = {};
+    bool edit_name_ = true;
+    bool edit_author_ = !edit_name_;
+
 
 
 
