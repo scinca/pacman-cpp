@@ -22,7 +22,7 @@ void MapCreator::DrawFrame() {
 
     ClearBackground(BLACK);
     DrawToolBox();
-    map_class_.Draw();
+    map_class_.Draw(true);
     DrawGrid();
 }
 
@@ -72,6 +72,12 @@ void MapCreator::DrawToolBox() {
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
+    const Rectangle clear_button = {
+        static_cast<float>(20 + 5 * (button_width + spacing)),
+        static_cast<float>(button_y),
+        static_cast<float>(button_width),
+        static_cast<float>(button_height)
+    };
 
     if (GuiButton(wall_button, "Wall")) {
         SetCurrentTool(Tile::Wall);
@@ -87,6 +93,9 @@ void MapCreator::DrawToolBox() {
     }
     if (GuiButton(empty_button, "Empty")) {
         SetCurrentTool(Tile::None);
+    }
+    if (GuiButton(clear_button, "Empty Map")) {
+        temporary_map_.assign(1400, ' ');
     }
 
 }

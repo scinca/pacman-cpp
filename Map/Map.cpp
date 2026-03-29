@@ -25,7 +25,7 @@ int Map::GetTileFromXY(const int x, const int y) {
     return tile_x + tile_y * config.TilesX;
 }
 
-void Map::Draw() const {
+void Map::Draw(const bool editor) const {
     const auto& config = ApplicationConfig::GetInstance();
     for (int i = 0; i < loaded_map_.size(); i++) {
         const std::int32_t tile_x = (i % config.TilesX) * config.TileWidth + config.GameMapRootX;
@@ -37,8 +37,22 @@ void Map::Draw() const {
         if (loaded_map_[i] == '#') {
             DrawRectangle(tile_x, tile_y, config.TileWidth, config.TileWidth, RAYWHITE);
         }
-        if (loaded_map_[i] == '0' && !explored_map_[i]) {
-            DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN); // the coins should be smaller than player
+        if (!editor) {
+            if (loaded_map_[i] == '0' && !explored_map_[i]) {
+                DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN); // the coins should be smaller than player
+            }
+        }
+        if (editor) {
+            if (loaded_map_[i]== 'X') {
+                DrawText("X", center_x- config.TileWidth/2 ,center_y- config.TileWidth/2,config.TileWidth, LIME);
+            }
+            if (loaded_map_[i]== '?') {
+                DrawText("?", center_x- config.TileWidth/2 ,center_y- config.TileWidth/2,config.TileWidth, LIME);
+            }
+            if (loaded_map_[i] == '0') {
+                DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN);
+
+            }
         }
     }
     //these are the outer borders that get drawn when there is a small gap

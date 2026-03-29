@@ -17,7 +17,7 @@ public:
     Map();
 
     std::expected<void, std::string> LoadMapFromDB(int map_number);
-    void Draw() const;
+    void Draw(bool editor = false) const;
     std::string GetMap();
     [[nodiscard]] bool AllExplored() const;
     void Explore(int tile);

@@ -146,7 +146,7 @@ void Game::DrawFrame() {
                     silent_pause_ = false;
                     Resume();
                 }
-                game_map.Draw();
+                game_map.Draw(false);
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
                     enemy->Draw();
@@ -155,7 +155,7 @@ void Game::DrawFrame() {
                 DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
                 DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
             }
-                game_map.Draw();
+                game_map.Draw(false);
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
                     enemy->Draw();
