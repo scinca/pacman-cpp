@@ -204,17 +204,18 @@ void Game::DrawFrame() {
 }
 
 void Game::DrawWinScreen() {
+    const auto& config = ApplicationConfig::GetInstance();
     ClearBackground(RAYWHITE);
     ShowCursor();
-    DrawText("You won!", ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().font_size, BLACK);
-    DrawText("Press r to restart", ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().font_size, SKYBLUE);
+    DrawText("You won!", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, BLACK);
+    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
         Initialize();
     }
     const Rectangle back_to_menu_button = {
-        static_cast<float>(ApplicationConfig::GetInstance().GameMapWidth / 2 - 100),
-        static_cast<float>(ApplicationConfig::GetInstance().GameMapHeight / 2 - 50),
+        static_cast<float>(config.GameMapWidth / 2 - 100),
+        static_cast<float>(config.GameMapHeight / 2 - 50),
         200,
         50
     };
@@ -225,18 +226,19 @@ void Game::DrawWinScreen() {
 }
 
 void Game::DrawLoseScreen() {
+    const auto& config = ApplicationConfig::GetInstance();
     ShowCursor();
     ClearBackground(RAYWHITE);
-    DrawText(std::format("You lost. Your Score was {}/{}", game_map.GetExploredTileCount(),game_map.GetFreeTileCount()).c_str(), 100, 100, ApplicationConfig::GetInstance().font_size, BLACK);
-    DrawText("Press r to restart", ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().font_size, SKYBLUE);
+    DrawText(std::format("You lost. Your Score was {}/{}", game_map.GetExploredTileCount(),game_map.GetFreeTileCount()).c_str(), 100, 100, config.font_size, BLACK);
+    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, SKYBLUE);
 
 
     if (IsKeyDown(KEY_R)) {
         Initialize();
     }
     const Rectangle back_to_menu_button = {
-        static_cast<float>(ApplicationConfig::GetInstance().GameMapWidth / 2 - 100),
-        static_cast<float>(ApplicationConfig::GetInstance().GameMapHeight / 2 - 50),
+        static_cast<float>(config.GameMapWidth / 2 - 100),
+        static_cast<float>(config.GameMapHeight / 2 - 50),
         200,
         50
     };
@@ -246,7 +248,7 @@ void Game::DrawLoseScreen() {
 
 }
 
-bool Game::ShouldClose() { // currently a wrapper because I need to make the map selector ui etc. first.
+bool Game::ShouldClose() {
     return WindowShouldClose();
 }
 
