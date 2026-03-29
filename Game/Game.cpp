@@ -106,6 +106,13 @@ void Game::Update() {
             enemy->Move();
             if (enemy->GetCurrentTile()== tile) {
                 player->Kill();
+                player->ResetPosition();
+                silent_pause_ = true;
+                for (const auto& other_enemy : enemy_players) {
+                    other_enemy->ResetPosition();
+                }
+
+
             }
         }
     }

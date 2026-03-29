@@ -73,8 +73,6 @@ void HumanPlayer::SetNextDirection(const Direction next_direction) {
 
 void HumanPlayer::Kill() {
     lives_--;
-
-    std::tie(position_x_, position_y_) = Map::GetTileCenter(start_tile_);
     if (lives_ <= 0) { // <= bc i don't have respawn logic yet
         is_alive_ = false;
     }

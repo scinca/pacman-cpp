@@ -23,6 +23,7 @@ class PlayerBase {
     [[nodiscard]] int GetCurrentTile() const { return current_tile_; }
     virtual void Move() = 0;
     virtual void Draw() const =0;
+    void ResetPosition();
 
     protected:
     bool CheckMoveValidity(Direction move);
