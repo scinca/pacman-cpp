@@ -24,8 +24,14 @@ int main(int argc, char* argv[]) {
     while (!WindowShouldClose()) {
         BeginDrawing();
         if (!game.HasStarted()) {
-            ClearBackground(RAYWHITE);
-            game_menu.Show();
+            if (map_creator.IsActive()) {
+
+                map_creator.DrawFrame();
+            }else {
+                ClearBackground(RAYWHITE);
+                game_menu.Show();
+            }
+
         }else{
             game.HandlePlayerInput();
             game.Update();

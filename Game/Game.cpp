@@ -132,11 +132,6 @@ void Game::DrawFrame() {
     switch (state) {
         case GameState::PLAYING: {
             ClearBackground(BLACK);
-            //these are the outer borders that get drawn when there is a small gap
-            DrawRectangle(0, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //left
-            DrawRectangle(GetScreenWidth() -config.GameMapRootX, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //right
-            DrawRectangle(0, config.GameMapRootY - config.GameMapRootX, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
-            DrawRectangle(0, config.GameMapRootY + config.GameMapHeight, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
             for (int i = 1; i <= player->GetMaxLives(); i++) {
                 if (i <= player->GetRemainingLives()) {
                     DrawCircle(config.WindowRoot + 100 + i * 30, config.WindowRoot + 80, config.PointRadius, RED);

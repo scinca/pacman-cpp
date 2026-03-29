@@ -14,6 +14,8 @@
 class Map {
 public:
     explicit Map(Database* db);
+    Map();
+
     std::expected<void, std::string> LoadMapFromDB(int map_number);
     void Draw() const;
     std::string GetMap();
@@ -23,6 +25,9 @@ public:
     [[nodiscard]] bool CanMove(int tileNumber) const;
     [[nodiscard]] int FindPlayerStartTile() const;
     [[nodiscard]] std::vector<int> FindEnemyStartTiles() const;
+
+    void LoadFromString(const std::string &map);
+
     static bool ValidateMap(const std::string& map);
     [[nodiscard]] int GetExploredTileCount() const {return explored_tile_count_;}
     [[nodiscard]] int GetFreeTileCount() const {return free_tile_count_;}

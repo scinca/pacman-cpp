@@ -11,8 +11,11 @@
 #include <raylib.h>
 #include <regex>
 
-Map::Map(Database* db){
- db_ = db;
+Map::Map(Database* db) : db_(db) {
+}
+
+Map::Map() {
+    db_ = nullptr;
 }
 
 
@@ -32,7 +35,14 @@ void Map::Draw() const {
             DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN); // the coins should be smaller than player
         }
     }
+    //these are the outer borders that get drawn when there is a small gap
+    DrawRectangle(0, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //left
+    DrawRectangle(GetScreenWidth() -config.GameMapRootX, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //right
+    DrawRectangle(0, config.GameMapRootY - config.GameMapRootX, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
+    DrawRectangle(0, config.GameMapRootY + config.GameMapHeight, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
 }
+
+
 
 std::string Map::GetMap() {
     return loaded_map_;
@@ -85,6 +95,9 @@ std::vector<int> Map::FindEnemyStartTiles() const {
     return positions;
 }
 
+void Map::LoadFromString(const std::string& map) {
+    loaded_map_ = map;
+}
 
 
 std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {

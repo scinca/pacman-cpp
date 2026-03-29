@@ -41,6 +41,7 @@ void GameMenu::Show() const {
         game_->Initialize(1);
     }
     if (GuiButton(create_map_button, "Create  your own Map")) {
+        map_creator_->Initialize();
 
     }
 }
