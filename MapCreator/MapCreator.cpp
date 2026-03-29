@@ -35,17 +35,77 @@ void MapCreator::Update() {
 void MapCreator::DrawToolBox() {
     const auto& config = ApplicationConfig::GetInstance();
 
+    const int button_width = 150;
+    const int button_height = 50;
+    const int button_y = 20; // top bar
+    const int spacing = 10;
+
+    Rectangle wall_button = {
+        static_cast<float>(20 + 0 * (button_width + spacing)),
+        static_cast<float>(button_y),
+        static_cast<float>(button_width),
+        static_cast<float>(button_height)
+    };
+    Rectangle coin_button = {
+        static_cast<float>(20 + 1 * (button_width + spacing)),
+        static_cast<float>(button_y),
+        static_cast<float>(button_width),
+        static_cast<float>(button_height)
+    };
+    Rectangle player_start_button = {
+        static_cast<float>(20 + 2 * (button_width + spacing)),
+        static_cast<float>(button_y),
+        static_cast<float>(button_width),
+        static_cast<float>(button_height)
+    };
+    Rectangle enemy_start_button = {
+        static_cast<float>(20 + 3 * (button_width + spacing)),
+        static_cast<float>(button_y),
+        static_cast<float>(button_width),
+        static_cast<float>(button_height)
+    };
+    Rectangle empty_button = {
+        static_cast<float>(20 + 4 * (button_width + spacing)),
+        static_cast<float>(button_y),
+        static_cast<float>(button_width),
+        static_cast<float>(button_height)
+    };
+
+
 
 }
+
 void MapCreator::HandlePlayerInput() {
     const auto& config = ApplicationConfig::GetInstance();
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        int current_x = GetMouseX()- config.GameMapRootX;
-        int current_y = GetMouseY()- config.GameMapRootY;
-        int tile = Map::GetTileFromXY(current_x, current_y);
-        if
+        const int current_x = GetMouseX()- config.GameMapRootX;
+        const int current_y = GetMouseY()- config.GameMapRootY;
+        const int tile = Map::GetTileFromXY(current_x, current_y);
+        if (tile <0 || tile >1400) {
+            return;
+        }
 
+        char tile_char = '0';
 
+        switch (current_tool_) {
+            case Tile::Coin:
+                tile_char = '0';
+                break;
+            case Tile::Wall:
+                tile_char = '#';
+                break;
+            case Tile::PlayerStart:
+                tile_char = 'X';
+                break;
+            case Tile::EnemyStart:
+                tile_char = '?';
+                break;
+            case  Tile::None:
+                tile_char = ' ';
+                break;
+        }
+
+        temporary_map_[tile] = tile_char;
 
     }
     

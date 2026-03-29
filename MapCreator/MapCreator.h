@@ -32,9 +32,7 @@ class MapCreator {
     void Initialize();
 
     static void DrawGrid();
-    void SetCurrentTool(const Tile tile){current_tile_ = tile;}
-    [[nodiscard]] Tile GetCurrentTile() const {return current_tile_;}
-
+    void SetCurrentTool(const Tile tool){current_tool_ = tool;}
     [[nodiscard]] bool IsActive() const{return is_active_;}
 
 private:
@@ -42,7 +40,7 @@ private:
     bool is_active_;
     std::string temporary_map_;
     Database *db_{};
-    Tile current_tile_ = Tile::None;
+    Tile current_tool_ = Tile::None;
 
 
 

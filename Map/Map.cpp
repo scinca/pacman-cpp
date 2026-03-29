@@ -20,8 +20,8 @@ Map::Map() {
 
 int Map::GetTileFromXY(const int x, const int y) {
     const auto& config = ApplicationConfig::GetInstance();
-    const int tile_x = x/ config.TilesX;
-    const int tile_y = y / config.TilesY;
+    const int tile_x = x/ config.TileWidth;
+    const int tile_y = y / config.TileWidth;
     return tile_x + tile_y * config.TilesX;
 }
 
