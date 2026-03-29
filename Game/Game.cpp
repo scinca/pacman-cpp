@@ -227,8 +227,9 @@ void Game::DrawWinScreen() {
 void Game::DrawLoseScreen() {
     ShowCursor();
     ClearBackground(RAYWHITE);
-    DrawText("You lost.", 100, 100, ApplicationConfig::GetInstance().font_size, BLACK);
+    DrawText(std::format("You lost. Your Score was {}/{}", game_map.GetExploredTileCount(),game_map.GetFreeTileCount()).c_str(), 100, 100, ApplicationConfig::GetInstance().font_size, BLACK);
     DrawText("Press r to restart", ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().font_size, SKYBLUE);
+
 
     if (IsKeyDown(KEY_R)) {
         Initialize();
