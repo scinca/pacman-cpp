@@ -248,10 +248,6 @@ void Game::DrawLoseScreen() {
 
 }
 
-bool Game::ShouldClose() {
-    return WindowShouldClose();
-}
-
 bool Game::HasStarted() const {
     return is_game_running_;
 }

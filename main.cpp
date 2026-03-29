@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
 
 
-    while (!Game::ShouldClose()) {
+    while (WindowShouldClose()) {
         BeginDrawing();
         if (!game.HasStarted()) {
             ClearBackground(RAYWHITE);

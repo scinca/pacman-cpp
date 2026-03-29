@@ -30,9 +30,8 @@ public:
     void Update();
     void DrawFrame();
 
-    bool HasStarted() const;
+    [[nodiscard]] bool HasStarted() const;
 
-    static bool ShouldClose();
     void SetCurrentMapNumber(const int number) {last_played_map_number_ = number;}
     void Pause();
     void Resume();
