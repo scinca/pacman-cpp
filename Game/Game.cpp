@@ -101,8 +101,12 @@ void Game::Update() {
     else {
         // Update game entities
         player->Move();
+        const int tile = player->GetCurrentTile();
         for (const auto& enemy : enemy_players) {
             enemy->Move();
+            if (enemy->GetCurrentTile()== tile) {
+                player->Kill();
+            }
         }
     }
 }

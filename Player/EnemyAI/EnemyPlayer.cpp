@@ -16,6 +16,7 @@ EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int st
     player_ = player;
     color_ = color;
     std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
+    start_tile_ = starting_tile;
     GetTile();
 
 }
@@ -53,12 +54,6 @@ void EnemyPlayer::Move() {
             break;
 
     }
-
-    if (player_->GetCurrentTile() == current_tile_) {
-            player_->Kill();
-        }
-
-
 }
 
 int EnemyPlayer::CalculateManhattanDistance(const int tile) const {

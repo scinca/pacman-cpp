@@ -37,7 +37,7 @@ public:
     void Pause();
     void Resume();
     void Stop(){is_game_running_ = false;}
-
+    void AddSilentPause(){ silent_pause_ = true; }
 private:
     void DrawWinScreen();
     void DrawLoseScreen();
@@ -48,8 +48,6 @@ private:
     Map game_map;
     int last_played_map_number_ {1};
     std::unique_ptr<HumanPlayer> player;
-    std::unique_ptr<EnemyPlayer> red_enemy;
-    std::unique_ptr<EnemyPlayer> blue_enemy;
     bool is_game_running_{};
     std::vector<std::unique_ptr<EnemyPlayer>> enemy_players;
     const std::vector<Color>enemy_colors = {RED, SKYBLUE, PINK, LIME};
