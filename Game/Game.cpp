@@ -199,7 +199,7 @@ void Game::DrawWinScreen() {
     ClearBackground(RAYWHITE);
     ShowCursor();
     DrawText("You won!", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, BLACK);
-    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, SKYBLUE);
+    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 350, config.font_size, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
         Initialize();
