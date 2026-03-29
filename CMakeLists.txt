@@ -3,7 +3,6 @@ project(pacman_cpp)
 
 set(CMAKE_CXX_STANDARD 23)
 
-# Try to find raylib installed on system first then download
 find_package(raylib QUIET)
 
 if(NOT raylib_FOUND)
@@ -30,7 +29,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(raygui)
 
 add_executable(pacman_cpp main.cpp
-        config.h
         Map/Map.cpp
         Map/Map.h
         Player/PlayerBase.h

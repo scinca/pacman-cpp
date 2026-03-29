@@ -19,7 +19,7 @@ void GameMenu::Show() const {
     DrawText("PAC-MAN GAME",
              config.GameMapWidth / 2 - 150,
              100,
-             40,
+             config.font_size,
              BLACK);
 
 
@@ -29,19 +29,10 @@ void GameMenu::Show() const {
         200,
         50
     };
-    const Rectangle map_2_button_ = {
-        static_cast<float>(config.GameMapWidth / 2 - 100),
-        static_cast<float>(config.GameMapHeight / 2 - 0),
-        200,
-        50
-    };
+
 
     if (GuiButton(default_map_button_, "Use Default Map")) {
         game_->Initialize(1);
     }
-    if (GuiButton(map_2_button_, "Use Map2")) {
-        game_->Initialize(2);
-    }
-
 }
 

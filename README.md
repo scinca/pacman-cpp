@@ -72,7 +72,7 @@ Notes:
 ### Prerequisites
 - CMake 4.1 or higher
 - C++23 compatible compiler  (This is required for std::expected)
-- Git
+- git
 
 ### Build and Run (Release)
 ```bash
@@ -84,40 +84,15 @@ cmake --build .
 ./pacman_cpp
 ```
 
-## Project Structure
-    
-```
-src/
-│
-├── main.cpp # Application entry point
-├── config.h # Shared configuration values (window size, tile size, etc.)
-│
-├── time/ # Simple deltaTime implementation for frame-independent movement
-│
-├── map/ # Map system
-│ └── Map class handles:
-│ - map loading from file or string
-│ - tile queries ( coordinates, status , exploration )
-│ - collision detection 
-│
-└── players/ # Base class shared by player and AI 
-│
-├── HumanPlayer/ # Handles player input and movement
-│
-└── EnemyAI/ # Enemy AI and pathfinding logic
-```
-
-
 **Note:** If raylib isn't installed it automatically downloaded and compiled. This takes a looong time.
 
 ## Disclosure of AI usage
 
-This project was made by me. However I used Claude 4.5 Sonnet to help me with:
+This project was made by me. However, I used Claude 4.5 Sonnet in learning mode to help me with:
 
-- designing the map ( writing 1400 '#' or '0' is insane)
-- Making the cmake specifically the 'add_custom_command()' ( now removed)
+- designing the initial map ( writing 1400 '#' or '0' is insane)
+- Making some parts of the cmake
 - Some brainstorming about how to implement certain functionality ( but the code was written by me)
 - questions about cpp ( like which function does this)
 - debugging certain things where I got stuck.
 - some of the math used to calculate certain things like the position of tiles
-- the automatic raylib download 

@@ -23,11 +23,15 @@ void Game::Initialize(const std::optional<int> map_number) {
     enemy_players.clear();
     is_game_running_ = true;
    if (map_number.has_value()) {
-       game_map.LoadMapFromDB(map_number.value());
+       auto res =game_map.LoadMapFromDB(map_number.value());
+       if (!res) {
+           std::cerr<< "Error loading map. Falling back to default" << std::endl;
+           game_map.LoadMapFromDB(1);
+       }
    }
-    else {
-        game_map.LoadMapFromDB(last_played_map_number_);
-    }
+   else {
+        game_map.LoadMapFromDB(last_played_map_number_); // shouldn't fail since last_played_map_number_ will be a valid map.
+   }
 
 
 
@@ -48,6 +52,12 @@ void Game::Initialize(const std::optional<int> map_number) {
 }
 
 void Game::HandlePlayerInput() {
+    if (silent_pause_) {
+        if (IsKeyPressed(KEY_W)||IsKeyPressed(KEY_A)|| IsKeyPressed(KEY_S)|| IsKeyPressed(KEY_D) || IsKeyPressed(KEY_UP)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_RIGHT)) {
+            silent_pause_ = false;
+            Resume();
+        }
+    }
     if (state != GameState::PLAYING) {
         if (IsKeyPressed(KEY_P)&& state == GameState::PAUSED) {
              Resume();
@@ -120,7 +130,7 @@ void Game::DrawFrame() {
                 ClearBackground(BLACK);
                 DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
                 DrawText("The game hasn't started, press any of the Direction Keys to continue",config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
-                if (IsKeyPressed(KEY_W)||IsKeyPressed(KEY_A)|| IsKeyPressed(KEY_S)|| IsKeyPressed(KEY_D) || IsKeyPressed(KEY_P)|| IsKeyPressed(KEY_UP)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_RIGHT)) {
+                if (IsKeyPressed(KEY_W)||IsKeyPressed(KEY_A)|| IsKeyPressed(KEY_S)|| IsKeyPressed(KEY_D) || IsKeyPressed(KEY_UP)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_RIGHT)) {
                     silent_pause_ = false;
                     Resume();
                 }
