@@ -90,6 +90,13 @@ void MapCreator::DrawToolBox() {
         static_cast<float>(button_width),
         static_cast<float>(button_height)
    };
+    const Rectangle back_to_main_menu = {
+        static_cast<float>(20 + 8 * (button_width + spacing)),
+        static_cast<float>(button_y),
+        static_cast<float>(button_width),
+        static_cast<float>(button_height)
+
+    };
 
 
     if (GuiButton(wall_button, "Wall")) {
@@ -117,6 +124,9 @@ void MapCreator::DrawToolBox() {
     }
     if (GuiButton(save_map_button, "Save Map")) {
         show_save_dialog_ = true;
+    }
+    if (GuiButton(back_to_main_menu, "Back to Main Menu")) {
+        is_active_ = false;
     }
 }
 
@@ -209,6 +219,11 @@ void MapCreator::SaveMapDialog() {
 
     if (GuiButton({dialog.x, dialog.y + 160, dialog.width / 2 - 5, 30}, "Save")) {
         show_save_dialog_ = false;
+        auto res = db_->AddMap(temporary_map_, map_name_buffer_, map_author_buffer_);
+        if (!res) {
+
+
+        }
     }
     if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
         show_save_dialog_ = false;
