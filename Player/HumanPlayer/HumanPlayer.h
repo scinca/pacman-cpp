@@ -15,11 +15,16 @@ class HumanPlayer : public PlayerBase {
     void Kill();
     [[nodiscard]] bool CheckIfAlive() const;
     void SetNextDirection(Direction next_direction);
-    [[nodiscard]] std::pair<int, int> GetPosition() const;
+    [[nodiscard]] int GetRemainingLives() const{return lives_;};
+    [[nodiscard]] int GetMaxLives() const{return max_lives_;};
 
     private:
     Direction next_direction_ = Direction::NONE;  // buffered input
     bool is_alive_ = true;
+    int max_lives_ = 3;
+    int lives_ = max_lives_;
+
+
 
 
 

@@ -12,6 +12,7 @@
 HumanPlayer::HumanPlayer(Map *map, Time *time, const int starting_tile, const Color color)
     :PlayerBase(map, time, starting_tile, color){
     std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
+    start_tile_ = starting_tile;
     GetTile();
     color_ = color;
 }
@@ -71,13 +72,12 @@ void HumanPlayer::SetNextDirection(const Direction next_direction) {
 }
 
 void HumanPlayer::Kill() {
-    is_alive_ = false;
+    lives_--;
+    if (lives_ <= 0) { // <= bc i don't have respawn logic yet
+        is_alive_ = false;
+    }
 }
 
 bool HumanPlayer::CheckIfAlive() const {
     return is_alive_;
-}
-
-std::pair<int, int> HumanPlayer::GetPosition() const {
-    return {position_x_, position_y_};
 }

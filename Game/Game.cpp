@@ -101,8 +101,22 @@ void Game::Update() {
     else {
         // Update game entities
         player->Move();
+        const int tile = player->GetCurrentTile();
         for (const auto& enemy : enemy_players) {
             enemy->Move();
+            if (enemy->GetCurrentTile()== tile) {
+                player->Kill();
+                if (!player->CheckIfAlive()) {
+                    state = GameState::LOST;
+                }
+                player->ResetPosition();
+                silent_pause_ = true;
+                for (const auto& other_enemy : enemy_players) {
+                    other_enemy->ResetPosition();
+                }
+
+
+            }
         }
     }
 }
@@ -121,34 +135,35 @@ void Game::DrawFrame() {
     DrawRectangleLines(config.WindowRoot,config.WindowRoot, GetScreenWidth()-1,GetScreenHeight()-1, RAYWHITE);
     switch (state) {
         case GameState::PLAYING: {
+            ClearBackground(BLACK);
             //these are the outer borders that get drawn when there is a small gap
             DrawRectangle(0, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //left
             DrawRectangle(GetScreenWidth() -config.GameMapRootX, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //right
             DrawRectangle(0, config.GameMapRootY - config.GameMapRootX, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
             DrawRectangle(0, config.GameMapRootY + config.GameMapHeight, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
+            for (int i = 1; i <= player->GetMaxLives(); i++) {
+                if (i <= player->GetRemainingLives()) {
+                    DrawCircle(config.WindowRoot + 100 + i * 30, config.WindowRoot + 80, config.PointRadius, RED);
+                }else {
+                    DrawCircleLines(config.WindowRoot+ 100+  i* 30, config.WindowRoot+80,config.PointRadius, RED);
+                }
+
             if (silent_pause_) {
-                ClearBackground(BLACK);
                 DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
                 DrawText("The game hasn't started, press any of the Direction Keys to continue",config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
                 if (IsKeyPressed(KEY_W)||IsKeyPressed(KEY_A)|| IsKeyPressed(KEY_S)|| IsKeyPressed(KEY_D) || IsKeyPressed(KEY_UP)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_RIGHT)) {
                     silent_pause_ = false;
                     Resume();
                 }
-
-
-
-                DrawLine(config.GameMapRootX,config.GameMapRootY,GetScreenWidth(),config.GameMapRootY,RAYWHITE);
-
                 game_map.Draw();
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
                     enemy->Draw();
                 }
             }else {
-                ClearBackground(BLACK);
                 DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
                 DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
-                DrawLine(config.GameMapRootX,config.GameMapRootY,GetScreenWidth(),config.GameMapRootY,RAYWHITE);
+            }
                 game_map.Draw();
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
@@ -212,8 +227,9 @@ void Game::DrawWinScreen() {
 void Game::DrawLoseScreen() {
     ShowCursor();
     ClearBackground(RAYWHITE);
-    DrawText("You lost.", 100, 100, ApplicationConfig::GetInstance().font_size, BLACK);
+    DrawText(std::format("You lost. Your Score was {}/{}", game_map.GetExploredTileCount(),game_map.GetFreeTileCount()).c_str(), 100, 100, ApplicationConfig::GetInstance().font_size, BLACK);
     DrawText("Press r to restart", ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().WindowRoot + 300, ApplicationConfig::GetInstance().font_size, SKYBLUE);
+
 
     if (IsKeyDown(KEY_R)) {
         Initialize();

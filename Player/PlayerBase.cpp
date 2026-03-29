@@ -20,7 +20,7 @@ void PlayerBase::GetTile() {
 
     const int tileX = static_cast<int>(position_x_ - config.GameMapRootX) / config.TileWidth;
     const int tileY = static_cast<int>(position_y_ -  config.GameMapRootY) /  config.TileWidth;
-    current_tile_ = tileY * 50 + tileX;
+    current_tile_ = tileY * config.TilesX + tileX;
 }
 
 
@@ -71,3 +71,8 @@ bool PlayerBase::IsAtTileCenter() const {
 }
 
 PlayerBase::~PlayerBase() = default;
+
+void PlayerBase::ResetPosition() {
+    current_tile_ = start_tile_;
+    std::tie(position_x_, position_y_) = Map::GetTileCenter(current_tile_);
+}

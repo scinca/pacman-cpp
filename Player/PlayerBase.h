@@ -21,9 +21,9 @@ class PlayerBase {
     PlayerBase(Map *game_map, Time *time, int tile, Color color);
 
     [[nodiscard]] int GetCurrentTile() const { return current_tile_; }
-
     virtual void Move() = 0;
     virtual void Draw() const =0;
+    void ResetPosition();
 
     protected:
     bool CheckMoveValidity(Direction move);
@@ -31,9 +31,11 @@ class PlayerBase {
     void GetTile();
     void CheckSurroundingTiles();
 
+
     float position_x_;
     float position_y_;
     int current_tile_;
+    int start_tile_;
     int velocity_ = 150;
     float margin_ = 3.0f;
     Color color_;
