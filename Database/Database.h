@@ -7,9 +7,13 @@
 
 #include <expected>
 #include <string>
+
+#include "../Map/Map.h"
+
 #include "../third_party/sqlite/sqlite3.h"
 
 
+enum class MapValidationError;
 
 enum class MapError {
     NotFound,
@@ -22,7 +26,7 @@ class Database {
     explicit Database(const std::string& db_path= "pacman.db");
     ~Database();
     std::expected<std::string, MapError> GetMap(int map_number) const;
-    std::expected<void, MapError> AddMap(std::string map, const std::string &map_name, const std::string &author) const;
+    std::expected<int, MapValidationError> AddMap(std::string map, const std::string &map_name, const std::string &author) const;
 
     private:
     [[nodiscard]] std::expected<void, MapError> InitDB() const;

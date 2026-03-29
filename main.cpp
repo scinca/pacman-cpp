@@ -10,13 +10,14 @@ int main(int argc, char* argv[]) {
 
     Database database;
     ApplicationConfig::GetInstance();
-    MapCreator map_creator{&database};
+    Game game{&database};
+    MapCreator map_creator{&database, &game};
 
 
     ToggleFullscreen();
     SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
 
-    Game game{&database};
+
     const GameMenu game_menu{&game, &map_creator};
 
 

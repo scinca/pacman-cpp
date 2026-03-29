@@ -5,11 +5,21 @@
 #ifndef PACMAN_CPP_MAP_H
 #define PACMAN_CPP_MAP_H
 #include <expected>
+#include <optional>
 #include <string>
 #include <vector>
 
 #include "../Database/Database.h"
+class Database;
+enum class MapValidationError {
+    InvalidLength,
+    InvalidPlayerCount,
+    InvalidEnemyCount,
+    UnresolvableSymbols,
+    CoinsUnreachable,
+    DatabaseError,
 
+};
 
 class Map {
 public:
@@ -28,7 +38,7 @@ public:
 
     void LoadFromString(const std::string &map);
 
-    static bool ValidateMap(const std::string& map);
+    static std::optional<MapValidationError> ValidateMap(const std::string& map);
     [[nodiscard]] int GetExploredTileCount() const {return explored_tile_count_;}
     [[nodiscard]] int GetFreeTileCount() const {return free_tile_count_;}
 

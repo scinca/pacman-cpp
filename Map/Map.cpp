@@ -138,7 +138,7 @@ std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {
     return {};
 }
 
-bool Map::ValidateMap(const std::string& map) {
+std::optional<MapValidationError> Map::ValidateMap(const std::string& map) {
     /*
      *ValidateMap() Checks if the map has correct length,
      *only allowed symbols
@@ -147,25 +147,25 @@ bool Map::ValidateMap(const std::string& map) {
     static const std::regex valid_chars(R"(^[X#0? ]+$)");
 
     if (map.length() != 1400) {
-        return false;
+        return MapValidationError::InvalidLength;
     }
 
     if (!std::regex_match(map, valid_chars)) {
         std::cerr << "Invalid characters found.\n";
-        return false;
+        return MapValidationError::UnresolvableSymbols;
     }
 
     int player_starting_positions_count = std::count(map.begin(), map.end(), 'X');
     if (player_starting_positions_count != 1) {
         std::cerr << "Invalid player count: " << player_starting_positions_count << " (expected exactly 1)\n";
-        return false;
+        return MapValidationError::InvalidPlayerCount;
     }
 
     int ghost_starting_positions_count = std::count(map.begin(), map.end(), '?');
     if (ghost_starting_positions_count > 4 || ghost_starting_positions_count < 1) {
         std::cerr << "Invalid ghost count: (Must be between 1 and 4) current count: " << ghost_starting_positions_count << "\n";
-        return false;
+        return MapValidationError::InvalidEnemyCount;
     }
 
-    return true;
+    return std::nullopt;
 }
