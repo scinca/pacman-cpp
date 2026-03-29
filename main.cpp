@@ -25,6 +25,7 @@ int main(int argc, char* argv[]) {
         BeginDrawing();
         if (!game.HasStarted()) {
             if (map_creator.IsActive()) {
+                map_creator.HandlePlayerInput();
                 map_creator.Update();
                 map_creator.DrawFrame();
 

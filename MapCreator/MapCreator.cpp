@@ -4,6 +4,7 @@
 
 #include "MapCreator.h"
 
+#include <raygui.h>
 #include <raylib.h>
 
 #include "../ApplicationConfig.h"
@@ -20,6 +21,7 @@ void MapCreator::DrawFrame() {
     const auto& config = ApplicationConfig::GetInstance();
 
     ClearBackground(BLACK);
+    DrawToolBox();
     map_class_.Draw();
     DrawGrid();
 }
@@ -35,43 +37,57 @@ void MapCreator::Update() {
 void MapCreator::DrawToolBox() {
     const auto& config = ApplicationConfig::GetInstance();
 
-    const int button_width = 150;
-    const int button_height = 50;
-    const int button_y = 20; // top bar
-    const int spacing = 10;
+    constexpr int button_width = 150;
+    constexpr int button_height = 50;
+    constexpr int button_y = 20; // top bar
+    constexpr int spacing = 10;
 
-    Rectangle wall_button = {
+    const Rectangle wall_button = {
         static_cast<float>(20 + 0 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-    Rectangle coin_button = {
+    const Rectangle coin_button = {
         static_cast<float>(20 + 1 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-    Rectangle player_start_button = {
+    const Rectangle player_start_button = {
         static_cast<float>(20 + 2 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-    Rectangle enemy_start_button = {
+    const Rectangle enemy_start_button = {
         static_cast<float>(20 + 3 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-    Rectangle empty_button = {
+    const Rectangle empty_button = {
         static_cast<float>(20 + 4 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
 
-
+    if (GuiButton(wall_button, "Wall")) {
+        SetCurrentTool(Tile::Wall);
+    }
+    if (GuiButton(player_start_button, "PlayerStart")) {
+        SetCurrentTool(Tile::PlayerStart);
+    }
+    if (GuiButton(coin_button, "Coin")) {
+        SetCurrentTool(Tile::Coin);
+    }
+    if (GuiButton(enemy_start_button, "Enemy")) {
+        SetCurrentTool(Tile::EnemyStart);
+    }
+    if (GuiButton(empty_button, "Empty")) {
+        SetCurrentTool(Tile::None);
+    }
 
 }
 
