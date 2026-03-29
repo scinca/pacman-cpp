@@ -71,7 +71,10 @@ void HumanPlayer::SetNextDirection(const Direction next_direction) {
 }
 
 void HumanPlayer::Kill() {
-    is_alive_ = false;
+    lives_--;
+    if (lives_ <= 0) { // <= bc i don't have respawn logic yet
+        is_alive_ = false;
+    }
 }
 
 bool HumanPlayer::CheckIfAlive() const {
