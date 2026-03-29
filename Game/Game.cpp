@@ -23,11 +23,7 @@ void Game::Initialize(const std::optional<int> map_number) {
     enemy_players.clear();
     is_game_running_ = true;
    if (map_number.has_value()) {
-       auto res =game_map.LoadMapFromDB(map_number.value());
-       if (!res) {
-           std::cerr<< "Error loading map. Falling back to default" << std::endl;
-           game_map.LoadMapFromDB(1);
-       }
+       game_map.LoadMapFromDB(map_number.value());
    }
    else {
         game_map.LoadMapFromDB(last_played_map_number_); // shouldn't fail since last_played_map_number_ will be a valid map.

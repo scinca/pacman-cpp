@@ -31,6 +31,7 @@ void GameMenu::Show() const {
     };
 
 
+
     if (GuiButton(default_map_button_, "Use Default Map")) {
         game_->Initialize(1);
     }

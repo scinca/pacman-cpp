@@ -28,7 +28,7 @@ public:
     [[nodiscard]] int GetFreeTileCount() const {return free_tile_count_;}
 
 private:
-    Database* database_;
+    Database* db_{};
     std::string loaded_map_;
     std::vector<bool> explored_map_;
     int free_tile_count_ = 0;

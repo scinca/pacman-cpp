@@ -12,7 +12,7 @@
 #include <regex>
 
 Map::Map(Database* db){
- database_ = db;
+ db_ = db;
 }
 
 
@@ -88,7 +88,7 @@ std::vector<int> Map::FindEnemyStartTiles() const {
 
 
 std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {
-    auto result = database_->GetMap(map_number);
+    auto result = db_->GetMap(map_number);
     if (!result) {
         return std::unexpected("Map " + std::to_string(map_number) + " not found");
     }
