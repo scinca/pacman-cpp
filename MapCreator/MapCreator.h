@@ -16,9 +16,11 @@ class MapCreator {
 
     void DrawFrame();
 
+    void Update();
+
     void Initialize();
 
-    void DrawGrid();
+    static void DrawGrid();
 
     [[nodiscard]] bool IsActive() const{return is_active_;}
 

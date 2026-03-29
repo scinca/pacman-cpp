@@ -21,8 +21,18 @@ void MapCreator::DrawFrame() {
 
     ClearBackground(BLACK);
     map_class_.Draw();
-
+    DrawGrid();
 }
+
+void MapCreator::Update() {
+    const auto& config = ApplicationConfig::GetInstance();
+
+
+
+
+    map_class_.LoadFromString(temporary_map_);
+}
+
 
 void MapCreator::Initialize() {
     is_active_ = true;
@@ -34,6 +44,13 @@ void MapCreator::Initialize() {
 void MapCreator::DrawGrid() {
     const auto& config = ApplicationConfig::GetInstance();
 
-
+    for ( int i =1; i<= config.TilesY; i++) { // start at 1 since the game map draws outer borders
+        DrawLine(config.GameMapRootX,config.GameMapRootY + config.TileWidth*i, config.GameMapRootX+ config.GameMapWidth, config.GameMapRootY+config.TileWidth*i, RAYWHITE);
+    }
+    for ( int i =1; i<= config.TilesX; i++) {
+        DrawLine(config.GameMapRootX+ config.TileWidth*i, config.GameMapRootY,config.GameMapRootX+config.TileWidth*i, config.GameMapRootY+config.GameMapHeight, RAYWHITE);
+    }
 }
+
+
 
