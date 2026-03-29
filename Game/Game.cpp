@@ -148,6 +148,16 @@ void Game::DrawFrame() {
                 ClearBackground(BLACK);
                 DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
                 DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
+                for (int i = 1; i <= player->GetMaxLives(); i++) {
+                    if (i <= player->GetRemainingLives()) {
+                        DrawCircle(config.WindowRoot + 100 + i * 30, config.WindowRoot + 80, config.PointRadius, RED);
+                    }else {
+                        DrawCircleLines(config.WindowRoot+ 100+  i* 30, config.WindowRoot+80,config.PointRadius, RED);
+                    }
+
+
+
+                }
                 DrawLine(config.GameMapRootX,config.GameMapRootY,GetScreenWidth(),config.GameMapRootY,RAYWHITE);
                 game_map.Draw();
                 player->Draw();
