@@ -32,6 +32,7 @@ public:
     [[nodiscard]] int GetExploredTileCount() const {return explored_tile_count_;}
     [[nodiscard]] int GetFreeTileCount() const {return free_tile_count_;}
 
+    static int GetTileFromXY(int x, int y);
 private:
     Database* db_{};
     std::string loaded_map_;

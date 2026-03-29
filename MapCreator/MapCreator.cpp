@@ -27,10 +27,29 @@ void MapCreator::DrawFrame() {
 void MapCreator::Update() {
     const auto& config = ApplicationConfig::GetInstance();
 
-
-
-
     map_class_.LoadFromString(temporary_map_);
+}
+
+
+
+void MapCreator::DrawToolBox() {
+    const auto& config = ApplicationConfig::GetInstance();
+
+
+}
+void MapCreator::HandlePlayerInput() {
+    const auto& config = ApplicationConfig::GetInstance();
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        int current_x = GetMouseX()- config.GameMapRootX;
+        int current_y = GetMouseY()- config.GameMapRootY;
+        int tile = Map::GetTileFromXY(current_x, current_y);
+        if
+
+
+
+    }
+    
+
 }
 
 
