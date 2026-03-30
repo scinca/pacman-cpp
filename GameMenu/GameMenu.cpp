@@ -11,7 +11,7 @@
 
 GameMenu::~GameMenu() = default;
 
-GameMenu::GameMenu(Game *game): game_(game) {
+GameMenu::GameMenu(Game *game, MapCreator *map_creator): game_(game), map_creator_(map_creator) {
 }
 
 void GameMenu::Show() const {
@@ -23,17 +23,26 @@ void GameMenu::Show() const {
              BLACK);
 
 
-    const Rectangle default_map_button_ = {
+    const Rectangle default_map_button = {
         static_cast<float>(config.GameMapWidth / 2 - 100),
         static_cast<float>(config.GameMapHeight / 2 - 50),
         200,
         50
     };
 
+    const Rectangle create_map_button = {
+        static_cast<float>(config.GameMapWidth / 2 - 100),
+        static_cast<float>(config.GameMapHeight / 2 + 50),
+        200,
+        50,
+    };
 
-
-    if (GuiButton(default_map_button_, "Use Default Map")) {
+    if (GuiButton(default_map_button, "Use Default Map")) {
         game_->Initialize(1);
+    }
+    if (GuiButton(create_map_button, "Create  your own Map")) {
+        map_creator_->Initialize();
+
     }
 }
 

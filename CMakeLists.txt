@@ -48,6 +48,8 @@ add_executable(pacman_cpp main.cpp
         Database/Database.h
         ApplicationConfig.cpp
         ApplicationConfig.h
+        MapCreator/MapCreator.cpp
+        MapCreator/MapCreator.h
 )
 
 # Add raygui include directory

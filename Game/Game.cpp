@@ -132,11 +132,6 @@ void Game::DrawFrame() {
     switch (state) {
         case GameState::PLAYING: {
             ClearBackground(BLACK);
-            //these are the outer borders that get drawn when there is a small gap
-            DrawRectangle(0, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //left
-            DrawRectangle(GetScreenWidth() -config.GameMapRootX, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //right
-            DrawRectangle(0, config.GameMapRootY - config.GameMapRootX, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
-            DrawRectangle(0, config.GameMapRootY + config.GameMapHeight, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
             for (int i = 1; i <= player->GetMaxLives(); i++) {
                 if (i <= player->GetRemainingLives()) {
                     DrawCircle(config.WindowRoot + 100 + i * 30, config.WindowRoot + 80, config.PointRadius, RED);
@@ -151,7 +146,7 @@ void Game::DrawFrame() {
                     silent_pause_ = false;
                     Resume();
                 }
-                game_map.Draw();
+                game_map.Draw(false);
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
                     enemy->Draw();
@@ -160,7 +155,7 @@ void Game::DrawFrame() {
                 DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
                 DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
             }
-                game_map.Draw();
+                game_map.Draw(false);
                 player->Draw();
                 for (const auto& enemy : enemy_players) {
                     enemy->Draw();
@@ -204,7 +199,7 @@ void Game::DrawWinScreen() {
     ClearBackground(RAYWHITE);
     ShowCursor();
     DrawText("You won!", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, BLACK);
-    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, SKYBLUE);
+    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 350, config.font_size, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
         Initialize();

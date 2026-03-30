@@ -11,12 +11,21 @@
 #include <raylib.h>
 #include <regex>
 
-Map::Map(Database* db){
- db_ = db;
+Map::Map(Database* db) : db_(db) {
 }
 
+Map::Map() {
+    db_ = nullptr;
+}
 
-void Map::Draw() const {
+int Map::GetTileFromXY(const int x, const int y) {
+    const auto& config = ApplicationConfig::GetInstance();
+    const int tile_x = x/ config.TileWidth;
+    const int tile_y = y / config.TileWidth;
+    return tile_x + tile_y * config.TilesX;
+}
+
+void Map::Draw(const bool editor) const {
     const auto& config = ApplicationConfig::GetInstance();
     for (int i = 0; i < loaded_map_.size(); i++) {
         const std::int32_t tile_x = (i % config.TilesX) * config.TileWidth + config.GameMapRootX;
@@ -28,11 +37,32 @@ void Map::Draw() const {
         if (loaded_map_[i] == '#') {
             DrawRectangle(tile_x, tile_y, config.TileWidth, config.TileWidth, RAYWHITE);
         }
-        if (loaded_map_[i] == '0' && !explored_map_[i]) {
-            DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN); // the coins should be smaller than player
+        if (!editor) {
+            if (loaded_map_[i] == '0' && !explored_map_[i]) {
+                DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN); // the coins should be smaller than player
+            }
+        }
+        if (editor) {
+            if (loaded_map_[i]== 'X') {
+                DrawText("X", center_x- config.TileWidth/2 ,center_y- config.TileWidth/2,config.TileWidth, LIME);
+            }
+            if (loaded_map_[i]== '?') {
+                DrawText("?", center_x- config.TileWidth/2 ,center_y- config.TileWidth/2,config.TileWidth, LIME);
+            }
+            if (loaded_map_[i] == '0') {
+                DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN);
+
+            }
         }
     }
+    //these are the outer borders that get drawn when there is a small gap
+    DrawRectangle(0, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //left
+    DrawRectangle(GetScreenWidth() -config.GameMapRootX, config.GameMapRootY, config.GameMapRootX, config.GameMapHeight, RAYWHITE); //right
+    DrawRectangle(0, config.GameMapRootY - config.GameMapRootX, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
+    DrawRectangle(0, config.GameMapRootY + config.GameMapHeight, GetScreenWidth(), config.GameMapRootX, RAYWHITE);
 }
+
+
 
 std::string Map::GetMap() {
     return loaded_map_;
@@ -85,6 +115,9 @@ std::vector<int> Map::FindEnemyStartTiles() const {
     return positions;
 }
 
+void Map::LoadFromString(const std::string& map) {
+    loaded_map_ = map;
+}
 
 
 std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {
@@ -105,7 +138,7 @@ std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {
     return {};
 }
 
-bool Map::ValidateMap(const std::string& map) {
+std::optional<MapValidationError> Map::ValidateMap(const std::string& map) {
     /*
      *ValidateMap() Checks if the map has correct length,
      *only allowed symbols
@@ -114,25 +147,29 @@ bool Map::ValidateMap(const std::string& map) {
     static const std::regex valid_chars(R"(^[X#0? ]+$)");
 
     if (map.length() != 1400) {
-        return false;
+        return MapValidationError::InvalidLength;
+    }
+    if (std::count(map.begin(),map.end(), '0')<=100) {
+        std::cerr << "Not enough coins" << std::endl;
+        return MapValidationError::TooFewCoins;
     }
 
     if (!std::regex_match(map, valid_chars)) {
         std::cerr << "Invalid characters found.\n";
-        return false;
+        return MapValidationError::UnresolvableSymbols;
     }
 
     int player_starting_positions_count = std::count(map.begin(), map.end(), 'X');
     if (player_starting_positions_count != 1) {
         std::cerr << "Invalid player count: " << player_starting_positions_count << " (expected exactly 1)\n";
-        return false;
+        return MapValidationError::InvalidPlayerCount;
     }
 
     int ghost_starting_positions_count = std::count(map.begin(), map.end(), '?');
     if (ghost_starting_positions_count > 4 || ghost_starting_positions_count < 1) {
         std::cerr << "Invalid ghost count: (Must be between 1 and 4) current count: " << ghost_starting_positions_count << "\n";
-        return false;
+        return MapValidationError::InvalidEnemyCount;
     }
 
-    return true;
+    return std::nullopt;
 }

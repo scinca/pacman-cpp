@@ -54,23 +54,29 @@ std::expected<std::string, MapError> Database::GetMap(const int map_number) cons
 }
 
 
-std::expected<void, MapError> Database::AddMap(std::string map, const std::string &map_name, const std::string &author) const {
+std::expected<int, MapValidationError> Database::AddMap(std::string map, const std::string &map_name, const std::string &author) const {
     const Statement stmt("INSERT OR IGNORE INTO maps (map_data, map_name, map_author) VALUES (?, ?, ?);", db_);
     std::erase(map, '\n');
     std::erase(map, '\r');
-    if (!Map::ValidateMap(map)) {
-        return std::unexpected(MapError::InvalidData);
+    MapValidationError error;
+
+    const auto result = Map::ValidateMap(map);
+    if (result.has_value()) {
+        return std::unexpected(result.value());
+
     }
+
 
     sqlite3_bind_text(stmt.Get(),1,map.c_str(),-1,SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt.Get(),2,map_name.c_str(),-1,SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt.Get(),3,author.c_str(),-1,SQLITE_TRANSIENT);
 
     if (sqlite3_step(stmt.Get()) != SQLITE_DONE) {
-        return std::unexpected(MapError::InvalidData);
+        return std::unexpected(MapValidationError::DatabaseError);
     }
 
-    return{};
+
+    return sqlite3_last_insert_rowid(db_);
 }
 
 std::expected<void, MapError> Database::InitDB() const {
@@ -91,10 +97,9 @@ std::expected<void, MapError> Database::InitDB() const {
     }
 
     const auto result = AddMap(default_map_, "Default Map", "scinca");
-    if (!result) {
+    if (result.has_value()) {
         std::cerr << "Something went wrong while it shouldn't have." << std::endl;
     }
-
     return {};
 }
 

@@ -5,17 +5,29 @@
 #ifndef PACMAN_CPP_MAP_H
 #define PACMAN_CPP_MAP_H
 #include <expected>
+#include <optional>
 #include <string>
 #include <vector>
 
 #include "../Database/Database.h"
-
+class Database;
+enum class MapValidationError {
+    InvalidLength,
+    InvalidPlayerCount,
+    InvalidEnemyCount,
+    UnresolvableSymbols,
+    CoinsUnreachable,
+    DatabaseError,
+    TooFewCoins,
+};
 
 class Map {
 public:
     explicit Map(Database* db);
+    Map();
+
     std::expected<void, std::string> LoadMapFromDB(int map_number);
-    void Draw() const;
+    void Draw(bool editor = false) const;
     std::string GetMap();
     [[nodiscard]] bool AllExplored() const;
     void Explore(int tile);
@@ -23,10 +35,14 @@ public:
     [[nodiscard]] bool CanMove(int tileNumber) const;
     [[nodiscard]] int FindPlayerStartTile() const;
     [[nodiscard]] std::vector<int> FindEnemyStartTiles() const;
-    static bool ValidateMap(const std::string& map);
+
+    void LoadFromString(const std::string &map);
+
+    static std::optional<MapValidationError> ValidateMap(const std::string& map);
     [[nodiscard]] int GetExploredTileCount() const {return explored_tile_count_;}
     [[nodiscard]] int GetFreeTileCount() const {return free_tile_count_;}
 
+    static int GetTileFromXY(int x, int y);
 private:
     Database* db_{};
     std::string loaded_map_;
