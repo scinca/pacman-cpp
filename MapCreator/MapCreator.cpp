@@ -191,9 +191,7 @@ void MapCreator::DrawGrid() {
     }
 }
 
-
-void MapCreator::ShowSaveMapDialog() {
-    const auto& config = ApplicationConfig::GetInstance();
+Rectangle MapCreator::DrawDialogBackground() {
     constexpr int dialog_width = 800;
     constexpr int dialog_height = 200;
 
@@ -204,6 +202,14 @@ void MapCreator::ShowSaveMapDialog() {
         .height = static_cast<float>(dialog_height)
     };
     DrawRectangle(dialog.x, dialog.y, dialog_width, dialog_height, LIGHTGRAY);
+    return dialog;
+}
+
+
+void MapCreator::ShowSaveMapDialog() {
+
+    const Rectangle dialog = DrawDialogBackground();
+
     switch (save_dialog_state_) {
         case SaveDialogState::Form: {
             GuiLabel({dialog.x, dialog.y + 10, dialog.width, 30}, "Map Name:");
@@ -290,17 +296,8 @@ void MapCreator::ShowClearMapConfirmationDialog() {
         return;
     }
     const auto& config = ApplicationConfig::GetInstance();
-    constexpr int dialog_width = 800;
-    constexpr int dialog_height = 200;
 
-    const Rectangle dialog = {
-        .x = static_cast<float>(GetScreenWidth() / 2 - dialog_width / 2),
-        .y = static_cast<float>(GetScreenHeight() / 2 - dialog_height / 2),
-        .width = static_cast<float>(dialog_width),
-        .height = static_cast<float>(dialog_height)
-    };
-    DrawRectangle(dialog.x, dialog.y, dialog_width, dialog_height, LIGHTGRAY);
-
+    const Rectangle dialog = DrawDialogBackground();
 
     DrawText("Do you really want to clear the map?", dialog.x, dialog.y+ 20, config.font_size - 10, RED);
     if (GuiButton({dialog.x, dialog.y + 160, dialog.width/2 -5, 30}, "Yes")) {
