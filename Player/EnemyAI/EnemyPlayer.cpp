@@ -95,13 +95,19 @@ void EnemyPlayer::FindBestDirection() {
     auto best_direction = Direction::NONE;
 
     for (const auto& direction : possible_moves_) {
-        if (direction == opposite) continue;
+        if (direction == opposite && possible_moves_.size() > 2) {
+            continue;
+        }
         int tile = -1;
         switch (direction) {
-            case Direction::UP:    tile = current_tile_ - 50; break;
-            case Direction::DOWN:  tile = current_tile_ + 50; break;
-            case Direction::LEFT:  tile = current_tile_ - 1;  break;
-            case Direction::RIGHT: tile = current_tile_ + 1;  break;
+            case Direction::UP:
+                tile = current_tile_ - 50; break;
+            case Direction::DOWN:
+                tile = current_tile_ + 50; break;
+            case Direction::LEFT:
+                tile = current_tile_ - 1;  break;
+            case Direction::RIGHT:
+                tile = current_tile_ + 1;  break;
             case Direction::NONE:  continue;
         }
         int distance = CalculateManhattanDistance(tile);
