@@ -42,6 +42,8 @@ class MapCreator {
     [[nodiscard]] bool IsActive() const{return is_active_;}
 
 private:
+    void ShowClearMapConfirmationDialog();
+
     Game *game_;
     MapValidationError save_map_error_ = MapValidationError::UnresolvableSymbols;
     int saved_map_id_ = 0;
@@ -55,7 +57,7 @@ private:
     bool edit_name_ = true;
     bool edit_author_ = !edit_name_;
     SaveDialogState save_dialog_state_ = SaveDialogState::Hidden;
-
+    bool clear_map_dialog_ = false;
 
 };
 

@@ -149,6 +149,10 @@ std::optional<MapValidationError> Map::ValidateMap(const std::string& map) {
     if (map.length() != 1400) {
         return MapValidationError::InvalidLength;
     }
+    if (std::count(map.begin(),map.end(), '0')<=100) {
+        std::cerr << "Not enough coins" << std::endl;
+        return MapValidationError::TooFewCoins;
+    }
 
     if (!std::regex_match(map, valid_chars)) {
         std::cerr << "Invalid characters found.\n";

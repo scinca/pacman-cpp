@@ -28,6 +28,9 @@ void MapCreator::DrawFrame() {
     if (save_dialog_state_ != SaveDialogState::Hidden) {
         ShowSaveMapDialog();
     }
+    if (clear_map_dialog_) {
+        ShowClearMapConfirmationDialog();
+    }
 }
 
 
@@ -113,8 +116,7 @@ void MapCreator::DrawToolBox() {
         SetCurrentTool(Tile::None);
     }
     if (GuiButton(clear_button, "Empty Map")) {
-        temporary_map_.assign(1400, ' ');
-        map_class_.LoadFromString(temporary_map_);
+        clear_map_dialog_ = true;
     }
     if (GuiButton(autofill_button, "Autofill Empty Tiles with coins")) {
         std::ranges::replace(temporary_map_, ' ', '0');
@@ -129,7 +131,7 @@ void MapCreator::DrawToolBox() {
 }
 
 void MapCreator::HandlePlayerInput() {
-    if (save_dialog_state_ != SaveDialogState::Hidden) {
+    if (save_dialog_state_ != SaveDialogState::Hidden || clear_map_dialog_) {
         return;
     }
     const auto& config = ApplicationConfig::GetInstance();
@@ -268,6 +270,9 @@ void MapCreator::ShowSaveMapDialog() {
                 case MapValidationError::CoinsUnreachable:
                     error_message = "Some coins are unreachable"; // needs to be added later
                     break;
+                case MapValidationError::TooFewCoins:
+                    error_message = "Too few coins. Minimum is 100";
+                    break;
                 case MapValidationError::DatabaseError:
                     error_message = "Some database error";
                     break;
@@ -278,6 +283,37 @@ void MapCreator::ShowSaveMapDialog() {
             }
         }// error case
     }
+}
+
+void MapCreator::ShowClearMapConfirmationDialog() {
+    if (!clear_map_dialog_) {
+        return;
+    }
+    const auto& config = ApplicationConfig::GetInstance();
+    constexpr int dialog_width = 800;
+    constexpr int dialog_height = 200;
+
+    const Rectangle dialog = {
+        .x = static_cast<float>(GetScreenWidth() / 2 - dialog_width / 2),
+        .y = static_cast<float>(GetScreenHeight() / 2 - dialog_height / 2),
+        .width = static_cast<float>(dialog_width),
+        .height = static_cast<float>(dialog_height)
+    };
+    DrawRectangle(dialog.x, dialog.y, dialog_width, dialog_height, LIGHTGRAY);
+
+
+    DrawText("Do you really want to clear the map?", dialog.x, dialog.y+ 20, config.font_size - 10, RED);
+    if (GuiButton({dialog.x, dialog.y + 160, dialog.width/2 -5, 30}, "Yes")) {
+        temporary_map_.assign(1400, ' ');
+        map_class_.LoadFromString(temporary_map_);
+        clear_map_dialog_ = false;
+
+
+    }
+    if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
+        clear_map_dialog_ = false;
+    }
+
 }
 
 

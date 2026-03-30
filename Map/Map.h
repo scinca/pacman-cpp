@@ -18,7 +18,7 @@ enum class MapValidationError {
     UnresolvableSymbols,
     CoinsUnreachable,
     DatabaseError,
-
+    TooFewCoins,
 };
 
 class Map {
