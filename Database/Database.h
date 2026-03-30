@@ -50,4 +50,13 @@ class Statement {
     sqlite3* db_{};
 };
 
+struct MapInfo {
+    int id;
+    std::string content;
+    std::string name;
+    std::string author;
+    std::string creation_date;
+
+};
+
 #endif //PACMAN_CPP_DATABASE_H
