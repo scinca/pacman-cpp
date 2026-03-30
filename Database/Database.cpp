@@ -53,6 +53,28 @@ std::expected<std::string, MapError> Database::GetMap(const int map_number) cons
     return std::unexpected(MapError::DatabaseUnavailable);
 }
 
+std::vector<MapInfo> Database::GetAllMaps() const {
+    std::vector<MapInfo> result;
+    const Statement stmt("SELECT * FROM maps", db_);
+
+
+    while (sqlite3_step(stmt.Get()) == SQLITE_ROW) {
+        MapInfo map;
+        map.id = sqlite3_column_int(stmt.Get(), 0);
+        map.content = reinterpret_cast<const char*>(sqlite3_column_text(stmt.Get(), 1));
+        map.name = reinterpret_cast<const char *>(sqlite3_column_text(stmt.Get(), 2));
+        map.author = reinterpret_cast<const char *>(sqlite3_column_text(stmt.Get(), 3));
+        map.creation_date = reinterpret_cast<const char *>(sqlite3_column_text(stmt.Get(), 4));
+        result.push_back(map);
+    }
+
+    return result;
+
+}
+
+
+
+
 
 std::expected<int, MapValidationError> Database::AddMap(std::string map, const std::string &map_name, const std::string &author) const {
     const Statement stmt("INSERT OR IGNORE INTO maps (map_data, map_name, map_author) VALUES (?, ?, ?);", db_);
@@ -78,6 +100,9 @@ std::expected<int, MapValidationError> Database::AddMap(std::string map, const s
 
     return sqlite3_last_insert_rowid(db_);
 }
+
+
+
 
 std::expected<void, MapError> Database::InitDB() const {
     const auto sql = R"sql(
