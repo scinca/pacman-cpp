@@ -7,14 +7,15 @@
 
 
 class Time {
+public:
+    Time();
+    [[nodiscard]] double GetDeltaTime() const;
+    void CalculateDeltaTime();
 private:
     double delta_time_{};
     double last_time_{};
 
-    public:
-    Time();
-    [[nodiscard]] double GetDeltaTime() const;
-    void CalculateDeltaTime();
+
 
 };
 

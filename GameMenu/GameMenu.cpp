@@ -3,18 +3,23 @@
 //
 
 #include "GameMenu.h"
-#include "../Game/Game.h"
-#include "../ApplicationConfig.h"
+#include "Game/Game.h"
+#include "ApplicationConfig.h"
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
+
+#include "Database/Database.h"
 
 
 GameMenu::~GameMenu() = default;
 
-GameMenu::GameMenu(Game *game, MapCreator *map_creator): game_(game), map_creator_(map_creator) {
+GameMenu::GameMenu(Game *game, MapCreator *map_creator, Database *db): game_(game), map_creator_(map_creator), db_(db) {
+    maps = db_->GetAllMaps();
 }
 
 void GameMenu::Show() const {
+    constexpr int button_width = 200;
+    constexpr int button_height = 50;
     const auto& config = ApplicationConfig::GetInstance();
     DrawText("PAC-MAN GAME",
              config.GameMapWidth / 2 - 150,
@@ -23,26 +28,52 @@ void GameMenu::Show() const {
              BLACK);
 
 
-    const Rectangle default_map_button = {
-        static_cast<float>(config.GameMapWidth / 2 - 100),
-        static_cast<float>(config.GameMapHeight / 2 - 50),
-        200,
-        50
-    };
-
     const Rectangle create_map_button = {
-        static_cast<float>(config.GameMapWidth / 2 - 100),
-        static_cast<float>(config.GameMapHeight / 2 + 50),
-        200,
-        50,
+        static_cast<float>(GetScreenWidth()/2 - button_width/2),
+        static_cast<float>(config.GameMapHeight /4 ),
+        button_width,
+        button_height,
     };
 
-    if (GuiButton(default_map_button, "Use Default Map")) {
-        game_->Initialize(1);
-    }
     if (GuiButton(create_map_button, "Create  your own Map")) {
         map_creator_->Initialize();
+    }
 
+   for (int i = 0; i != maps.size(); i++ ) {
+       DrawMapInfo(maps.at(i), i+1);
+   }
+
+}
+
+
+void GameMenu::DrawMapInfo(const MapInfo& data, const int i) const {
+    const auto& config = ApplicationConfig::GetInstance();
+
+    constexpr float row_height = 40;
+    const float start_y = GetScreenHeight() / 3.0f;
+    const float start_x = GetScreenWidth() / 10.0f * 2;
+
+    constexpr float id     = 60;
+    constexpr float name   = 250;
+    constexpr float author = 250;
+    constexpr float date   = 200;
+    const float button    = 100;
+    const float total_width = id + name + author + date+ button;
+
+    const float y = start_y + row_height * i;
+
+    const Color background = (i % 2 == 0) ? LIGHTGRAY : GRAY;
+
+    DrawRectangle(start_x, y, total_width, row_height, background);
+
+    const int text_y = y + (row_height - config.font_size) / 2;
+    DrawText(std::to_string(i).c_str(),    start_x,                              text_y, config.font_size/2, BLACK);
+    DrawText(data.name.c_str(),                  start_x + id,                     text_y, config.font_size/2, BLACK);
+    DrawText(data.author.c_str(),                start_x + id + name,          text_y, config.font_size/2, BLACK);
+    DrawText(data.creation_date.c_str(),         start_x + id + name + author, text_y, config.font_size/2, BLACK);
+
+    if (GuiButton({start_x + total_width, y, button, row_height}, "Play")) {
+        game_->Initialize(data.id);
     }
 }
 

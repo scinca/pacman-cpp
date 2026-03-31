@@ -8,9 +8,9 @@
 #include <limits>
 
 #include "raylib.h"
-#include "../../ApplicationConfig.h"
-#include "../../time/deltaTime.h"
-#include "../../Map/Map.h"
+#include "ApplicationConfig.h"
+#include "time/deltaTime.h"
+#include "Map/Map.h"
 
 EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int starting_tile, const Color color) : PlayerBase(map, time, starting_tile, color) {
     player_ = player;
