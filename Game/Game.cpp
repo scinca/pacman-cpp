@@ -121,9 +121,11 @@ void Game::Update() {
 
 void Game::Pause() {
     state = GameState::PAUSED;
+    ShowCursor();
 }
 void Game::Resume() {
     state = GameState::PLAYING;
+    HideCursor();
 }
 
 void Game::DrawFrame() {
@@ -166,7 +168,6 @@ void Game::DrawFrame() {
 
         case GameState::PAUSED: {
                 ClearBackground(RAYWHITE);
-                ShowCursor();
                 DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
                 const Rectangle resume_game_button = {
                     static_cast<float>(config.GameMapWidth / 2 - 100),
