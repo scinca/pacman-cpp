@@ -39,23 +39,41 @@ void GameMenu::Show() const {
         map_creator_->Initialize();
     }
 
-    DrawMapInfo(maps[0], 1);
+   for (int i = 0; i != maps.size(); i++ ) {
+       DrawMapInfo(maps.at(i), i+1);
+   }
 
 }
 
 
-void GameMenu::DrawMapInfo(const MapInfo& data, int i) const {
-    float width = GetScreenWidth() / 8;
-    float start =  GetScreenHeight() / 3;
-    float height = 20;
+void GameMenu::DrawMapInfo(const MapInfo& data, const int i) const {
+    const auto& config = ApplicationConfig::GetInstance();
 
-    GuiLabel({width, start + height * i, width, height }, std::to_string(data.id).c_str());
-    GuiLabel({width * 2, start + height * i, width, height }, data.name.c_str());
-    GuiLabel({width * 3, start + height * i, width, height }, data.author.c_str());
-    GuiLabel({width * 4, start + height * i, width, height }, data.creation_date.c_str());
-    if (GuiButton({width*5, start + height * i, width, height }, "Play")) {
+    constexpr float row_height = 40;
+    const float start_y = GetScreenHeight() / 3.0f;
+    const float start_x = GetScreenWidth() / 10.0f * 2;
+
+    const float id     = 60;
+    const float name   = 250;
+    const float author = 250;
+    const float date   = 200;
+    const float button    = 100;
+    const float total_width = id + name + author + date+ button;
+
+    const float y = start_y + row_height * i;
+
+    const Color background = (i % 2 == 0) ? LIGHTGRAY : GRAY;
+
+    DrawRectangle(start_x, y, total_width, row_height, background);
+
+    const int text_y = y + (row_height - config.font_size) / 2;
+    DrawText(std::to_string(i).c_str(),    start_x,                              text_y, config.font_size/2, BLACK);
+    DrawText(data.name.c_str(),                  start_x + id,                     text_y, config.font_size/2, BLACK);
+    DrawText(data.author.c_str(),                start_x + id + name,          text_y, config.font_size/2, BLACK);
+    DrawText(data.creation_date.c_str(),         start_x + id + name + author, text_y, config.font_size/2, BLACK);
+
+    if (GuiButton({start_x + total_width, y, button, row_height}, "Play")) {
         game_->Initialize(data.id);
     }
-
 }
 
