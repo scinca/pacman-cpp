@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
 
 
-    const GameMenu game_menu{&game, &map_creator};
+    const GameMenu game_menu{&game, &map_creator, &database};
 
 
 

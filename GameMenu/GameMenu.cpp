@@ -8,10 +8,13 @@
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
 
+#include "../Database/Database.h"
+
 
 GameMenu::~GameMenu() = default;
 
-GameMenu::GameMenu(Game *game, MapCreator *map_creator): game_(game), map_creator_(map_creator) {
+GameMenu::GameMenu(Game *game, MapCreator *map_creator, Database *db): game_(game), map_creator_(map_creator), db_(db) {
+    maps = db_->GetAllMaps();
 }
 
 void GameMenu::Show() const {
@@ -34,9 +37,25 @@ void GameMenu::Show() const {
 
     if (GuiButton(create_map_button, "Create  your own Map")) {
         map_creator_->Initialize();
-
     }
 
+    DrawMapInfo(maps[0], 1);
+
+}
+
+
+void GameMenu::DrawMapInfo(const MapInfo& data, int i) const {
+    float width = GetScreenWidth() / 8;
+    float start =  GetScreenHeight() / 3;
+    float height = 20;
+
+    GuiLabel({width, start + height * i, width, height }, std::to_string(data.id).c_str());
+    GuiLabel({width * 2, start + height * i, width, height }, data.name.c_str());
+    GuiLabel({width * 3, start + height * i, width, height }, data.author.c_str());
+    GuiLabel({width * 4, start + height * i, width, height }, data.creation_date.c_str());
+    if (GuiButton({width*5, start + height * i, width, height }, "Play")) {
+        game_->Initialize(data.id);
+    }
 
 }
 
