@@ -15,6 +15,8 @@ GameMenu::GameMenu(Game *game, MapCreator *map_creator): game_(game), map_creato
 }
 
 void GameMenu::Show() const {
+    constexpr int button_width = 200;
+    constexpr int button_height = 50;
     const auto& config = ApplicationConfig::GetInstance();
     DrawText("PAC-MAN GAME",
              config.GameMapWidth / 2 - 150,
@@ -23,26 +25,18 @@ void GameMenu::Show() const {
              BLACK);
 
 
-    const Rectangle default_map_button = {
-        static_cast<float>(config.GameMapWidth / 2 - 100),
-        static_cast<float>(config.GameMapHeight / 2 - 50),
-        200,
-        50
-    };
-
     const Rectangle create_map_button = {
-        static_cast<float>(config.GameMapWidth / 2 - 100),
-        static_cast<float>(config.GameMapHeight / 2 + 50),
-        200,
-        50,
+        static_cast<float>(GetScreenWidth()/2 - button_width/2),
+        static_cast<float>(config.GameMapHeight /4 ),
+        button_width,
+        button_height,
     };
 
-    if (GuiButton(default_map_button, "Use Default Map")) {
-        game_->Initialize(1);
-    }
     if (GuiButton(create_map_button, "Create  your own Map")) {
         map_creator_->Initialize();
 
     }
+
+
 }
 

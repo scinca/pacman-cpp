@@ -134,6 +134,7 @@ void MapCreator::HandlePlayerInput() {
     if (save_dialog_state_ != SaveDialogState::Hidden || clear_map_dialog_) {
         return;
     }
+
     const auto& config = ApplicationConfig::GetInstance();
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
 
@@ -207,6 +208,7 @@ Rectangle MapCreator::DrawDialogBackground() {
 
 
 void MapCreator::ShowSaveMapDialog() {
+    const auto& config = ApplicationConfig::GetInstance();
 
     const Rectangle dialog = DrawDialogBackground();
 
