@@ -83,12 +83,7 @@ void EnemyPlayer::FindBestDirection() {
     }
 
     if (GetRandomValue(0, 100) < config.failure_percentage) { // 15% chance of random move so that the gameplay doesn't feel repetitive.
-        for (const auto& direction : possible_moves_) {
-            if (direction != opposite) {
-                current_direction_ = direction;
-                return;
-            }
-        }
+       current_direction_ = possible_moves_.at(GetRandomValue(0, possible_moves_.size() - 1));
     }
 
     int min_distance = std::numeric_limits<int>::max();
