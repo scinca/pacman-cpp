@@ -6,8 +6,8 @@
 
 #include <algorithm>
 #include <raylib.h>
-#include "../ApplicationConfig.h"
-#include "../Map/Map.h"
+#include "ApplicationConfig.h"
+#include "Map/Map.h"
 
 PlayerBase::PlayerBase(Map *game_map, Time *time, const int tile, const Color color)
     :position_x_(ApplicationConfig::GetInstance().GameMapRootX+ ApplicationConfig::GetInstance().TileWidth /2), position_y_(ApplicationConfig::GetInstance().GameMapRootY + ApplicationConfig::GetInstance().TileWidth/2), current_tile_(tile), color_(color), map_(game_map), time_(time)

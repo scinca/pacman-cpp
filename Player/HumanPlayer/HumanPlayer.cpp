@@ -5,9 +5,9 @@
 #include "HumanPlayer.h"
 #include <algorithm>
 #include <raylib.h>
-#include "../../time/deltaTime.h"
-#include "../../Map/Map.h"
-#include "../../ApplicationConfig.h"
+#include "time/deltaTime.h"
+#include "Map/Map.h"
+#include "ApplicationConfig.h"
 
 HumanPlayer::HumanPlayer(Map *map, Time *time, const int starting_tile, const Color color)
     :PlayerBase(map, time, starting_tile, color){

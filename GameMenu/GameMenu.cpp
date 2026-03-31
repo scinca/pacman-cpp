@@ -3,12 +3,12 @@
 //
 
 #include "GameMenu.h"
-#include "../Game/Game.h"
-#include "../ApplicationConfig.h"
+#include "Game/Game.h"
+#include "ApplicationConfig.h"
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
 
-#include "../Database/Database.h"
+#include "Database/Database.h"
 
 
 GameMenu::~GameMenu() = default;
@@ -53,10 +53,10 @@ void GameMenu::DrawMapInfo(const MapInfo& data, const int i) const {
     const float start_y = GetScreenHeight() / 3.0f;
     const float start_x = GetScreenWidth() / 10.0f * 2;
 
-    const float id     = 60;
-    const float name   = 250;
-    const float author = 250;
-    const float date   = 200;
+    constexpr float id     = 60;
+    constexpr float name   = 250;
+    constexpr float author = 250;
+    constexpr float date   = 200;
     const float button    = 100;
     const float total_width = id + name + author + date+ button;
 
