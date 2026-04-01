@@ -20,7 +20,7 @@ class EnemyPlayer : public PlayerBase {
     [[nodiscard]] int CalculateManhattanDistance(int tile) const;
     void FindBestDirection();
 
-    void CheckSurroundingTiles(int tile);
+    void CheckSurroundingTiles(int tile, Direction direction);
 
     void BreadthFirstSearch();
 

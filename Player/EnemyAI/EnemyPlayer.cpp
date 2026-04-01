@@ -116,7 +116,7 @@ void EnemyPlayer::FindBestDirection() {
     }
 }
 
-void EnemyPlayer::CheckSurroundingTiles(const int tile) {
+void EnemyPlayer::CheckSurroundingTiles(const int tile, Direction direction) {
     const auto& config = ApplicationConfig::GetInstance();
     if (tile > config.TilesX * config.TilesY) {
         return;
@@ -127,16 +127,28 @@ void EnemyPlayer::CheckSurroundingTiles(const int tile) {
         return;
     }
     if (tile_x > 0 && map_->CanMove(tile - 1)) {
-        to_be_explored_.emplace(tile -1,Direction::LEFT);
+        if (direction == Direction::NONE) {
+            direction = Direction::LEFT;
+        }
+        to_be_explored_.emplace(tile -1,direction);
     }
     if (tile_x < config.TilesX-1 && map_->CanMove(tile + 1)) {
-        to_be_explored_.emplace(  tile+1 ,Direction::RIGHT);
+        if (direction == Direction::NONE) {
+            direction = Direction::RIGHT;
+        }
+        to_be_explored_.emplace(  tile+1 ,direction);
     }
     if (tile_y > 0 && map_->CanMove(tile - config.TilesX)) {
-        to_be_explored_.emplace(tile - config.TilesX,Direction::UP);
+        if (direction == Direction::NONE) {
+            direction = Direction::UP;
+        }
+        to_be_explored_.emplace(tile - config.TilesX,direction);
     }
     if (tile_y < config.TilesY -1 && map_->CanMove(tile + config.TilesX)) {
-        to_be_explored_.emplace(tile + config.TilesX,Direction::DOWN);
+        if (direction == Direction::NONE) {
+            direction = Direction::DOWN;
+        }
+        to_be_explored_.emplace(tile + config.TilesX,direction);
     }
 }
 
@@ -147,16 +159,16 @@ void EnemyPlayer::BreadthFirstSearch() {
     std::vector<int>explored_set;
     to_be_explored_.swap(empty_queue);
 
-
-    to_be_explored_.emplace(current_tile_, Direction::NONE);
+    auto target_dir = Direction::NONE;
+    to_be_explored_.emplace(current_tile_, target_dir);
     while (!to_be_explored_.empty()) {
-        auto target_dir = Direction::NONE;
+
         auto [tile , Direction] = to_be_explored_.front();
         if (tile == player_->GetCurrentTile()) {
-            return;
+            current_direction_ = target_dir;
         }
         if (std::ranges::find(explored_set, tile) == end(explored_set)) {
-            CheckSurroundingTiles(tile);
+            CheckSurroundingTiles(tile, Direction);
             explored_set.push_back(tile);
         }
         to_be_explored_.pop();
