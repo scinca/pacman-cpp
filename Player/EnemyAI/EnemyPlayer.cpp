@@ -37,10 +37,8 @@ void EnemyPlayer::Move() {
 
     GetTile();
 
-    TraceLog(LOG_INFO, "tile: %d, atCenter: %d, playerTile: %d, lastKnown: %d",
-       current_tile_, IsAtTileCenter(), player_->GetCurrentTile(), last_known_player_tile_);
 
-    if (IsAtTileCenter()) {
+    if (IsAtTileCenter() && player_->GetCurrentTile() != last_known_player_tile_) {
         BreadthFirstSearch();
         }
 
