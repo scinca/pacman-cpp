@@ -197,9 +197,8 @@ void EnemyPlayer::BreadthFirstSearch() {
         if (std::ranges::find(explored_set, tile) == end(explored_set)) {
             CheckSurroundingTiles(tile);
             explored_set.push_back(tile);
-            to_be_explored_.pop();
-
         }
+        to_be_explored_.pop();
     }
 }
 
