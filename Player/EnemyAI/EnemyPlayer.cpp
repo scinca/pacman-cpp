@@ -32,6 +32,7 @@ void EnemyPlayer::Draw() const {
 }
 
 void EnemyPlayer::Move() {
+    const auto& config = ApplicationConfig::GetInstance();
     PlayerBase::CheckSurroundingTiles();
 
     GetTile();
@@ -43,39 +44,32 @@ void EnemyPlayer::Move() {
         BreadthFirstSearch();
         }
 
-    if (CheckMoveValidity(current_direction_)) {
         switch (current_direction_) {
             case Direction::UP:
                 position_y_ -= velocity_ * time_->GetDeltaTime();
                 break;
-            case Direction::DOWN:
+        case Direction::DOWN:
                 position_y_ += velocity_ * time_->GetDeltaTime();
                 break;
-            case Direction::LEFT:
+        case Direction::LEFT:
                 position_x_ -= velocity_ * time_->GetDeltaTime();
                 break;
-            case Direction::RIGHT:
+        case Direction::RIGHT:
                 position_x_ += velocity_ * time_->GetDeltaTime();
                 break;
-            case Direction::NONE:
+        case Direction::NONE:
                 break;
-
         }
-    }else {
-        BreadthFirstSearch();
-    }
 }
 
 void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction direction, std::queue<std::pair<int, Direction>> *to_be_explored, std::vector<bool> *explored_set) const {
     const auto& config = ApplicationConfig::GetInstance();
-    if (tile > config.TilesX * config.TilesY) {
+    if (tile > config.TilesX * config.TilesY -1) {
         return;
     }
+    const int tile_x = tile % config.TilesX;
+    const int tile_y = tile / config.TilesX;
 
-    auto [tile_x, tile_y] = Map::GetTileCenter(tile);
-    if (tile_x < 0 || tile_y< 0) {
-        return;
-    }
     if (tile_x > 0 && map_->CanMove(tile - 1) && !explored_set->at(tile - 1)) {
         Direction temp_direction = (direction == Direction::NONE) ? Direction::LEFT : direction;
         explored_set->at(tile - 1) = true;
@@ -118,7 +112,7 @@ void EnemyPlayer::BreadthFirstSearch() {
 
 
         auto [tile , direction] = to_be_explored.front();
-        CheckSurroundingTiles(tile, direction, &to_be_explored, &explored_set);
+
         if (tile == player_->GetCurrentTile()) {
             current_direction_ = direction;
             if (player_->GetCurrentTile() != last_known_player_tile_) {
@@ -126,6 +120,7 @@ void EnemyPlayer::BreadthFirstSearch() {
             }
             return;
         }
+        CheckSurroundingTiles(tile, direction, &to_be_explored, &explored_set);
 
         to_be_explored.pop();
     }
