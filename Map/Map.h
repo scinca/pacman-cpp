@@ -32,7 +32,7 @@ public:
     [[nodiscard]] bool AllExplored() const;
     void Explore(int tile);
     static std::pair<float, float> GetTileCenter(int tile) ;
-    [[nodiscard]] bool CanMove(int tileNumber) const;
+    [[nodiscard]] bool CanMove(int tile) const;
     [[nodiscard]] int FindPlayerStartTile() const;
     [[nodiscard]] std::vector<int> FindEnemyStartTiles() const;
 

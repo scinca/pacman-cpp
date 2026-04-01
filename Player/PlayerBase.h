@@ -29,11 +29,13 @@ class PlayerBase {
     bool CheckMoveValidity(Direction move);
     [[nodiscard]] bool IsAtTileCenter() const;
     void GetTile();
+
+
     void CheckSurroundingTiles();
 
 
-    float position_x_;
-    float position_y_;
+    double position_x_;
+    double position_y_;
     int current_tile_;
     int start_tile_;
     int velocity_ = 150;

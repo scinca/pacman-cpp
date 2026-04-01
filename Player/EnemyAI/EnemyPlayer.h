@@ -4,7 +4,9 @@
 
 #ifndef PACMAN_CPP_ENEMYPLAYER_H
 #define PACMAN_CPP_ENEMYPLAYER_H
+#include <queue>
 #include <raylib.h>
+#include <unordered_set>
 
 #include "../PlayerBase.h"
 #include "../HumanPlayer/HumanPlayer.h"
@@ -16,11 +18,13 @@ class EnemyPlayer : public PlayerBase {
     void Move() override;
 
     private:
-    [[nodiscard]] int CalculateManhattanDistance(int tile) const;
-    void FindBestDirection();
+    void CheckSurroundingTiles(int tile, Direction direction, std::queue<std::pair<int, Direction>> *to_be_explored, std::vector<bool> *explored_set) const;
+
+    void BreadthFirstSearch();
 
     HumanPlayer *player_;
     std::vector<int> surrounding_tiles_;
+    int last_known_player_tile_{};
 };
 
 

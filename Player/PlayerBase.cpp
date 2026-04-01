@@ -32,6 +32,10 @@ void PlayerBase::GetTile() {
 (0, WindowHeight) ── (WindowWidth, WindowHeight)
  */
 
+
+
+
+
 void PlayerBase::CheckSurroundingTiles() { // it's a 50x28 grid but arrays start at 0 so 49 and 27 aren't magic numbers.
     const auto& config = ApplicationConfig::GetInstance();
     possible_moves_.clear();

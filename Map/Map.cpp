@@ -73,7 +73,7 @@ bool Map::AllExplored() const {
 }
 
 void Map::Explore(const int tile) {
-    if (tile<0 || tile> loaded_map_.size()) return;
+    if (tile<0 || tile>= loaded_map_.size()) return;
 
     if (!explored_map_[tile]&& loaded_map_[tile] == '0') {
         explored_map_[tile] = true;
@@ -83,20 +83,26 @@ void Map::Explore(const int tile) {
 
 
 
-bool Map::CanMove(const int tileNumber) const {
-    if (tileNumber < 0 || tileNumber >= static_cast<int>(loaded_map_.size()))
+bool Map::CanMove(const int tile) const {
+    if (tile < 0 || tile >= loaded_map_.size())
         return false;
 
-    return loaded_map_[tileNumber] != '#';
+    return loaded_map_[tile] != '#';
 
 }
 
 
 std::pair<float, float> Map::GetTileCenter(const int tile) {
     const auto& config = ApplicationConfig::GetInstance();
+    if ( tile > config.TilesX * config.TilesY) {
+        return {-1,-1};
+    }
+
     const float center_x = config.GameMapRootX + (tile % config.TilesX) * config.TileWidth + config.TileWidth / 2;
     const float center_y = config.GameMapRootY + (tile / config.TilesX) * config.TileWidth + config.TileWidth / 2;
+
     return {center_x, center_y};
+
 }
 
 int Map::FindPlayerStartTile() const {

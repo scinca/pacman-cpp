@@ -29,7 +29,7 @@ public:
     int TilesX = 50;
     int TilesY = 28;
 
-    std::int32_t TileWidth;
+    float TileWidth;
     float PointRadius;
 
     int failure_percentage { 15 };
