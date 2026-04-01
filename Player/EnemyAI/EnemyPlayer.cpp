@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <unordered_set>
 
 #include "raylib.h"
 #include "ApplicationConfig.h"
@@ -31,36 +32,41 @@ void EnemyPlayer::Draw() const {
 }
 
 void EnemyPlayer::Move() {
+    PlayerBase::CheckSurroundingTiles();
 
     GetTile();
 
     TraceLog(LOG_INFO, "tile: %d, atCenter: %d, playerTile: %d, lastKnown: %d",
        current_tile_, IsAtTileCenter(), player_->GetCurrentTile(), last_known_player_tile_);
 
-    if (IsAtTileCenter() || player_->GetCurrentTile() != last_known_player_tile_) {
+    if (IsAtTileCenter()) {
         BreadthFirstSearch();
         }
 
-    switch (current_direction_) {
-        case Direction::UP:
-            position_y_ -= velocity_ * time_->GetDeltaTime();
-            break;
-        case Direction::DOWN:
-            position_y_ += velocity_ * time_->GetDeltaTime();
-            break;
-        case Direction::LEFT:
-            position_x_ -= velocity_ * time_->GetDeltaTime();
-            break;
-        case Direction::RIGHT:
-            position_x_ += velocity_ * time_->GetDeltaTime();
-            break;
-        case Direction::NONE:
-            break;
+    if (CheckMoveValidity(current_direction_)) {
+        switch (current_direction_) {
+            case Direction::UP:
+                position_y_ -= velocity_ * time_->GetDeltaTime();
+                break;
+            case Direction::DOWN:
+                position_y_ += velocity_ * time_->GetDeltaTime();
+                break;
+            case Direction::LEFT:
+                position_x_ -= velocity_ * time_->GetDeltaTime();
+                break;
+            case Direction::RIGHT:
+                position_x_ += velocity_ * time_->GetDeltaTime();
+                break;
+            case Direction::NONE:
+                break;
 
+        }
+    }else {
+        BreadthFirstSearch();
     }
 }
 
-void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction direction) {
+void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction direction, std::queue<std::pair<int, Direction>> *to_be_explored, std::vector<bool> *explored_set) const {
     const auto& config = ApplicationConfig::GetInstance();
     if (tile > config.TilesX * config.TilesY) {
         return;
@@ -70,39 +76,49 @@ void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction directio
     if (tile_x < 0 || tile_y< 0) {
         return;
     }
-    if (tile_x > 0 && map_->CanMove(tile - 1)) {
+    if (tile_x > 0 && map_->CanMove(tile - 1) && !explored_set->at(tile - 1)) {
         Direction temp_direction = (direction == Direction::NONE) ? Direction::LEFT : direction;
+        explored_set->at(tile - 1) = true;
 
-        to_be_explored_.emplace(tile -1,temp_direction);
+        to_be_explored->emplace(tile -1,temp_direction);
     }
-    if (tile_x < config.TilesX-1 && map_->CanMove(tile + 1)) {
+    if (tile_x < config.TilesX-1 && map_->CanMove(tile + 1) && !explored_set->at(tile + 1)) {
         Direction temp_direction = (direction == Direction::NONE) ? Direction::RIGHT : direction;
 
-        to_be_explored_.emplace(  tile+1 ,temp_direction);
+        to_be_explored->emplace(  tile+ 1 ,temp_direction);
+        explored_set->at(tile + 1) = true;
     }
-    if (tile_y > 0 && map_->CanMove(tile - config.TilesX)) {
+    if (tile_y > 0 && map_->CanMove(tile - config.TilesX) && !explored_set->at(tile - config.TilesX)) {
         Direction temp_direction = (direction == Direction::NONE) ? Direction::UP : direction;
 
-        to_be_explored_.emplace(tile - config.TilesX,temp_direction);
+        to_be_explored->emplace(tile - config.TilesX,temp_direction);
+        explored_set->at(tile - config.TilesX) = true;
     }
-    if (tile_y < config.TilesY -1 && map_->CanMove(tile + config.TilesX)) {
+    if (tile_y < config.TilesY -1 && map_->CanMove(tile + config.TilesX) && !explored_set->at(tile + config.TilesX)) {
         Direction temp_direction = (direction == Direction::NONE) ? Direction::DOWN : direction;
-        to_be_explored_.emplace(tile + config.TilesX,temp_direction);
+        to_be_explored->emplace(tile + config.TilesX,temp_direction);
+        explored_set->at(tile + config.TilesX) = true;
     }
 }
 
 
 
 void EnemyPlayer::BreadthFirstSearch() {
-    std::queue<std::pair<int, Direction>> empty_queue;
-    std::vector<int>explored_set;
-    to_be_explored_.swap(empty_queue);
+    const auto& config = ApplicationConfig::GetInstance();
+    std::queue<std::pair<int, Direction>>to_be_explored ;
+    std::vector<bool>explored_set;
+    explored_set.assign(config.TilesX * config.TilesY, false);
 
-    auto target_dir = Direction::NONE;
-    to_be_explored_.emplace(current_tile_, target_dir);
-    while (!to_be_explored_.empty()) {
 
-        auto [tile , direction] = to_be_explored_.front();
+
+    to_be_explored.emplace(current_tile_, Direction::NONE);
+    explored_set[current_tile_] = true;
+
+    while (!to_be_explored.empty()) {
+
+
+        auto [tile , direction] = to_be_explored.front();
+        CheckSurroundingTiles(tile, direction, &to_be_explored, &explored_set);
         if (tile == player_->GetCurrentTile()) {
             current_direction_ = direction;
             if (player_->GetCurrentTile() != last_known_player_tile_) {
@@ -110,11 +126,8 @@ void EnemyPlayer::BreadthFirstSearch() {
             }
             return;
         }
-        if (std::ranges::find(explored_set, tile) == end(explored_set)) {
-            CheckSurroundingTiles(tile, direction);
-            explored_set.push_back(tile);
-        }
-        to_be_explored_.pop();
+
+        to_be_explored.pop();
     }
 }
 
