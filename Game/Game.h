@@ -5,9 +5,9 @@
 #include <optional>
 
 #include "../Map/Map.h"
-#include "../Player/HumanPlayer/HumanPlayer.h"
-#include "../Player/EnemyAI/EnemyPlayer.h"
-#include "../time/deltaTime.h"
+#include "HumanPlayer/HumanPlayer.h"
+#include "EnemyAI/EnemyPlayer.h"
+#include "../Time/DeltaTime.h"
 #include "../Database/Database.h"
 
 enum class GameState {

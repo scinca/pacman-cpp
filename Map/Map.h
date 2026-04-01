@@ -26,7 +26,7 @@ public:
     explicit Map(Database* db);
     Map();
 
-    std::expected<void, std::string> LoadMapFromDB(int map_number);
+    void LoadMapFromDB(int map_number);
     void Draw(bool editor = false) const;
     std::string GetMap();
     [[nodiscard]] bool AllExplored() const;

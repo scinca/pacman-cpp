@@ -170,8 +170,8 @@ void Game::DrawFrame() {
                 ClearBackground(RAYWHITE);
                 DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
                 const Rectangle resume_game_button = {
-                    static_cast<float>(config.GameMapWidth / 2 - 100),
-                    static_cast<float>(config.GameMapHeight / 2 - 50),
+                    static_cast<float>(config.GameMapWidth) / 2 - 100,
+                    static_cast<float>(config.GameMapHeight) / 2 - 50,
                     200,
                     50
                 };
@@ -206,8 +206,8 @@ void Game::DrawWinScreen() {
         Initialize();
     }
     const Rectangle back_to_menu_button = {
-        static_cast<float>(config.GameMapWidth / 2 - 100),
-        static_cast<float>(config.GameMapHeight / 2 - 50),
+        static_cast<float>(config.GameMapWidth) / 2 - 100,
+        static_cast<float>(config.GameMapHeight) / 2 - 50,
         200,
         50
     };
@@ -229,8 +229,8 @@ void Game::DrawLoseScreen() {
         Initialize();
     }
     const Rectangle back_to_menu_button = {
-        static_cast<float>(config.GameMapWidth / 2 - 100),
-        static_cast<float>(config.GameMapHeight / 2 - 50),
+        static_cast<float>(config.GameMapWidth) / 2 - 100,
+        static_cast<float>(config.GameMapHeight) / 2 - 50,
         200,
         50
     };

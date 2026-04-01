@@ -18,8 +18,8 @@ GameMenu::GameMenu(Game *game, MapCreator *map_creator, Database *db): game_(gam
 }
 
 void GameMenu::Show() const {
-    constexpr int button_width = 200;
-    constexpr int button_height = 50;
+    constexpr float button_width = 200;
+    constexpr float button_height = 50;
     const auto& config = ApplicationConfig::GetInstance();
     DrawText("PAC-MAN GAME",
              config.GameMapWidth / 2 - 150,
@@ -29,8 +29,8 @@ void GameMenu::Show() const {
 
 
     const Rectangle create_map_button = {
-        static_cast<float>(GetScreenWidth()/2 - button_width/2),
-        static_cast<float>(config.GameMapHeight /4 ),
+        static_cast<float>(GetScreenWidth())/2 - button_width/2,
+        static_cast<float>(config.GameMapHeight) /4 ,
         button_width,
         button_height,
     };
@@ -50,15 +50,15 @@ void GameMenu::DrawMapInfo(const MapInfo& data, const int i) const {
     const auto& config = ApplicationConfig::GetInstance();
 
     constexpr float row_height = 40;
-    const float start_y = GetScreenHeight() / 3.0f;
-    const float start_x = GetScreenWidth() / 10.0f * 2;
+    const float start_y = static_cast<float>(GetScreenHeight()) / 3.0f;
+    const float start_x = static_cast<float>(GetScreenWidth()) / 10.0f * 2;
 
     constexpr float id     = 60;
     constexpr float name   = 250;
     constexpr float author = 250;
     constexpr float date   = 200;
-    const float button    = 100;
-    const float total_width = id + name + author + date+ button;
+    constexpr float button    = 100;
+    constexpr float total_width = id + name + author + date+ button;
 
     const float y = start_y + row_height * i;
 

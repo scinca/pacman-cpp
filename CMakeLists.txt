@@ -31,14 +31,14 @@ FetchContent_MakeAvailable(raygui)
 add_executable(pacman_cpp main.cpp
         Map/Map.cpp
         Map/Map.h
-        Player/PlayerBase.h
-        time/deltaTime.cpp
-        time/deltaTime.h
-        Player/PlayerBase.cpp
-        Player/HumanPlayer/HumanPlayer.cpp
-        Player/HumanPlayer/HumanPlayer.h
-        Player/EnemyAI/EnemyPlayer.cpp
-        Player/EnemyAI/EnemyPlayer.h
+        PlayerBase/PlayerBase.h
+        Time/DeltaTime.cpp
+        Time/DeltaTime.h
+        PlayerBase/PlayerBase.cpp
+        HumanPlayer/HumanPlayer.cpp
+        HumanPlayer/HumanPlayer.h
+        EnemyAI/EnemyPlayer.cpp
+        EnemyAI/EnemyPlayer.h
         Game/Game.cpp
         Game/Game.h
         GameMenu/GameMenu.cpp

@@ -5,7 +5,7 @@
 #include "HumanPlayer.h"
 #include <algorithm>
 #include <raylib.h>
-#include "time/deltaTime.h"
+#include "Time/DeltaTime.h"
 #include "Map/Map.h"
 #include "ApplicationConfig.h"
 

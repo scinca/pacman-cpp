@@ -49,49 +49,49 @@ void MapCreator::DrawToolBox() {
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-    const Rectangle coin_button = {
+    constexpr Rectangle coin_button = {
         static_cast<float>(20 + 1 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-    const Rectangle player_start_button = {
+    constexpr Rectangle player_start_button = {
         static_cast<float>(20 + 2 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-    const Rectangle enemy_start_button = {
+    constexpr Rectangle enemy_start_button = {
         static_cast<float>(20 + 3 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-    const Rectangle empty_button = {
+    constexpr Rectangle empty_button = {
         static_cast<float>(20 + 4 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-    const Rectangle clear_button = {
+    constexpr Rectangle clear_button = {
         static_cast<float>(20 + 5 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
     };
-   const Rectangle autofill_button = {
+    constexpr Rectangle autofill_button = {
        static_cast<float>(20 + 6 * (button_width + spacing)),
        static_cast<float>(button_y),
        static_cast<float>(button_width),
        static_cast<float>(button_height)
    };
-   const Rectangle save_map_button = {
+    constexpr Rectangle save_map_button = {
        static_cast<float>(20 + 7 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
    };
-    const Rectangle back_to_main_menu = {
+    constexpr Rectangle back_to_main_menu = {
         static_cast<float>(20 + 8 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
@@ -185,7 +185,7 @@ void MapCreator::DrawGrid() {
     const auto& config = ApplicationConfig::GetInstance();
 
     for ( int i =1; i<= config.TilesY; i++) { // start at 1 since the game map draws outer borders
-        DrawLine(config.GameMapRootX,config.GameMapRootY + config.TileWidth*i, config.GameMapRootX+ config.GameMapWidth, config.GameMapRootY+config.TileWidth*i, RAYWHITE);
+        DrawLine(config.GameMapRootX,config.GameMapRootY + config.TileWidth* i, config.GameMapRootX+ config.GameMapWidth, config.GameMapRootY+config.TileWidth*i, RAYWHITE);
     }
     for ( int i =1; i<= config.TilesX; i++) {
         DrawLine(config.GameMapRootX+ config.TileWidth*i, config.GameMapRootY,config.GameMapRootX+config.TileWidth*i, config.GameMapRootY+config.GameMapHeight, RAYWHITE);
@@ -193,12 +193,12 @@ void MapCreator::DrawGrid() {
 }
 
 Rectangle MapCreator::DrawDialogBackground() {
-    constexpr int dialog_width = 800;
-    constexpr int dialog_height = 200;
+    constexpr float dialog_width = 800;
+    constexpr float dialog_height = 200;
 
     const Rectangle dialog = {
-        .x = static_cast<float>(GetScreenWidth() / 2 - dialog_width / 2),
-        .y = static_cast<float>(GetScreenHeight() / 2 - dialog_height / 2),
+        .x = static_cast<float>(GetScreenWidth()) / 2 - dialog_width / 2,
+        .y = static_cast<float>(GetScreenHeight()) / 2 - dialog_height / 2,
         .width = static_cast<float>(dialog_width),
         .height = static_cast<float>(dialog_height)
     };
@@ -289,7 +289,8 @@ void MapCreator::ShowSaveMapDialog() {
             if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
                 save_dialog_state_ = SaveDialogState::Hidden;
             }
-        }// error case
+        }
+        default: ;
     }
 }
 

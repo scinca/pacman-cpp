@@ -4,7 +4,7 @@
 
 #ifndef PACMAN_CPP_HUMANPLAYER_H
 #define PACMAN_CPP_HUMANPLAYER_H
-#include "../PlayerBase.h"
+#include "PlayerBase/PlayerBase.h"
 
 
 class HumanPlayer : public PlayerBase {

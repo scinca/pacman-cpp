@@ -44,7 +44,7 @@ class MapCreator {
 private:
     void ShowClearMapConfirmationDialog();
 
-    Rectangle DrawDialogBackground();
+    static Rectangle DrawDialogBackground();
 
     Game *game_;
     MapValidationError save_map_error_ = MapValidationError::UnresolvableSymbols;

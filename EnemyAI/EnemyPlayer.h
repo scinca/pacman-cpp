@@ -6,10 +6,8 @@
 #define PACMAN_CPP_ENEMYPLAYER_H
 #include <queue>
 #include <raylib.h>
-#include <unordered_set>
-
-#include "../PlayerBase.h"
-#include "../HumanPlayer/HumanPlayer.h"
+#include "PlayerBase/PlayerBase.h"
+#include "HumanPlayer/HumanPlayer.h"
 
 class EnemyPlayer : public PlayerBase {
     public:

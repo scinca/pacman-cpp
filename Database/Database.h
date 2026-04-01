@@ -54,7 +54,7 @@ class Statement {
     explicit Statement(std::string_view SQL, sqlite3* database);
     ~Statement();
 
-    sqlite3_stmt* Get() const { return sql_statement_; } // might be useful later.
+    [[nodiscard]] sqlite3_stmt* Get() const { return sql_statement_; } // might be useful later.
 
     private:
     sqlite3_stmt* sql_statement_{};

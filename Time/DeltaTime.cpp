@@ -2,7 +2,7 @@
 // Created by simon on 06.03.26.
 //
 
-#include "deltaTime.h"
+#include "DeltaTime.h"
 
 #include <algorithm>
 #include <raylib.h>

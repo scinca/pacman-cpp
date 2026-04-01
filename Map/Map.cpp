@@ -39,18 +39,18 @@ void Map::Draw(const bool editor) const {
         }
         if (!editor) {
             if (loaded_map_[i] == '0' && !explored_map_[i]) {
-                DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN); // the coins should be smaller than player
+                DrawCircle(center_x, center_y, config.PointRadius * 0.5f, GREEN); // the coins should be smaller than player
             }
         }
         if (editor) {
-            if (loaded_map_[i]== 'X') {
-                DrawText("X", center_x- config.TileWidth/2 ,center_y- config.TileWidth/2,config.TileWidth, LIME);
+            if (loaded_map_[i]== 'X' ) {
+                DrawText("X", center_x - static_cast<int> (config.TileWidth/2) , center_y- static_cast<int>(config.TileWidth/2),static_cast<int>(config.TileWidth), LIME);
             }
             if (loaded_map_[i]== '?') {
-                DrawText("?", center_x- config.TileWidth/2 ,center_y- config.TileWidth/2,config.TileWidth, LIME);
+                DrawText("?", center_x - static_cast<int> (config.TileWidth/2) , center_y- static_cast<int> (config.TileWidth/2),static_cast<int>(config.TileWidth), LIME);
             }
             if (loaded_map_[i] == '0') {
-                DrawCircle(center_x, center_y, config.PointRadius * 0.5, GREEN);
+                DrawCircle(center_x, center_y, config.PointRadius * 0.5f, GREEN);
 
             }
         }
@@ -126,11 +126,9 @@ void Map::LoadFromString(const std::string& map) {
 }
 
 
-std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {
+void Map::LoadMapFromDB(const int map_number) {
     auto result = db_->GetMap(map_number);
-    if (!result) {
-        return std::unexpected("Map " + std::to_string(map_number) + " not found");
-    }
+
 
     loaded_map_ = std::move(result.value()); //move avoids copy
     std::erase(loaded_map_, '\n');
@@ -141,7 +139,6 @@ std::expected<void, std::string> Map::LoadMapFromDB(const int map_number) {
         std::count(loaded_map_.begin(), loaded_map_.end(), '0')
     );
 
-    return {};
 }
 
 std::optional<MapValidationError> Map::ValidateMap(const std::string& map) {
@@ -165,13 +162,13 @@ std::optional<MapValidationError> Map::ValidateMap(const std::string& map) {
         return MapValidationError::UnresolvableSymbols;
     }
 
-    int player_starting_positions_count = std::count(map.begin(), map.end(), 'X');
+    auto player_starting_positions_count = std::count(map.begin(), map.end(), 'X');
     if (player_starting_positions_count != 1) {
         std::cerr << "Invalid player count: " << player_starting_positions_count << " (expected exactly 1)\n";
         return MapValidationError::InvalidPlayerCount;
     }
 
-    int ghost_starting_positions_count = std::count(map.begin(), map.end(), '?');
+    auto ghost_starting_positions_count = std::count(map.begin(), map.end(), '?');
     if (ghost_starting_positions_count > 4 || ghost_starting_positions_count < 1) {
         std::cerr << "Invalid ghost count: (Must be between 1 and 4) current count: " << ghost_starting_positions_count << "\n";
         return MapValidationError::InvalidEnemyCount;
