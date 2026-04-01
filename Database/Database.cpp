@@ -122,7 +122,7 @@ std::expected<void, MapError> Database::InitDB() const {
     }
 
     const auto result = AddMap(default_map_, "Default Map", "scinca");
-    if (result.has_value()) {
+    if (result.has_value() == false) { //cant use .error because i dont want to make logic for casting enum to bool;
         std::cerr << "Something went wrong while it shouldn't have." << std::endl;
     }
     return {};

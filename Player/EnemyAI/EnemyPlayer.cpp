@@ -18,6 +18,7 @@ EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int st
     std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
     start_tile_ = starting_tile;
     GetTile();
+    last_known_player_tile_ = player_->GetCurrentTile();
 
 }
 
@@ -32,6 +33,10 @@ void EnemyPlayer::Draw() const {
 void EnemyPlayer::Move() {
 
     GetTile();
+
+    TraceLog(LOG_INFO, "tile: %d, atCenter: %d, playerTile: %d, lastKnown: %d",
+       current_tile_, IsAtTileCenter(), player_->GetCurrentTile(), last_known_player_tile_);
+
     if (IsAtTileCenter() || player_->GetCurrentTile() != last_known_player_tile_) {
         BreadthFirstSearch();
         }
@@ -55,68 +60,7 @@ void EnemyPlayer::Move() {
     }
 }
 
-int EnemyPlayer::CalculateManhattanDistance(const int tile) const {
-    const int tile_x = tile % 50;
-    const int tile_y = tile / 50;
-    const int player_tile = player_->GetCurrentTile();
-    const int player_tile_x = player_tile % 50;
-    const int player_tile_y = player_tile / 50;
-    return std::abs(tile_x - player_tile_x) + std::abs(tile_y - player_tile_y);
-}
-
-
-void EnemyPlayer::FindBestDirection() {
-    const auto& config = ApplicationConfig::GetInstance();
-    auto opposite = Direction::NONE;
-    if (current_direction_ == Direction::UP) {
-        opposite = Direction::DOWN;
-    }
-    if (current_direction_ == Direction::DOWN) {
-        opposite = Direction::UP;
-    }
-    if (current_direction_ == Direction::LEFT) {
-        opposite = Direction::RIGHT;
-    }
-    if (current_direction_ == Direction::RIGHT) {
-        opposite = Direction::LEFT;
-    }
-
-    if (GetRandomValue(0, 100) < config.failure_percentage) { // 15% chance of random move so that the gameplay doesn't feel repetitive.
-       current_direction_ = possible_moves_.at(GetRandomValue(0, possible_moves_.size() - 1));
-    }
-
-    int min_distance = std::numeric_limits<int>::max();
-    auto best_direction = Direction::NONE;
-
-    for (const auto& direction : possible_moves_) {
-        if (direction == opposite && possible_moves_.size() > 2) {
-            continue;
-        }
-        int tile = -1;
-        switch (direction) {
-            case Direction::UP:
-                tile = current_tile_ - 50; break;
-            case Direction::DOWN:
-                tile = current_tile_ + 50; break;
-            case Direction::LEFT:
-                tile = current_tile_ - 1;  break;
-            case Direction::RIGHT:
-                tile = current_tile_ + 1;  break;
-            case Direction::NONE:  continue;
-        }
-        int distance = CalculateManhattanDistance(tile);
-        if (distance < min_distance) {
-            min_distance = distance;
-            best_direction = direction;
-        }
-    }
-
-    if (best_direction != Direction::NONE) { // sanity check
-        current_direction_ = best_direction;
-    }
-}
-
-void EnemyPlayer::CheckSurroundingTiles(const int tile, Direction direction) {
+void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction direction) {
     const auto& config = ApplicationConfig::GetInstance();
     if (tile > config.TilesX * config.TilesY) {
         return;
@@ -142,7 +86,7 @@ void EnemyPlayer::CheckSurroundingTiles(const int tile, Direction direction) {
         to_be_explored_.emplace(tile - config.TilesX,temp_direction);
     }
     if (tile_y < config.TilesY -1 && map_->CanMove(tile + config.TilesX)) {
-        Direction temp_direction = (direction == Direction::NONE) ? Direction::UP : direction;
+        Direction temp_direction = (direction == Direction::NONE) ? Direction::DOWN : direction;
         to_be_explored_.emplace(tile + config.TilesX,temp_direction);
     }
 }
@@ -161,6 +105,9 @@ void EnemyPlayer::BreadthFirstSearch() {
         auto [tile , direction] = to_be_explored_.front();
         if (tile == player_->GetCurrentTile()) {
             current_direction_ = direction;
+            if (player_->GetCurrentTile() != last_known_player_tile_) {
+                last_known_player_tile_ = player_->GetCurrentTile();
+            }
             return;
         }
         if (std::ranges::find(explored_set, tile) == end(explored_set)) {

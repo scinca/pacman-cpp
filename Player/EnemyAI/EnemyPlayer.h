@@ -17,9 +17,6 @@ class EnemyPlayer : public PlayerBase {
     void Move() override;
 
     private:
-    [[nodiscard]] int CalculateManhattanDistance(int tile) const;
-    void FindBestDirection();
-
     void CheckSurroundingTiles(int tile, Direction direction);
 
     void BreadthFirstSearch();
@@ -28,7 +25,7 @@ class EnemyPlayer : public PlayerBase {
     std::vector<int> explored_set_;
     std::queue<std::pair<int, Direction>> to_be_explored_;
     std::vector<int> surrounding_tiles_;
-    int last_known_player_tile_;
+    int last_known_player_tile_{};
 };
 
 
