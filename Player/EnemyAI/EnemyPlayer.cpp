@@ -140,46 +140,7 @@ void EnemyPlayer::CheckSurroundingTiles(const int tile) {
     }
 }
 
-void EnemyPlayer::BreadthFirstSearch() {
-    std::queue<std::pair<int, Direction>> empty_queue;
-    std::vector<int>explored_set;
-    to_be_explored_.swap(empty_queue);
 
-
-    to_be_explored_.emplace(current_tile_, Direction::NONE);
-    while (!to_be_explored_.empty()) {
-
-        auto [tile , Direction] = to_be_explored_.front();
-        if (tile == player_->GetCurrentTile()) {
-            return;
-        }
-        if (std::ranges::find(explored_set, tile) == end(explored_set)) {
-            CheckSurroundingTiles(tile);
-            explored_set.push_back(tile);
-        }
-        void EnemyPlayer::CheckSurroundingTiles(const int tile) {
-    const auto& config = ApplicationConfig::GetInstance();
-    if (tile > config.TilesX * config.TilesY) {
-        return;
-    }
-
-    auto [tile_x, tile_y] = Map::GetTileCenter(tile);
-    if (tile_x < 0 || tile_y< 0) {
-        return;
-    }
-    if (tile_x > 0 && map_->CanMove(tile - 1)) {
-        to_be_explored_.emplace(tile -1,Direction::LEFT);
-    }
-    if (tile_x < config.TilesX-1 && map_->CanMove(tile + 1)) {
-        to_be_explored_.emplace(  tile+1 ,Direction::RIGHT);
-    }
-    if (tile_y > 0 && map_->CanMove(tile - config.TilesX)) {
-        to_be_explored_.emplace(tile - config.TilesX,Direction::UP);
-    }
-    if (tile_y < config.TilesY -1 && map_->CanMove(tile + config.TilesX)) {
-        to_be_explored_.emplace(tile + config.TilesX,Direction::DOWN);
-    }
-}
 
 void EnemyPlayer::BreadthFirstSearch() {
     std::queue<std::pair<int, Direction>> empty_queue;
@@ -189,7 +150,7 @@ void EnemyPlayer::BreadthFirstSearch() {
 
     to_be_explored_.emplace(current_tile_, Direction::NONE);
     while (!to_be_explored_.empty()) {
-
+        auto target_dir = Direction::NONE;
         auto [tile , Direction] = to_be_explored_.front();
         if (tile == player_->GetCurrentTile()) {
             return;
@@ -202,5 +163,4 @@ void EnemyPlayer::BreadthFirstSearch() {
     }
 }
 
-    }
-}
+
