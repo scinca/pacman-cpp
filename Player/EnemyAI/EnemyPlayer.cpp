@@ -5,9 +5,6 @@
 #include "EnemyPlayer.h"
 
 #include <algorithm>
-#include <limits>
-#include <unordered_set>
-
 #include "raylib.h"
 #include "ApplicationConfig.h"
 #include "time/deltaTime.h"
@@ -40,6 +37,9 @@ void EnemyPlayer::Move() {
 
     if (IsAtTileCenter() && player_->GetCurrentTile() != last_known_player_tile_) {
         BreadthFirstSearch();
+        if (GetRandomValue(0, 99)< config.failure_percentage && !possible_moves_.empty()) {
+            current_direction_ = possible_moves_.at(GetRandomValue(0, static_cast<int>(possible_moves_.size()) -1));
+            }
         }
 
         switch (current_direction_) {

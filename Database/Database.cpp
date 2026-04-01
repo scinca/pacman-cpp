@@ -80,7 +80,6 @@ std::expected<int, MapValidationError> Database::AddMap(std::string map, const s
     const Statement stmt("INSERT OR IGNORE INTO maps (map_data, map_name, map_author) VALUES (?, ?, ?);", db_);
     std::erase(map, '\n');
     std::erase(map, '\r');
-    MapValidationError error;
 
     const auto result = Map::ValidateMap(map);
     if (result.has_value()) {
@@ -99,6 +98,7 @@ std::expected<int, MapValidationError> Database::AddMap(std::string map, const s
 
 
     return sqlite3_last_insert_rowid(db_);
+
 }
 
 
@@ -122,7 +122,7 @@ std::expected<void, MapError> Database::InitDB() const {
     }
 
     const auto result = AddMap(default_map_, "Default Map", "scinca");
-    if (result.has_value() == false) { //cant use .error because i dont want to make logic for casting enum to bool;
+    if (result.has_value() == false) { //cant use .error because I don't want to make logic for casting enum to bool;
         std::cerr << "Something went wrong while it shouldn't have." << std::endl;
     }
     return {};
@@ -132,7 +132,7 @@ std::expected<void, MapError> Database::InitDB() const {
 
 
 
-Statement::Statement(std::string_view SQL, sqlite3 *database) {
+Statement::Statement(const std::string_view SQL, sqlite3 *database) {
     sqlite3_stmt* raw_statement = nullptr;
     if (sqlite3_prepare_v2(database, SQL.data(), -1, &raw_statement, nullptr) != SQLITE_OK) {
         throw std::runtime_error(std::format("Failed to pepare statemement: {}", sqlite3_errmsg(database)));
