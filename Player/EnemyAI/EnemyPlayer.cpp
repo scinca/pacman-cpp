@@ -127,36 +127,23 @@ void EnemyPlayer::CheckSurroundingTiles(const int tile, Direction direction) {
         return;
     }
     if (tile_x > 0 && map_->CanMove(tile - 1)) {
-        if (direction == Direction::NONE) {
-            direction = Direction::LEFT;
-            to_be_explored_.emplace(tile - config.TilesX,direction);
-            direction = Direction::NONE;
-        }
-        to_be_explored_.emplace(tile -1,direction);
+        Direction temp_direction = (direction == Direction::NONE) ? Direction::LEFT : direction;
+
+        to_be_explored_.emplace(tile -1,temp_direction);
     }
     if (tile_x < config.TilesX-1 && map_->CanMove(tile + 1)) {
-        if (direction == Direction::NONE) {
-            direction = Direction::RIGHT;
-            to_be_explored_.emplace(  tile+1 ,direction);
-            direction = Direction::NONE;
-        }
-        to_be_explored_.emplace(  tile+1 ,direction);
+        Direction temp_direction = (direction == Direction::NONE) ? Direction::RIGHT : direction;
+
+        to_be_explored_.emplace(  tile+1 ,temp_direction);
     }
     if (tile_y > 0 && map_->CanMove(tile - config.TilesX)) {
-        if (direction == Direction::NONE) {
-            direction = Direction::UP;
-            to_be_explored_.emplace(tile - config.TilesX,direction);
-            direction = Direction::NONE;
-        }
-        to_be_explored_.emplace(tile - config.TilesX,direction);
+        Direction temp_direction = (direction == Direction::NONE) ? Direction::UP : direction;
+
+        to_be_explored_.emplace(tile - config.TilesX,temp_direction);
     }
     if (tile_y < config.TilesY -1 && map_->CanMove(tile + config.TilesX)) {
-        if (direction == Direction::NONE) {
-            direction = Direction::DOWN;
-            to_be_explored_.emplace(tile - config.TilesX,direction);
-            direction = Direction::NONE;
-        }
-        to_be_explored_.emplace(tile + config.TilesX,direction);
+        Direction temp_direction = (direction == Direction::NONE) ? Direction::UP : direction;
+        to_be_explored_.emplace(tile + config.TilesX,temp_direction);
     }
 }
 
@@ -173,7 +160,8 @@ void EnemyPlayer::BreadthFirstSearch() {
 
         auto [tile , direction] = to_be_explored_.front();
         if (tile == player_->GetCurrentTile()) {
-            current_direction_ = direction;;
+            current_direction_ = direction;
+            return;
         }
         if (std::ranges::find(explored_set, tile) == end(explored_set)) {
             CheckSurroundingTiles(tile, direction);
