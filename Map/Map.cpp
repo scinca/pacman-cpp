@@ -96,7 +96,11 @@ std::pair<float, float> Map::GetTileCenter(const int tile) {
     const auto& config = ApplicationConfig::GetInstance();
     const float center_x = config.GameMapRootX + (tile % config.TilesX) * config.TileWidth + config.TileWidth / 2;
     const float center_y = config.GameMapRootY + (tile / config.TilesX) * config.TileWidth + config.TileWidth / 2;
+    if (center_x< config.GameMapRootX || center_x > config.GameMapWidth || center_y < config.GameMapRootY || center_y > config.GameMapHeight) {
+        return{ -1,-1};
+    }
     return {center_x, center_y};
+
 }
 
 int Map::FindPlayerStartTile() const {
