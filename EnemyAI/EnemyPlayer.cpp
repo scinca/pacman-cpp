@@ -37,6 +37,10 @@ void EnemyPlayer::Move() {
 
 
     if (IsAtTileCenter() && player_->GetCurrentTile() != last_known_player_tile_) {
+        if (!CheckMoveValidity(current_direction_)) {
+            current_direction_ = Direction::NONE;
+        }
+
         BreadthFirstSearch();
         if (GetRandomValue(0, 99)< config.failure_percentage && !possible_moves_.empty()) {
             current_direction_ = possible_moves_.at(GetRandomValue(0, static_cast<int>(possible_moves_.size()) -1));
@@ -63,13 +67,14 @@ void EnemyPlayer::Move() {
 
 void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction direction, std::queue<std::pair<int, Direction>> *to_be_explored, std::vector<bool> *explored_set) const {
     const auto& config = ApplicationConfig::GetInstance();
-    if (tile > config.TilesX * config.TilesY -1) {
+    if (tile > config.TilesX * config.TilesY -1 || tile < 0) {
         return;
     }
     const int tile_x = tile % config.TilesX;
     const int tile_y = tile / config.TilesX;
 
     if (tile_x > 0 && map_->CanMove(tile - 1) && !explored_set->at(tile - 1)) {
+
         Direction temp_direction = (direction == Direction::NONE) ? Direction::LEFT : direction;
         explored_set->at(tile - 1) = true;
 
@@ -77,20 +82,21 @@ void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction directio
     }
     if (tile_x < config.TilesX-1 && map_->CanMove(tile + 1) && !explored_set->at(tile + 1)) {
         Direction temp_direction = (direction == Direction::NONE) ? Direction::RIGHT : direction;
-
-        to_be_explored->emplace(  tile+ 1 ,temp_direction);
         explored_set->at(tile + 1) = true;
+        to_be_explored->emplace(  tile+ 1 ,temp_direction);
+
     }
     if (tile_y > 0 && map_->CanMove(tile - config.TilesX) && !explored_set->at(tile - config.TilesX)) {
         Direction temp_direction = (direction == Direction::NONE) ? Direction::UP : direction;
-
-        to_be_explored->emplace(tile - config.TilesX,temp_direction);
         explored_set->at(tile - config.TilesX) = true;
+        to_be_explored->emplace(tile - config.TilesX,temp_direction);
+
     }
     if (tile_y < config.TilesY -1 && map_->CanMove(tile + config.TilesX) && !explored_set->at(tile + config.TilesX)) {
         Direction temp_direction = (direction == Direction::NONE) ? Direction::DOWN : direction;
-        to_be_explored->emplace(tile + config.TilesX,temp_direction);
         explored_set->at(tile + config.TilesX) = true;
+        to_be_explored->emplace(tile + config.TilesX,temp_direction);
+
     }
 }
 

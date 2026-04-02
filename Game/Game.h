@@ -7,8 +7,8 @@
 #include "../Map/Map.h"
 #include "HumanPlayer/HumanPlayer.h"
 #include "EnemyAI/EnemyPlayer.h"
-#include "../Time/DeltaTime.h"
-#include "../Database/Database.h"
+#include "Time/DeltaTime.h"
+#include "Database/Database.h"
 
 enum class GameState {
     PLAYING,

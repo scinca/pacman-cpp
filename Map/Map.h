@@ -4,7 +4,6 @@
 
 #ifndef PACMAN_CPP_MAP_H
 #define PACMAN_CPP_MAP_H
-#include <expected>
 #include <optional>
 #include <string>
 #include <vector>
@@ -39,7 +38,7 @@ public:
     void LoadFromString(const std::string &map);
 
     static std::optional<MapValidationError> ValidateMap(const std::string& map);
-    [[nodiscard]] int GetExploredTileCount() const {return explored_tile_count_;}
+    [[nodiscard]] int GetExploredTileCount() const {return score_;}
     [[nodiscard]] int GetFreeTileCount() const {return free_tile_count_;}
 
     static int GetTileFromXY(int x, int y);
@@ -48,6 +47,6 @@ private:
     std::string loaded_map_;
     std::vector<bool> explored_map_;
     int free_tile_count_ = 0;
-    int explored_tile_count_ = 0;
+    int score_ = 0;
   };
 #endif //PACMAN_CPP_MAP_H

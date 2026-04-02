@@ -34,22 +34,22 @@ void Map::Draw(const bool editor) const {
         const int center_x = tile_x + config.TileWidth / 2;
         const int center_y = tile_y + config.TileWidth / 2;
 
-        if (loaded_map_[i] == '#') {
+        if (loaded_map_.at(i) == '#') {
             DrawRectangle(tile_x, tile_y, config.TileWidth, config.TileWidth, RAYWHITE);
         }
         if (!editor) {
-            if (loaded_map_[i] == '0' && !explored_map_[i]) {
+            if (loaded_map_.at(i) == '0' && !explored_map_.at(i)) {
                 DrawCircle(center_x, center_y, config.PointRadius * 0.5f, GREEN); // the coins should be smaller than player
             }
         }
         if (editor) {
-            if (loaded_map_[i]== 'X' ) {
+            if (loaded_map_.at(i) == 'X' ) {
                 DrawText("X", center_x - static_cast<int> (config.TileWidth/2) , center_y- static_cast<int>(config.TileWidth/2),static_cast<int>(config.TileWidth), LIME);
             }
-            if (loaded_map_[i]== '?') {
+            if (loaded_map_.at(i)== '?') {
                 DrawText("?", center_x - static_cast<int> (config.TileWidth/2) , center_y- static_cast<int> (config.TileWidth/2),static_cast<int>(config.TileWidth), LIME);
             }
-            if (loaded_map_[i] == '0') {
+            if (loaded_map_.at(i) == '0') {
                 DrawCircle(center_x, center_y, config.PointRadius * 0.5f, GREEN);
 
             }
@@ -69,25 +69,26 @@ std::string Map::GetMap() {
 }
 
 bool Map::AllExplored() const {
-    return free_tile_count_ == explored_tile_count_;
+    return free_tile_count_ == score_;
 }
 
 void Map::Explore(const int tile) {
     if (tile<0 || tile>= loaded_map_.size()) return;
 
-    if (!explored_map_[tile]&& loaded_map_[tile] == '0') {
-        explored_map_[tile] = true;
-        explored_tile_count_++;
+    if (!explored_map_.at(tile) && loaded_map_.at(tile) == '0') {
+        explored_map_.at(tile) = true;
+        score_++;
     }
 }
 
 
 
 bool Map::CanMove(const int tile) const {
-    if (tile < 0 || tile >= loaded_map_.size())
+    const auto& config = ApplicationConfig::GetInstance();
+    if (tile < 0 || tile >= config.TilesX* config.TilesY)
         return false;
 
-    return loaded_map_[tile] != '#';
+    return loaded_map_.at(tile) != '#';
 
 }
 
@@ -127,13 +128,14 @@ void Map::LoadFromString(const std::string& map) {
 
 
 void Map::LoadMapFromDB(const int map_number) {
+    score_ = 0;
     auto result = db_->GetMap(map_number);
 
 
     loaded_map_ = std::move(result.value()); //move avoids copy
     std::erase(loaded_map_, '\n');
     std::erase(loaded_map_, '\r');
-
+    ;
     explored_map_.assign(loaded_map_.size(), false);
     free_tile_count_ = static_cast<int>(
         std::count(loaded_map_.begin(), loaded_map_.end(), '0')

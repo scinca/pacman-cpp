@@ -18,6 +18,9 @@ Game::Game(Database *db) : db_(db), state(GameState::PLAYING), game_map(db_) {
 Game::~Game() = default;
 
 void Game::Initialize(const std::optional<int> map_number) {
+    if (map_number.has_value()) {
+        last_played_map_number_ = map_number.value();
+    }
     silent_pause_ = true;
     HideCursor();
     enemy_players.clear();
@@ -26,13 +29,13 @@ void Game::Initialize(const std::optional<int> map_number) {
        game_map.LoadMapFromDB(map_number.value());
    }
    else {
-        game_map.LoadMapFromDB(last_played_map_number_); // shouldn't fail since last_played_map_number_ will be a valid map.
+        game_map.LoadMapFromDB(last_played_map_number_);
    }
 
 
 
 
-    // Find starting positions
+
     const int player_starting_position = game_map.FindPlayerStartTile();
     const std::vector<int> enemy_starting_positions = game_map.FindEnemyStartTiles();
 
@@ -95,7 +98,6 @@ void Game::Update() {
         state = GameState::LOST;
     }
     else {
-        // Update game entities
         player->Move();
         const int tile = player->GetCurrentTile();
         for (const auto& enemy : enemy_players) {
@@ -203,7 +205,7 @@ void Game::DrawWinScreen() {
     DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 350, config.font_size, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
-        Initialize();
+        Initialize(last_played_map_number_);
     }
     const Rectangle back_to_menu_button = {
         static_cast<float>(config.GameMapWidth) / 2 - 100,
@@ -226,7 +228,7 @@ void Game::DrawLoseScreen() {
 
 
     if (IsKeyDown(KEY_R)) {
-        Initialize();
+        Initialize(last_played_map_number_);
     }
     const Rectangle back_to_menu_button = {
         static_cast<float>(config.GameMapWidth) / 2 - 100,
