@@ -78,15 +78,14 @@ bool PlayerBase::CheckMoveValidity(const Direction move) {
     return std::ranges::contains(possible_moves_, move);
 }
 
-
-bool PlayerBase::IsAtTileCenter() const {
+bool PlayerBase::IsAtTileCenter() {
     const auto& config = ApplicationConfig::GetInstance();
-        const float tile_center_x = config.GameMapRootX + (current_tile_ % config.TilesX) * config.TileWidth + config.TileWidth / 2;
-        const float tile_center_y = config.GameMapRootY + (current_tile_ / config.TilesX) * config.TileWidth + config.TileWidth / 2;
-        return std::abs(position_x_ - tile_center_x) < margin_ &&
-               std::abs(position_y_ - tile_center_y) < margin_;
+    auto [tile_center_x, tile_center_y] = Map::GetTileCenter(current_tile_);
+    return std::abs(position_x_ - tile_center_x) < config.margin_ &&
+           std::abs(position_y_ - tile_center_y) < config.margin_;
 
 }
+
 
 PlayerBase::~PlayerBase() = default;
 

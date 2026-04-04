@@ -24,10 +24,10 @@ class PlayerBase {
     virtual void Move() = 0;
     virtual void Draw() const =0;
     void ResetPosition();
+    [[nodiscard]] virtual bool IsAtTileCenter();
 
     protected:
     bool CheckMoveValidity(Direction move);
-    [[nodiscard]] bool IsAtTileCenter() const;
     void GetTile();
     [[nodiscard]] int GetPreviousTile() const;
 
@@ -39,8 +39,6 @@ class PlayerBase {
     double position_y_;
     int current_tile_;
     int start_tile_;
-    float velocity_ = 180;
-    float margin_ = 2.5f;
     Color color_;
     Direction current_direction_ = Direction::NONE;
     std::vector<Direction> possible_moves_;

@@ -18,8 +18,8 @@ public:
 
 
     int WindowRoot { 1 };
-    int GameMapWidth { 1601}; //50 tiles
-    int GameMapHeight = { 1001 }; // 28 tiles
+    int GameMapWidth;
+    int GameMapHeight;
     int GameMapRootX;
     int GameMapRootY;
     int TilesX = 50;
@@ -30,6 +30,9 @@ public:
 
     int failure_percentage { 15 };
     int font_size { 40 };
+
+    float velocity_;
+    float margin_;
 
 private:
     std::string window_title_ {" Pacman Raylib Game"};

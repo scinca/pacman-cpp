@@ -18,9 +18,8 @@ HumanPlayer::HumanPlayer(Map *map, Time *time, const int starting_tile, const Co
 }
 
 
-
-
 void HumanPlayer::Move() {
+    const auto& config = ApplicationConfig::GetInstance();
     GetTile();
     if (IsAtTileCenter()) {
         CheckSurroundingTiles();
@@ -38,16 +37,16 @@ void HumanPlayer::Move() {
 
     switch (current_direction_) {
         case Direction::UP:
-            position_y_ -= velocity_ * time_->GetDeltaTime();
+            position_y_ -= config.velocity_ * time_->GetDeltaTime();
             break;
         case Direction::DOWN:
-            position_y_ += velocity_ * time_->GetDeltaTime();
+            position_y_ += config.velocity_ * time_->GetDeltaTime();
             break;
         case Direction::LEFT:
-            position_x_ -= velocity_ * time_->GetDeltaTime();
+            position_x_ -= config.velocity_ * time_->GetDeltaTime();
             break;
         case Direction::RIGHT:
-            position_x_ += velocity_ * time_->GetDeltaTime();
+            position_x_ += config.velocity_ * time_->GetDeltaTime();
             break;
         case Direction::NONE:
             break;

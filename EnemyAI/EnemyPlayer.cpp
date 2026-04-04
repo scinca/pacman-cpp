@@ -21,6 +21,7 @@ EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int st
 
 }
 
+
 void EnemyPlayer::Draw() const {
     const auto& config = ApplicationConfig::GetInstance();
     DrawCircle(
@@ -32,7 +33,11 @@ void EnemyPlayer::Draw() const {
 void EnemyPlayer::Move() {
     const auto& config = ApplicationConfig::GetInstance();
     GetTile();
-    if (!map_->CanMove(current_tile_)) {
+    auto [x, y] = Map::GetTileCenter(GetPreviousTile());
+    float distance = std::abs(position_x_ - x) + std::abs(position_y_ - y);
+
+
+    if (!map_->CanMove(current_tile_) && distance < config.margin_) {
          current_tile_ = GetPreviousTile();
         std::tie(position_x_, position_y_) = Map::GetTileCenter(current_tile_);
         BreadthFirstSearch();
@@ -44,18 +49,18 @@ void EnemyPlayer::Move() {
 
         switch (current_direction_) {
             case Direction::UP:
-                position_y_ -= velocity_ * time_->GetDeltaTime();
+                position_y_ -= config.velocity_ * time_->GetDeltaTime();
                 break;
-        case Direction::DOWN:
-                position_y_ += velocity_ * time_->GetDeltaTime();
+            case Direction::DOWN:
+                position_y_ += config.velocity_ * time_->GetDeltaTime();
                 break;
-        case Direction::LEFT:
-                position_x_ -= velocity_ * time_->GetDeltaTime();
+            case Direction::LEFT:
+                position_x_ -= config.velocity_ * time_->GetDeltaTime();
                 break;
-        case Direction::RIGHT:
-                position_x_ += velocity_ * time_->GetDeltaTime();
+            case Direction::RIGHT:
+                position_x_ += config.velocity_ * time_->GetDeltaTime();
                 break;
-        case Direction::NONE:
+            case Direction::NONE:
                 break;
         }
 }
