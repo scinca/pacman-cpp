@@ -43,7 +43,7 @@ private:
 
     Database* db_{};
     GameState state;
-    Time time;
+    Time time_;
     Map game_map;
     int last_played_map_number_ {1};
     std::unique_ptr<HumanPlayer> player;

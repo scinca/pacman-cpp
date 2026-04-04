@@ -21,7 +21,6 @@ void Game::Initialize(const std::optional<int> map_number) {
     if (map_number.has_value()) {
         last_played_map_number_ = map_number.value();
     }
-    silent_pause_ = true;
     HideCursor();
     enemy_players.clear();
     is_game_running_ = true;
@@ -40,13 +39,13 @@ void Game::Initialize(const std::optional<int> map_number) {
     const std::vector<int> enemy_starting_positions = game_map.FindEnemyStartTiles();
 
 
-    player = std::make_unique<HumanPlayer>(&game_map, &time, player_starting_position, YELLOW);
+    player = std::make_unique<HumanPlayer>(&game_map, &time_, player_starting_position, YELLOW);
 
     for (int i = 0; i < enemy_starting_positions.size(); i++) {
-        enemy_players.push_back(std::make_unique<EnemyPlayer>(&game_map, &time, player.get(), enemy_starting_positions[i], enemy_colors[i]));
+        enemy_players.push_back(std::make_unique<EnemyPlayer>(&game_map, &time_, player.get(), enemy_starting_positions[i], enemy_colors[i]));
     }
-
-
+    
+    silent_pause_ = true;
     state = GameState::PLAYING;
 }
 
@@ -89,7 +88,7 @@ void Game::Update() {
         return;
     }
 
-    time.CalculateDeltaTime();
+    time_.CalculateDeltaTime();
 
     if (game_map.AllExplored()) {
         state = GameState::WON;
@@ -122,10 +121,12 @@ void Game::Update() {
 
 
 void Game::Pause() {
+    time_.PauseGameTimer();
     state = GameState::PAUSED;
     ShowCursor();
 }
 void Game::Resume() {
+    time_.StartGameTimer();
     state = GameState::PLAYING;
     HideCursor();
 }

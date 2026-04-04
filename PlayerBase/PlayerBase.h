@@ -38,7 +38,7 @@ class PlayerBase {
     double position_y_;
     int current_tile_;
     int start_tile_;
-    int velocity_ = 150;
+    float velocity_ = 200;
     float margin_ = 3.0f;
     Color color_;
     Direction current_direction_ = Direction::NONE;

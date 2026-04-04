@@ -4,17 +4,22 @@
 
 #ifndef PACMAN_CPP_DELTATIME_H
 #define PACMAN_CPP_DELTATIME_H
+#include <chrono>
+
+
 
 
 class Time {
 public:
-    Time();
-    [[nodiscard]] double GetDeltaTime() const;
+    explicit Time();
+    [[nodiscard]] float GetDeltaTime() const;
     void CalculateDeltaTime();
+    void StartGameTimer();
+    void PauseGameTimer(){running_ = false;}
 private:
-    double delta_time_{};
-    double last_time_{};
-
+    float delta_time_{};
+    std::chrono::steady_clock::time_point last_time_{};
+    bool running_{ false };
 
 
 };
