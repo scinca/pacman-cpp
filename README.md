@@ -32,13 +32,14 @@ TODO
 - CMake 4.1 or higher
 - C++23 compatible compiler  (This is required for std::expected)
 - git
+- an internet connection (cmake will download raylib and raygui)
 
-### Build and Run (Release)
+### Build and Run
 ```bash
 git clone https://github.com/scinca/pacman-cpp.git
 cd pacman-cpp
 mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake ..
 cmake --build .
 ./pacman_cpp
 ```
@@ -49,7 +50,7 @@ cmake --build .
 
 This project was made by me. However, I used Claude 4.6 Sonnet in learning mode to help me with:
 
-- designing the initial map ( writing 1400 '#' or '0' is insane and i started with game logic and not the map creator)
+- designing the (now removed) initial map that was used before I had a working map creator ( writing 1400 '#' or '0' is insane and i started with game logic and not the map creator) 
 - Making some parts of the cmake
 - Some brainstorming about how to implement certain functionality ( but the code was written by me)
 - questions about cpp and programming in general ( like which function does this, what data structure is best for this)
