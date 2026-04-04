@@ -20,7 +20,7 @@ ApplicationConfig::ApplicationConfig() {
     GameMapRootY = (screen_height_ - GameMapHeight) - (GetScreenWidth()- GameMapWidth)/2;
     GameMapRootX = (screen_width_ - GameMapWidth) / 2;
     velocity_ = TileWidth * 4.0f;
-    margin_ = TileWidth / 10.0f;
+    margin_ = TileWidth / 7.5f;
 
 }
 

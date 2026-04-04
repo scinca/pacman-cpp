@@ -12,7 +12,6 @@
 class EnemyPlayer : public PlayerBase {
     public:
     explicit EnemyPlayer(Map *map, Time *time, HumanPlayer *player, int starting_tile, Color color);
-    void Draw() const override;
     void Move() override;
 
     private:

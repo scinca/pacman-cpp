@@ -14,12 +14,19 @@ PlayerBase::PlayerBase(Map *game_map, Time *time, const int tile, const Color co
 {
 
 }
+void PlayerBase::Draw() const {
+    const auto& config = ApplicationConfig::GetInstance();
+    DrawCircle(
+        static_cast<int>(position_x_),
+        static_cast<int>(position_y_),
+        config.TileWidth * 0.4f, color_);
+}
 
 void PlayerBase::GetTile() {
     const auto& config = ApplicationConfig::GetInstance();
 
-    const int tileX = static_cast<int>(position_x_ - config.GameMapRootX) / config.TileWidth;
-    const int tileY = static_cast<int>(position_y_ -  config.GameMapRootY) /  config.TileWidth;
+    const int tileX = (position_x_ - config.GameMapRootX) / config.TileWidth;
+    const int tileY = (position_y_ -  config.GameMapRootY) /  config.TileWidth;
     current_tile_ = tileY * config.TilesX + tileX;
 }
 
@@ -54,8 +61,8 @@ void PlayerBase::CheckSurroundingTiles() { // it's a 50x28 grid but arrays start
     const auto& config = ApplicationConfig::GetInstance();
     possible_moves_.clear();
 
-    const int tile_x = static_cast<int>(position_x_ -config.GameMapRootX) / config.TileWidth;
-    const int tile_y = static_cast<int>(position_y_ - config.GameMapRootY) / config.TileWidth;
+    const int tile_x = (position_x_ -config.GameMapRootX) / config.TileWidth;
+    const int tile_y = (position_y_ - config.GameMapRootY) / config.TileWidth;
     const int tile = tile_y * config.TilesX + tile_x;
 
         if (tile_x > 0 && map_->CanMove(tile - 1)) {
@@ -73,6 +80,46 @@ void PlayerBase::CheckSurroundingTiles() { // it's a 50x28 grid but arrays start
 }
 
 
+void PlayerBase::CenterPosition() {
+    auto [center_x, center_y] = Map::GetTileCenter(current_tile_);
+    switch (current_direction_) {
+        case Direction::UP:
+            if (position_x_ > center_x) {
+                position_x_--;
+            }
+           if (position_x_ < center_x) {
+               position_x_++;
+           }
+            break;
+        case Direction::DOWN:
+            if (position_x_ > center_x) {
+                position_x_--;
+            }
+            if (position_x_ < center_x) {
+                position_x_++;
+            }
+            break;
+        case Direction::LEFT:
+            if (position_y_ > center_y) {
+                position_y_--;
+            }
+            if (position_y_ < center_y) {
+                position_y_++;
+            }
+            break;
+        case Direction::RIGHT:
+            if (position_y_ > center_y) {
+                position_y_--;
+            }
+            if (position_y_ < center_y) {
+                position_y_++;
+            }
+            break;
+        case Direction::NONE:
+            break;
+    }
+
+}
 
 bool PlayerBase::CheckMoveValidity(const Direction move) {
     return std::ranges::contains(possible_moves_, move);

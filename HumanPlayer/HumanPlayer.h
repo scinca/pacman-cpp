@@ -11,7 +11,6 @@ class HumanPlayer : public PlayerBase {
     public:
     explicit HumanPlayer(Map *map, Time *time, int starting_tile, Color color);
     void Move() override;
-    void Draw() const override;
     void Kill();
     [[nodiscard]] bool CheckIfAlive() const;
     void SetNextDirection(Direction next_direction);

@@ -19,20 +19,19 @@ HumanPlayer::HumanPlayer(Map *map, Time *time, const int starting_tile, const Co
 
 
 void HumanPlayer::Move() {
+    CenterPosition();
     const auto& config = ApplicationConfig::GetInstance();
     GetTile();
     if (IsAtTileCenter()) {
         CheckSurroundingTiles();
 
-        if (CheckMoveValidity(next_direction_)) { //try buffered input.
+        if (CheckMoveValidity(next_direction_)) {
             current_direction_ = next_direction_;
             next_direction_ = Direction::NONE;
         }
-        // stop if current direction is now blocked
-        if (!CheckMoveValidity(current_direction_)) {
+        else if (!CheckMoveValidity(current_direction_)) {
             current_direction_ = Direction::NONE;
         }
-
     }
 
     switch (current_direction_) {
@@ -51,19 +50,7 @@ void HumanPlayer::Move() {
         case Direction::NONE:
             break;
     }
-    GetTile();
     map_->Explore(current_tile_);
-
-}
-
-
-
-void HumanPlayer::Draw() const {
-    const auto& config = ApplicationConfig::GetInstance();
-    DrawCircle(
-        static_cast<int>(position_x_),
-        static_cast<int>(position_y_),
-        config.TileWidth * 0.4f, color_);
 }
 
 void HumanPlayer::SetNextDirection(const Direction next_direction) {

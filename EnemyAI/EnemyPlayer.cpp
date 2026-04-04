@@ -3,7 +3,7 @@
 //
 
 #include "EnemyPlayer.h"
-
+#include <iostream>
 #include <algorithm>
 #include "raylib.h"
 #include "ApplicationConfig.h"
@@ -22,30 +22,34 @@ EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int st
 }
 
 
-void EnemyPlayer::Draw() const {
-    const auto& config = ApplicationConfig::GetInstance();
-    DrawCircle(
-        static_cast<int>(position_x_),
-        static_cast<int>(position_y_),
-        config.TileWidth * 0.4f, color_);
-}
+
 
 void EnemyPlayer::Move() {
+    CenterPosition();
     const auto& config = ApplicationConfig::GetInstance();
     GetTile();
     auto [x, y] = Map::GetTileCenter(GetPreviousTile());
+
+
+
+    if (IsAtTileCenter()) {
+        PlayerBase::CheckSurroundingTiles();
+        if (!CheckMoveValidity(current_direction_)) {
+            current_direction_ = Direction::NONE;
+        }
+            BreadthFirstSearch();
+
+    }
+    /* This Block was used for an overshoot protection. I need to do some additional testing if the  CheckMoveValidity is enough.
+     * The HumanPlayer uses this check and it works but i need some more testing.
     float distance = std::abs(position_x_ - x) + std::abs(position_y_ - y);
-
-
-    if (!map_->CanMove(current_tile_) && distance < config.margin_) {
-         current_tile_ = GetPreviousTile();
+    else if (!map_->CanMove(current_tile_) && distance < config.margin_) {
+        current_tile_ = GetPreviousTile();
         std::tie(position_x_, position_y_) = Map::GetTileCenter(current_tile_);
         BreadthFirstSearch();
-    }
+    }*/
 
-    if (IsAtTileCenter() && player_->GetCurrentTile() != last_known_player_tile_) {
-        BreadthFirstSearch();
-        }
+
 
         switch (current_direction_) {
             case Direction::UP:
@@ -103,20 +107,14 @@ void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction directio
 
 
 void EnemyPlayer::BreadthFirstSearch() {
-    PlayerBase::CheckSurroundingTiles();
     const auto& config = ApplicationConfig::GetInstance();
     std::queue<std::pair<int, Direction>>to_be_explored ;
     std::vector<bool>explored_set;
     explored_set.assign(config.TilesX * config.TilesY, false);
-
-
-
     to_be_explored.emplace(current_tile_, Direction::NONE);
     explored_set[current_tile_] = true;
 
     while (!to_be_explored.empty()) {
-
-
         auto [tile , direction] = to_be_explored.front();
 
         if (tile == player_->GetCurrentTile()) {
@@ -124,6 +122,7 @@ void EnemyPlayer::BreadthFirstSearch() {
                 current_direction_ = possible_moves_.at(GetRandomValue(0, static_cast<int>(possible_moves_.size()) -1));
                 return;
             }
+
             current_direction_ = direction;
             if (player_->GetCurrentTile() != last_known_player_tile_) {
                 last_known_player_tile_ = player_->GetCurrentTile();
@@ -131,9 +130,6 @@ void EnemyPlayer::BreadthFirstSearch() {
             return;
         }
         CheckSurroundingTiles(tile, direction, &to_be_explored, &explored_set);
-
         to_be_explored.pop();
     }
 }
-
-
