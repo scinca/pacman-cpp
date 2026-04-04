@@ -4,22 +4,33 @@
 
 #include "DeltaTime.h"
 
-#include <algorithm>
-#include <raylib.h>
 
-Time::Time(){
-   delta_time_= 0.0;
-   last_time_ = GetTime();
+
+Time::Time() {
+   delta_time_= 0.0f;
+   last_time_ = std::chrono::steady_clock::now();
 }
 
 
 void Time::CalculateDeltaTime() {
-   const double currentTime { GetTime()};
-   delta_time_ = currentTime - last_time_;
-   delta_time_ = std::min(delta_time_, 0.05); // min value to make movement more smooth
-   last_time_ = currentTime;
+   if (!running_) {
+      delta_time_ = 0.0f;
+      return;
+   }
+
+   const auto current_time = std::chrono::steady_clock::now();
+   delta_time_ = std::chrono::duration<float, std::chrono::seconds::period>(current_time- last_time_).count();
+   last_time_ = current_time;
+
 }
 
-double Time::GetDeltaTime() const {
+float Time::GetDeltaTime() const {
    return delta_time_;
+}
+
+
+void Time::StartGameTimer() {
+   last_time_ = std::chrono::steady_clock::now();
+   running_ = true;
+
 }
