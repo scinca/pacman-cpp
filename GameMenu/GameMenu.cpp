@@ -13,10 +13,17 @@
 GameMenu::~GameMenu() = default;
 
 GameMenu::GameMenu(Game *game, MapCreator *map_creator, Database *db): game_(game), map_creator_(map_creator), db_(db) {
-    maps = db_->GetAllMaps();
+    maps_ = db_->GetAllMaps();
 }
 
-void GameMenu::Show() const {
+void GameMenu::ReloadMaps() { //leaving this in for readability since gcc will inline it.
+    maps_ = db_->GetAllMaps();
+}
+
+void GameMenu::Show() {
+    if (map_creator_->MapCreated()) {
+        ReloadMaps();
+    }
     constexpr float button_width = 200;
     constexpr float button_height = 50;
     const auto& config = ApplicationConfig::GetInstance();
@@ -38,8 +45,8 @@ void GameMenu::Show() const {
         map_creator_->Initialize();
     }
 
-   for (int i = 0; i != maps.size(); i++ ) {
-       DrawMapInfo(maps.at(i), i+1);
+   for (int i = 0; i != maps_.size(); i++ ) {
+       DrawMapInfo(maps_.at(i), i+1);
    }
 
 }

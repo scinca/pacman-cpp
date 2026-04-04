@@ -37,6 +37,7 @@ class MapCreator {
     static void DrawGrid();
 
     void ShowSaveMapDialog();
+    bool MapCreated();
 
     void SetCurrentTool(const Tile tool){current_tool_ = tool;}
     [[nodiscard]] bool IsActive() const{return is_active_;}
@@ -60,6 +61,7 @@ private:
     bool edit_author_ = !edit_name_;
     SaveDialogState save_dialog_state_ = SaveDialogState::Hidden;
     bool clear_map_dialog_ = false;
+    bool map_created_ = false;
 
 };
 

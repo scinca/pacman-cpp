@@ -11,13 +11,14 @@
 #include "Map/Map.h"
 
 
-EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int starting_tile, const Color color) : PlayerBase(map, time, starting_tile, color) {
+EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int starting_tile, const Color color) : PlayerBase(map, time, starting_tile, color), random_number_generator_(std::random_device{}()){
     player_ = player;
     color_ = color;
     std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
     start_tile_ = starting_tile;
     GetTile();
     last_known_player_tile_ = player_->GetCurrentTile();
+
 
 }
 
@@ -97,7 +98,7 @@ void EnemyPlayer::BreadthFirstSearch() {
         auto [tile , direction] = to_be_explored.front();
 
         if (tile == player_->GetCurrentTile()) {
-            if (GetRandomValue(0, 99)< config.failure_percentage && !possible_moves_.empty()) {
+            if (GetRandomInt() < config.failure_percentage && !possible_moves_.empty()) {
                 current_direction_ = possible_moves_.at(GetRandomValue(0, static_cast<int>(possible_moves_.size()) -1));
                 return;
             }

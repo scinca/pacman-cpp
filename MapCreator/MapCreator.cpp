@@ -127,6 +127,7 @@ void MapCreator::DrawToolBox() {
     }
     if (GuiButton(back_to_main_menu, "Back to Main Menu")) {
         is_active_ = false;
+
     }
 }
 
@@ -232,6 +233,7 @@ void MapCreator::ShowSaveMapDialog() {
                 if (res.has_value()) {
                     save_dialog_state_ = SaveDialogState::Success;
                     saved_map_id_ = res.value();
+                    map_created_ = true;
                 }
                 else {
                     save_map_error_ = res.error();
@@ -250,12 +252,10 @@ void MapCreator::ShowSaveMapDialog() {
             if (GuiButton({dialog.x, dialog.y + 160, dialog.width/2 -5, 30}, "Play")) {
                 is_active_ = false;
                 game_->Initialize(saved_map_id_);
-
             }
             if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
                 save_dialog_state_ = SaveDialogState::Hidden;
             }
-
 
         }
             break;
@@ -313,6 +313,13 @@ void MapCreator::ShowClearMapConfirmationDialog() {
     if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
         clear_map_dialog_ = false;
     }
+
+}
+
+// I want to return whether a map was created and then reset this variable so the GameMenu is updated only once.
+bool MapCreator::MapCreated() {
+
+    return std::exchange(map_created_, false); // better than making a temporary variable and then
 
 }
 

@@ -12,10 +12,8 @@ int main(int argc, char* argv[]) {
     ApplicationConfig::GetInstance();
     Game game{&database};
     MapCreator map_creator{&database, &game};
-    SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
 
-
-    const GameMenu game_menu{&game, &map_creator, &database};
+    GameMenu game_menu{&game, &map_creator, &database};
 
 
 
