@@ -1,0 +1,16 @@
+name: Build on macOS
+on:
+  push:
+    branches: [ main, master ]
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Install dependencies
+        run: brew install cmake ninja
+      - name: Configure
+        run: cmake -B build -S . -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --parallel
