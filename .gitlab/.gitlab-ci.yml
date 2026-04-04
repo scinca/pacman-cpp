@@ -3,6 +3,9 @@
 stages:
   - build
 
+tags:
+  - linux
+
 default:
   interruptible: true
 
