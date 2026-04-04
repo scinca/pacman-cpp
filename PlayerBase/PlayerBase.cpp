@@ -31,9 +31,23 @@ void PlayerBase::GetTile() {
   |                      |
 (0, WindowHeight) ── (WindowWidth, WindowHeight)
  */
+int PlayerBase::GetPreviousTile() const {
+    const auto& config = ApplicationConfig::GetInstance();
+    switch (current_direction_) {
+        case Direction::UP:
+            return current_tile_ + config.TilesX;
+        case Direction::DOWN:
+            return current_tile_ - config.TilesX;
+        case Direction::LEFT:
+            return current_tile_ + 1;;
+        case Direction::RIGHT:
+            return current_tile_ - 1;
+        case Direction::NONE:
+            return current_tile_;
+    }
 
-
-
+    return current_tile_;
+}
 
 
 void PlayerBase::CheckSurroundingTiles() { // it's a 50x28 grid but arrays start at 0 so 49 and 27 aren't magic numbers.

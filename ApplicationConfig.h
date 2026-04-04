@@ -4,11 +4,7 @@
 
 #ifndef PACMAN_CPP_CONFIG_H
 #define PACMAN_CPP_CONFIG_H
-
-
-#include <cstdint>
 #include <string>
-
 
 
 class ApplicationConfig {
@@ -21,11 +17,11 @@ public:
     ApplicationConfig& operator=(const ApplicationConfig&) = delete;
 
 
-    std::int32_t WindowRoot { 1 };
-    std::int32_t GameMapWidth { 1601}; //50 tiles
-    std::int32_t GameMapHeight = { 1001 }; // 28 tiles
-    std::int32_t GameMapRootX;
-    std::int32_t GameMapRootY;
+    int WindowRoot { 1 };
+    int GameMapWidth { 1601}; //50 tiles
+    int GameMapHeight = { 1001 }; // 28 tiles
+    int GameMapRootX;
+    int GameMapRootY;
     int TilesX = 50;
     int TilesY = 28;
 
@@ -36,7 +32,7 @@ public:
     int font_size { 40 };
 
 private:
-    std::string window_title_ = "Raylib Pacman Game";
+    std::string window_title_ {" Pacman Raylib Game"};
     int screen_width_;
     int screen_height_;
     ApplicationConfig();

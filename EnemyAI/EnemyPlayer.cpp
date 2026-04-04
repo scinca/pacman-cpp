@@ -31,20 +31,15 @@ void EnemyPlayer::Draw() const {
 
 void EnemyPlayer::Move() {
     const auto& config = ApplicationConfig::GetInstance();
-    PlayerBase::CheckSurroundingTiles();
-
     GetTile();
-
+    if (!map_->CanMove(current_tile_)) {
+         current_tile_ = GetPreviousTile();
+        std::tie(position_x_, position_y_) = Map::GetTileCenter(current_tile_);
+        BreadthFirstSearch();
+    }
 
     if (IsAtTileCenter() && player_->GetCurrentTile() != last_known_player_tile_) {
-        if (!CheckMoveValidity(current_direction_)) {
-            current_direction_ = Direction::NONE;
-        }
-
         BreadthFirstSearch();
-        if (GetRandomValue(0, 99)< config.failure_percentage && !possible_moves_.empty()) {
-            current_direction_ = possible_moves_.at(GetRandomValue(0, static_cast<int>(possible_moves_.size()) -1));
-            }
         }
 
         switch (current_direction_) {
@@ -103,6 +98,7 @@ void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction directio
 
 
 void EnemyPlayer::BreadthFirstSearch() {
+    PlayerBase::CheckSurroundingTiles();
     const auto& config = ApplicationConfig::GetInstance();
     std::queue<std::pair<int, Direction>>to_be_explored ;
     std::vector<bool>explored_set;
@@ -119,6 +115,10 @@ void EnemyPlayer::BreadthFirstSearch() {
         auto [tile , direction] = to_be_explored.front();
 
         if (tile == player_->GetCurrentTile()) {
+            if (GetRandomValue(0, 99)< config.failure_percentage && !possible_moves_.empty()) {
+                current_direction_ = possible_moves_.at(GetRandomValue(0, static_cast<int>(possible_moves_.size()) -1));
+                return;
+            }
             current_direction_ = direction;
             if (player_->GetCurrentTile() != last_known_player_tile_) {
                 last_known_player_tile_ = player_->GetCurrentTile();

@@ -188,7 +188,7 @@ void MapCreator::DrawGrid() {
         DrawLine(config.GameMapRootX,config.GameMapRootY + config.TileWidth* i, config.GameMapRootX+ config.GameMapWidth, config.GameMapRootY+config.TileWidth*i, RAYWHITE);
     }
     for ( int i =1; i<= config.TilesX; i++) {
-        DrawLine(config.GameMapRootX+ config.TileWidth*i, config.GameMapRootY,config.GameMapRootX+config.TileWidth*i, config.GameMapRootY+config.GameMapHeight, RAYWHITE);
+        DrawLine(config.GameMapRootX + config.TileWidth* i, config.GameMapRootY,config.GameMapRootX+config.TileWidth*i, config.GameMapRootY+config.GameMapHeight, RAYWHITE);
     }
 }
 

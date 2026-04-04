@@ -2,14 +2,16 @@
 // Created by simon on 22.02.26.
 //
 
-#include "Map.h"
-#include "../Database/Database.h"
+
+#include "Map/Map.h"
+
 #include <fstream>
 #include <iostream>
+#include "Database/Database.h"
 
-#include "../ApplicationConfig.h"
 #include <raylib.h>
 #include <regex>
+#include "../ApplicationConfig.h"
 
 Map::Map(Database* db) : db_(db) {
 }
