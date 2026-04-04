@@ -7,9 +7,8 @@
 #include "ApplicationConfig.h"
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
-
 #include "Database/Database.h"
-
+#include <iostream>
 
 GameMenu::~GameMenu() = default;
 
@@ -74,6 +73,8 @@ void GameMenu::DrawMapInfo(const MapInfo& data, const int i) const {
 
     if (GuiButton({start_x + total_width, y, button, row_height}, "Play")) {
         game_->Initialize(data.id);
+
+        std::cout<<data.content << std::endl;
     }
 }
 

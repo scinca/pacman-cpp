@@ -19,9 +19,9 @@ HumanPlayer::HumanPlayer(Map *map, Time *time, const int starting_tile, const Co
 
 
 void HumanPlayer::Move() {
-    CenterPosition();
-    const auto& config = ApplicationConfig::GetInstance();
     GetTile();
+    CenterPosition();
+
     if (IsAtTileCenter()) {
         CheckSurroundingTiles();
 
@@ -34,22 +34,7 @@ void HumanPlayer::Move() {
         }
     }
 
-    switch (current_direction_) {
-        case Direction::UP:
-            position_y_ -= config.velocity_ * time_->GetDeltaTime();
-            break;
-        case Direction::DOWN:
-            position_y_ += config.velocity_ * time_->GetDeltaTime();
-            break;
-        case Direction::LEFT:
-            position_x_ -= config.velocity_ * time_->GetDeltaTime();
-            break;
-        case Direction::RIGHT:
-            position_x_ += config.velocity_ * time_->GetDeltaTime();
-            break;
-        case Direction::NONE:
-            break;
-    }
+    UpdatePosition();
     map_->Explore(current_tile_);
 }
 
@@ -59,7 +44,7 @@ void HumanPlayer::SetNextDirection(const Direction next_direction) {
 
 void HumanPlayer::Kill() {
     lives_--;
-    if (lives_ <= 0) { // <= bc i don't have respawn logic yet
+    if (lives_ <= 0) {
         is_alive_ = false;
     }
 }

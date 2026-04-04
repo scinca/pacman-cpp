@@ -25,12 +25,8 @@ EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int st
 
 
 void EnemyPlayer::Move() {
-    CenterPosition();
-    const auto& config = ApplicationConfig::GetInstance();
     GetTile();
-    auto [x, y] = Map::GetTileCenter(GetPreviousTile());
-
-
+    CenterPosition();
 
     if (IsAtTileCenter()) {
         PlayerBase::CheckSurroundingTiles();
@@ -38,35 +34,18 @@ void EnemyPlayer::Move() {
             current_direction_ = Direction::NONE;
         }
             BreadthFirstSearch();
-
     }
-    /* This Block was used for an overshoot protection. I need to do some additional testing if the  CheckMoveValidity is enough.
-     * The HumanPlayer uses this check and it works but i need some more testing.
+    /* This Block was used for an overshoot protection. I will to do some additional testing if the  CheckMoveValidity is enough.
+     * The HumanPlayer uses this check and it works but I need some more testing.
+
+    auto [x, y] = Map::GetTileCenter(GetPreviousTile());
     float distance = std::abs(position_x_ - x) + std::abs(position_y_ - y);
     else if (!map_->CanMove(current_tile_) && distance < config.margin_) {
         current_tile_ = GetPreviousTile();
         std::tie(position_x_, position_y_) = Map::GetTileCenter(current_tile_);
         BreadthFirstSearch();
     }*/
-
-
-
-        switch (current_direction_) {
-            case Direction::UP:
-                position_y_ -= config.velocity_ * time_->GetDeltaTime();
-                break;
-            case Direction::DOWN:
-                position_y_ += config.velocity_ * time_->GetDeltaTime();
-                break;
-            case Direction::LEFT:
-                position_x_ -= config.velocity_ * time_->GetDeltaTime();
-                break;
-            case Direction::RIGHT:
-                position_x_ += config.velocity_ * time_->GetDeltaTime();
-                break;
-            case Direction::NONE:
-                break;
-        }
+    UpdatePosition();
 }
 
 void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction direction, std::queue<std::pair<int, Direction>> *to_be_explored, std::vector<bool> *explored_set) const {

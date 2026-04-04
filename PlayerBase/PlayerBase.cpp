@@ -130,9 +130,29 @@ bool PlayerBase::IsAtTileCenter() {
     auto [tile_center_x, tile_center_y] = Map::GetTileCenter(current_tile_);
     return std::abs(position_x_ - tile_center_x) < config.margin_ &&
            std::abs(position_y_ - tile_center_y) < config.margin_;
-
 }
 
+
+void PlayerBase::UpdatePosition() {
+    const auto& config = ApplicationConfig::GetInstance();
+
+    switch (current_direction_) {
+        case Direction::UP:
+            position_y_ -= config.velocity_ * time_->GetDeltaTime();
+            break;
+        case Direction::DOWN:
+            position_y_ += config.velocity_ * time_->GetDeltaTime();
+            break;
+        case Direction::LEFT:
+            position_x_ -= config.velocity_ * time_->GetDeltaTime();
+            break;
+        case Direction::RIGHT:
+            position_x_ += config.velocity_ * time_->GetDeltaTime();
+            break;
+        case Direction::NONE:
+            break;
+    }
+}
 
 PlayerBase::~PlayerBase() = default;
 

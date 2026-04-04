@@ -21,6 +21,7 @@ void Time::CalculateDeltaTime() {
    const auto current_time = std::chrono::steady_clock::now();
    delta_time_ = std::chrono::duration<float, std::chrono::seconds::period>(current_time- last_time_).count();
    last_time_ = current_time;
+   delta_time_ = std::min(delta_time_, 1.0f/30.0f); // in case of lags/frame drops
 
 }
 

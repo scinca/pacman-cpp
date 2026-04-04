@@ -10,7 +10,7 @@
 
 ApplicationConfig::ApplicationConfig() {
     InitWindow(GetScreenWidth(), GetScreenHeight(), window_title_.c_str());
-    SetTargetFPS(60);
+    SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
     screen_width_ = GetScreenWidth();
     screen_height_ = GetScreenHeight();
     TileWidth = static_cast<float>(std::min(screen_width_ / TilesX,screen_height_ / TilesY));

@@ -6,8 +6,8 @@
 #define PACMAN_CPP_PLAYER_BASE_H
 #include <raylib.h>
 #include <vector>
-class Map;
-class Time; // forward declaration because linker complains if I include header. Might investigate later.
+#include "Map/Map.h"
+#include "Time/DeltaTime.h"
 
 enum class Direction {
     UP,DOWN,LEFT,RIGHT, NONE
@@ -28,6 +28,7 @@ class PlayerBase {
     void CenterPosition();
 
     protected:
+    void UpdatePosition();
     bool CheckMoveValidity(Direction move);
     void GetTile();
     [[nodiscard]] int GetPreviousTile() const;
@@ -43,8 +44,8 @@ class PlayerBase {
     Color color_;
     Direction current_direction_ = Direction::NONE;
     std::vector<Direction> possible_moves_;
-    Map *map_ = nullptr;
-    Time *time_ = nullptr;
+    Map *map_;
+    Time *time_;
 
 };
 

@@ -12,9 +12,6 @@ int main(int argc, char* argv[]) {
     ApplicationConfig::GetInstance();
     Game game{&database};
     MapCreator map_creator{&database, &game};
-
-
-    ToggleFullscreen();
     SetRandomSeed(static_cast<unsigned int>(std::time(nullptr)));
 
 
