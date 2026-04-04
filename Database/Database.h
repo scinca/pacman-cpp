@@ -36,7 +36,7 @@ class Database {
     explicit Database(const std::string& db_path= "pacman.db");
     ~Database();
     [[nodiscard]] std::expected<std::string, MapError> GetMap(int map_number) const;
-    [[nodiscard]] std::expected<int, MapValidationError> AddMap(std::string map, const std::string &map_name, const std::string &author) const;
+    [[nodiscard]] std::expected<std::int64_t, MapValidationError> AddMap(std::string map, const std::string &map_name, const std::string &author) const;
     [[nodiscard]] std::vector<MapInfo> GetAllMaps() const;
 
     private:

@@ -48,7 +48,7 @@ private:
 
     Game *game_;
     MapValidationError save_map_error_ = MapValidationError::UnresolvableSymbols;
-    int saved_map_id_ = 0;
+    std::int64_t saved_map_id_ = 0;
     Map map_class_;
     bool is_active_;
     std::string temporary_map_;

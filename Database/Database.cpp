@@ -76,7 +76,7 @@ std::vector<MapInfo> Database::GetAllMaps() const {
 
 
 
-std::expected<int, MapValidationError> Database::AddMap(std::string map, const std::string &map_name, const std::string &author) const {
+std::expected<std::int64_t, MapValidationError> Database::AddMap(std::string map, const std::string &map_name, const std::string &author) const {
     const Statement stmt("INSERT OR IGNORE INTO maps (map_data, map_name, map_author) VALUES (?, ?, ?);", db_);
     std::erase(map, '\n');
     std::erase(map, '\r');

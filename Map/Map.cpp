@@ -98,7 +98,7 @@ bool Map::CanMove(const int tile) const {
 std::pair<float, float> Map::GetTileCenter(const int tile) {
     const auto& config = ApplicationConfig::GetInstance();
     if ( tile > config.TilesX * config.TilesY) {
-        return {-1,-1};
+        return {-1.f,-1.f};
     }
 
     const float center_x = config.GameMapRootX + (tile % config.TilesX) * config.TileWidth + config.TileWidth / 2;
