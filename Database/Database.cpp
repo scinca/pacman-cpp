@@ -5,6 +5,10 @@
 #include <ostream>
 #include <string>
 #include <format>
+#include <expected>
+#include <vector>
+#include <stdexcept>
+#include <cstdint>
 #include "Map/Map.h"
 #include "Database.h"
 

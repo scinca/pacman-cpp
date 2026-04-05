@@ -7,6 +7,7 @@
 #include <raygui.h>
 #include <raylib.h>
 #include <utility>
+#include <format>
 #include "Game.h"
 #include "ApplicationConfig.h"
 
@@ -44,7 +45,7 @@ void Game::Initialize(const std::optional<int> map_number, const std::optional<s
     for (int i = 0; i < enemy_starting_positions.size(); i++) {
         enemy_players.push_back(std::make_unique<EnemyPlayer>(&game_map, &time_, player.get(), enemy_starting_positions[i], enemy_colors[i]));
     }
-    
+
     silent_pause_ = true;
     state_ = GameState::PLAYING;
 }

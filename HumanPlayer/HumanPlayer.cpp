@@ -3,7 +3,6 @@
 //
 
 #include "HumanPlayer.h"
-#include <algorithm>
 #include <raylib.h>
 #include "Time/DeltaTime.h"
 #include "Map/Map.h"

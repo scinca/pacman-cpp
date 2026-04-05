@@ -4,9 +4,14 @@
 
 #ifndef PACMAN_CPP_MAPCREATOR_H
 #define PACMAN_CPP_MAPCREATOR_H
-#include "../Database/Database.h"
-#include "../Map/Map.h"
-#include "../Game/Game.h"
+
+#include<string>
+#include<optional>
+#include <raylib.h>
+#include <cstdint>
+#include "Database/Database.h"
+#include "Map/Map.h"
+#include "Game/Game.h"
 
 
 

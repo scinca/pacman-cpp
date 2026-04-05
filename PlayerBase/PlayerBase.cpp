@@ -5,6 +5,8 @@
 #include "PlayerBase.h"
 
 #include <algorithm>
+#include <cmath>
+#include <tuple>
 #include <raylib.h>
 #include "ApplicationConfig.h"
 #include "Map/Map.h"

@@ -5,13 +5,13 @@
 
 #include "Map/Map.h"
 
-#include <fstream>
 #include <iostream>
 #include "Database/Database.h"
-
+#include <algorithm>
+#include <utility>
 #include <raylib.h>
 #include <regex>
-#include "../ApplicationConfig.h"
+#include "ApplicationConfig.h"
 
 Map::Map(Database* db) : db_(db) {
 }
@@ -128,7 +128,7 @@ void Map::LoadFromString(const std::string& map) {
     score_ = 0;
     explored_map_.assign(loaded_map_.size(), false);
     free_tile_count_ = static_cast<int>(
-        std::count(loaded_map_.begin(), loaded_map_.end(), '0')
+        std::ranges::count(loaded_map_, '0')
     );
 }
 
@@ -141,7 +141,7 @@ void Map::LoadMapFromDB(const int map_number) {
     std::erase(loaded_map_, '\r');
     explored_map_.assign(loaded_map_.size(), false);
     free_tile_count_ = static_cast<int>(
-        std::count(loaded_map_.begin(), loaded_map_.end(), '0')
+        std::ranges::count(loaded_map_, '0')
     );
 }
 
@@ -151,7 +151,7 @@ std::optional<MapValidationError> Map::ValidateMap(const std::string& map) {
     if (map.length() != 1400) {
         return MapValidationError::InvalidLength;
     }
-    if (std::count(map.begin(),map.end(), '0')<=100) {
+    if (std::ranges::count(map, '0')<=100) {
         std::cerr << "Not enough coins" << std::endl;
         return MapValidationError::TooFewCoins;
     }
@@ -159,12 +159,12 @@ std::optional<MapValidationError> Map::ValidateMap(const std::string& map) {
         std::cerr << "Invalid characters found.\n";
         return MapValidationError::UnresolvableSymbols;
     }
-    auto player_starting_positions_count = std::count(map.begin(), map.end(), 'X');
+    auto player_starting_positions_count = std::ranges::count(map, 'X');
     if (player_starting_positions_count != 1) {
         std::cerr << "Invalid player count: " << player_starting_positions_count << " (expected exactly 1)\n";
         return MapValidationError::InvalidPlayerCount;
     }
-    auto ghost_starting_positions_count = std::count(map.begin(), map.end(), '?');
+    auto ghost_starting_positions_count = std::ranges::count(map, '?');
     if (ghost_starting_positions_count > 4 || ghost_starting_positions_count < 1) {
         std::cerr << "Invalid ghost count: (Must be between 1 and 4) current count: " << ghost_starting_positions_count << "\n";
         return MapValidationError::InvalidEnemyCount;

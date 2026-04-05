@@ -5,8 +5,11 @@
 #ifndef PACMAN_CPP_GAMEMENU_H
 #define PACMAN_CPP_GAMEMENU_H
 
+#include <vector>
 #include "Game/Game.h"
 #include "MapCreator/MapCreator.h"
+#include "Database/Database.h"
+
 class GameMenu {
 public:
     explicit GameMenu(Game *game, MapCreator *map_creator, Database* db);

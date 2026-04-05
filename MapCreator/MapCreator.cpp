@@ -8,8 +8,10 @@
 #include <format>
 #include <raygui.h>
 #include <raylib.h>
+#include <utility>
+#include <string>
 
-#include "../ApplicationConfig.h"
+#include "ApplicationConfig.h"
 
 
 MapCreator::MapCreator(Database *database, Game *game): game_(game), db_(database)

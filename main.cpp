@@ -4,6 +4,7 @@
 #include "GameMenu/GameMenu.h"
 #include "ApplicationConfig.h"
 #include "MapCreator/MapCreator.h"
+#include <raylib.h>
 
 int main() {
 

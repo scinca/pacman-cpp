@@ -2,6 +2,7 @@
 // Created by simon on 28.03.26.
 //
 #include <raylib.h>
+#include <algorithm>
 #include "ApplicationConfig.h"
 #include "MapCreator/MapCreator.h"
 

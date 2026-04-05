@@ -4,6 +4,7 @@
 #include <memory>
 #include <optional>
 #include <array>
+#include <vector>
 #include <raylib.h>
 #include "Map/Map.h"
 #include "HumanPlayer/HumanPlayer.h"

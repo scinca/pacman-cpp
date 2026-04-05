@@ -2,13 +2,15 @@
 // Created by simon on 14.03.26.
 //
 
-#include "GameMenu.h"
-#include "Game/Game.h"
-#include "ApplicationConfig.h"
+#include <iostream>
+#include <string>
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
 #include "Database/Database.h"
-#include <iostream>
+#include "GameMenu.h"
+#include "Game/Game.h"
+#include "ApplicationConfig.h"
+
 
 GameMenu::~GameMenu() = default;
 
