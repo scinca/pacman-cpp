@@ -29,18 +29,13 @@ void Game::Initialize(const std::optional<int> map_number, const std::optional<s
         game_map.LoadMapFromDB(last_played_map_number_);
    }
 
-
-
     HideCursor();
     enemy_players.clear();
     is_game_running_ = true;
 
     const int player_starting_position = game_map.FindPlayerStartTile();
     const std::vector<int> enemy_starting_positions = game_map.FindEnemyStartTiles();
-
-
     player = std::make_unique<HumanPlayer>(&game_map, &time_, player_starting_position, YELLOW);
-
     for (int i = 0; i < enemy_starting_positions.size(); i++) {
         enemy_players.push_back(std::make_unique<EnemyPlayer>(&game_map, &time_, player.get(), enemy_starting_positions[i], enemy_colors[i]));
     }

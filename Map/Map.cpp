@@ -126,6 +126,11 @@ std::vector<int> Map::FindEnemyStartTiles() const {
 
 void Map::LoadFromString(const std::string& map) {
     loaded_map_ = map;
+    score_ = 0;
+    explored_map_.assign(loaded_map_.size(), false);
+    free_tile_count_ = static_cast<int>(
+        std::count(loaded_map_.begin(), loaded_map_.end(), '0')
+    );
 }
 
 
