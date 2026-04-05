@@ -53,3 +53,10 @@ add_library(sqlite3_lib STATIC third_party/sqlite/sqlite3.c
         third_party/sqlite/sqlite3.h)
 target_include_directories(sqlite3_lib PUBLIC third_party/sqlite)
 target_link_libraries(pacman_cpp raylib sqlite3_lib)
+
+# Checks if OSX and links appropriate frameworks (Only required on MacOS)
+if (APPLE)
+    target_link_libraries(${PROJECT_NAME} "-framework IOKit")
+    target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
+    target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
+endif()
