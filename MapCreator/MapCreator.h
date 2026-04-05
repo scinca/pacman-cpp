@@ -32,12 +32,17 @@ class MapCreator {
     explicit MapCreator(Database *database, Game *game);
     void DrawFrame();
     void DrawToolBox();
+
+    void Activate();
+
     void HandlePlayerInput();
     void Initialize();
     static void DrawGrid();
 
     void ShowSaveMapDialog();
     bool MapCreated();
+
+    bool MapValidationErrorPopup(MapValidationError error);
 
     void SetCurrentTool(const Tile tool){current_tool_ = tool;}
     [[nodiscard]] bool IsActive() const{return is_active_;}
@@ -52,6 +57,7 @@ private:
     std::int64_t saved_map_id_ = 0;
     Map map_class_;
     bool is_active_;
+    std::optional<std::string> temporarily_saved_map_ = std::nullopt;
     std::string temporary_map_;
     Database *db_{};
     Tile current_tool_ = Tile::None;
@@ -62,6 +68,7 @@ private:
     SaveDialogState save_dialog_state_ = SaveDialogState::Hidden;
     bool clear_map_dialog_ = false;
     bool map_created_ = false;
+    std::optional<MapValidationError> test_map_error_= std::nullopt;
 
 };
 

@@ -25,7 +25,7 @@ public:
 
     ~Game();
 
-    void Initialize(std::optional<int> map_number = 1);
+    void Initialize(std::optional<int> map_number = 1, const std::optional<std::string>& map_data = {});
     void HandlePlayerInput();
     void Update();
     void DrawFrame();
@@ -37,20 +37,22 @@ public:
     void Resume();
     void Stop(){is_game_running_ = false;}
     void AddSilentPause(){ silent_pause_ = true; }
+    [[nodiscard]] bool StartedAsTest();
 private:
     void DrawWinScreen();
     void DrawLoseScreen();
 
     Database* db_{};
-    GameState state;
+    GameState state_;
     Time time_;
     Map game_map;
     int last_played_map_number_ {1};
     std::unique_ptr<HumanPlayer> player;
     bool is_game_running_{};
     std::vector<std::unique_ptr<EnemyPlayer>> enemy_players;
-    const std::vector<Color>enemy_colors = {RED, SKYBLUE, PINK, LIME};
+    const std::array<Color, 4>enemy_colors = {RED, SKYBLUE, PINK, LIME};
     bool silent_pause_ = true;
+    bool init_from_creator_ = false;
 
 };
 

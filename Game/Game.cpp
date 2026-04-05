@@ -4,7 +4,6 @@
 
 
 #include <iostream>
-#include <ctime>
 #include <raygui.h>
 #include <raylib.h>
 #include "Game.h"
@@ -12,41 +11,40 @@
 
 
 
-Game::Game(Database *db) : db_(db), state(GameState::PLAYING), game_map(db_) {
+Game::Game(Database *db) : db_(db), state_(GameState::PLAYING), game_map(db_) {
 }
 
 Game::~Game() = default;
 
-void Game::Initialize(const std::optional<int> map_number) {
-    if (map_number.has_value()) {
-        last_played_map_number_ = map_number.value();
+void Game::Initialize(const std::optional<int> map_number, const std::optional<std::string>& map_data) {
+
+    if (map_data.has_value()) {
+        game_map.LoadFromString(map_data.value());
+        init_from_creator_ = true;
     }
+    else if (map_number.has_value()) {
+        last_played_map_number_ = map_number.value();
+        game_map.LoadMapFromDB(map_number.value());
+        init_from_creator_ = false;
+    }
+    else {
+        game_map.LoadMapFromDB(last_played_map_number_);
+        init_from_creator_= false;
+   }
+
     HideCursor();
     enemy_players.clear();
     is_game_running_ = true;
-   if (map_number.has_value()) {
-       game_map.LoadMapFromDB(map_number.value());
-   }
-   else {
-        game_map.LoadMapFromDB(last_played_map_number_);
-   }
-
-
-
-
 
     const int player_starting_position = game_map.FindPlayerStartTile();
     const std::vector<int> enemy_starting_positions = game_map.FindEnemyStartTiles();
-
-
     player = std::make_unique<HumanPlayer>(&game_map, &time_, player_starting_position, YELLOW);
-
     for (int i = 0; i < enemy_starting_positions.size(); i++) {
         enemy_players.push_back(std::make_unique<EnemyPlayer>(&game_map, &time_, player.get(), enemy_starting_positions[i], enemy_colors[i]));
     }
     
     silent_pause_ = true;
-    state = GameState::PLAYING;
+    state_ = GameState::PLAYING;
 }
 
 void Game::HandlePlayerInput() {
@@ -56,8 +54,8 @@ void Game::HandlePlayerInput() {
             Resume();
         }
     }
-    if (state != GameState::PLAYING) {
-        if (IsKeyPressed(KEY_P)&& state == GameState::PAUSED) {
+    if (state_ != GameState::PLAYING) {
+        if (IsKeyPressed(KEY_P)&& state_ == GameState::PAUSED) {
              Resume();
         }
         return;
@@ -81,20 +79,27 @@ void Game::HandlePlayerInput() {
 }
 
 void Game::Update() {
+    const auto& config = ApplicationConfig::GetInstance();
+    if (state_ != GameState::PLAYING || GetMouseY()< config.GameMapRootY) {
+        ShowCursor();
+    }else {
+        HideCursor();
+    }
+
     if (silent_pause_) {
         return;
     }
-    if (state != GameState::PLAYING) {
+    if (state_ != GameState::PLAYING) {
         return;
     }
 
     time_.CalculateDeltaTime();
 
     if (game_map.AllExplored()) {
-        state = GameState::WON;
+        state_ = GameState::WON;
     }
     else if (!player->CheckIfAlive()) {
-        state = GameState::LOST;
+        state_ = GameState::LOST;
     }
     else {
         player->Move();
@@ -104,7 +109,7 @@ void Game::Update() {
             if (enemy->GetCurrentTile()== tile) {
                 player->Kill();
                 if (!player->CheckIfAlive()) {
-                    state = GameState::LOST;
+                    state_ = GameState::LOST;
                 }
                 player->ResetPosition();
                 silent_pause_ = true;
@@ -122,27 +127,52 @@ void Game::Update() {
 
 void Game::Pause() {
     time_.PauseGameTimer();
-    state = GameState::PAUSED;
-    ShowCursor();
+    state_ = GameState::PAUSED;
 }
 void Game::Resume() {
     time_.StartGameTimer();
-    state = GameState::PLAYING;
-    HideCursor();
+    state_ = GameState::PLAYING;
 }
 
 void Game::DrawFrame() {
     const auto& config = ApplicationConfig::GetInstance();
+
+
+    const Rectangle test_game_button = {
+        20 + 9 * (config.button_width + config.button_spacing),
+      config.button_y,
+      config.button_width,
+      config.button_height
+
+    };
+    const Rectangle back_to_main_menu = {
+        20 + 10 * (config.button_width + config.button_spacing),
+        config.button_y,
+        config.button_width,
+        config.button_height
+
+    };
+    if (init_from_creator_) {
+        if (GuiButton(test_game_button, "#133#Stop Test")) {
+            Stop();
+        }
+    }
+
     DrawRectangleLines(config.WindowRoot,config.WindowRoot, GetScreenWidth()-1,GetScreenHeight()-1, RAYWHITE);
-    switch (state) {
+    switch (state_) {
         case GameState::PLAYING: {
             ClearBackground(BLACK);
+            if (GuiButton(back_to_main_menu, "#185#Back to Main Menu")) {
+                Stop();
+
+            }
             for (int i = 1; i <= player->GetMaxLives(); i++) {
                 if (i <= player->GetRemainingLives()) {
                     DrawCircle(config.WindowRoot + 100 + i * 30, config.WindowRoot + 80, config.PointRadius, RED);
                 }else {
                     DrawCircleLines(config.WindowRoot+ 100+  i* 30, config.WindowRoot+80,config.PointRadius, RED);
                 }
+
 
             if (silent_pause_) {
                 DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
@@ -171,16 +201,26 @@ void Game::DrawFrame() {
 
         case GameState::PAUSED: {
                 ClearBackground(RAYWHITE);
-                DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
+                DrawText("Game is paused, click P to continue", 100, 100, 40, BLACK);
                 const Rectangle resume_game_button = {
+                    static_cast<float>(config.GameMapWidth) / 2 - 100,
+                    static_cast<float>(config.GameMapHeight) / 2 - 120,
+                    200,
+                    50
+                };
+                if (GuiButton(resume_game_button, "#131#Resume game")) {
+                    Resume();
+                }
+            const Rectangle back_to_menu_button = {
                     static_cast<float>(config.GameMapWidth) / 2 - 100,
                     static_cast<float>(config.GameMapHeight) / 2 - 50,
                     200,
                     50
                 };
-                if (GuiButton(resume_game_button, "Resume game")) {
-                    Resume();
-                }
+
+            if (GuiButton(back_to_menu_button, "#185#Back to Menu")) {
+                Stop();
+            }
             break;
         }
 
@@ -201,7 +241,6 @@ void Game::DrawFrame() {
 void Game::DrawWinScreen() {
     const auto& config = ApplicationConfig::GetInstance();
     ClearBackground(RAYWHITE);
-    ShowCursor();
     DrawText("You won!", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, BLACK);
     DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 350, config.font_size, SKYBLUE);
 
@@ -214,7 +253,8 @@ void Game::DrawWinScreen() {
         200,
         50
     };
-    if (GuiButton(back_to_menu_button, "Back to Menu")) {
+
+    if (GuiButton(back_to_menu_button, "#185#Back to Menu")) {
         Stop();
     }
 
@@ -222,7 +262,6 @@ void Game::DrawWinScreen() {
 
 void Game::DrawLoseScreen() {
     const auto& config = ApplicationConfig::GetInstance();
-    ShowCursor();
     ClearBackground(RAYWHITE);
     DrawText(std::format("You lost. Your Score was {}/{}", game_map.GetExploredTileCount(),game_map.GetFreeTileCount()).c_str(), 100, 100, config.font_size, BLACK);
     DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, SKYBLUE);
@@ -237,7 +276,7 @@ void Game::DrawLoseScreen() {
         200,
         50
     };
-    if (GuiButton(back_to_menu_button, "Back to Menu")) {
+    if (GuiButton(back_to_menu_button, "#185#Back to Menu")) {
     Stop();
     }
 
@@ -245,4 +284,8 @@ void Game::DrawLoseScreen() {
 
 bool Game::HasStarted() const {
     return is_game_running_;
+}
+
+bool Game::StartedAsTest() {
+    return std::exchange(init_from_creator_, false);
 }
