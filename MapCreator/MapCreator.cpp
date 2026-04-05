@@ -31,6 +31,9 @@ void MapCreator::DrawFrame() {
     if (clear_map_dialog_) {
         ShowClearMapConfirmationDialog();
     }
+    if (test_map_error_.has_value()) {
+        MapValidationErrorPopup( test_map_error_.value());
+    }
 }
 
 
@@ -133,7 +136,13 @@ void MapCreator::DrawToolBox() {
         save_dialog_state_ = SaveDialogState::Form;
     }
     if (GuiButton(test_game_button, "#131#Test Map")) {
-        return;
+        auto res = Map::ValidateMap(temporary_map_);
+        if (res.has_value()) {
+            test_map_error_ = res.value();
+        }else {
+            test_map_error_ = std::nullopt;
+            game_->Initialize(std::nullopt, temporary_map_);
+        }
     }
     if (GuiButton(back_to_main_menu, "#185#Back to Main Menu")) {
         is_active_ = false;
@@ -271,32 +280,8 @@ void MapCreator::ShowSaveMapDialog() {
             break;
 
         case SaveDialogState::Error: {
-            std::string error_message;
-            switch (save_map_error_) {
-                case MapValidationError::InvalidLength:
-                    error_message = "Invalid Map Length";
-                    break;
-                case MapValidationError::InvalidPlayerCount:
-                    error_message = "There needs to be exactly one player";
-                    break;
-                case MapValidationError::InvalidEnemyCount:
-                    error_message = "There need to be between 1 and 4 enemies";
-                    break;
-                case MapValidationError::UnresolvableSymbols:
-                    error_message = "This shouldn't have happened";
-                    break;
-                case MapValidationError::CoinsUnreachable:
-                    error_message = "Some coins are unreachable"; // needs to be added later
-                    break;
-                case MapValidationError::TooFewCoins:
-                    error_message = "Too few coins. Minimum is 100";
-                    break;
-                case MapValidationError::DatabaseError:
-                    error_message = "Some database error";
-                    break;
-            }
-            DrawText(std::format("Error: {}", error_message).c_str(), dialog.x, dialog.y+ 20, config.font_size - 10, RED);
-            if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "#113#Cancel")) {
+            const auto res = MapValidationErrorPopup(save_map_error_);
+            if (res) {
                 save_dialog_state_ = SaveDialogState::Hidden;
             }
         }
@@ -324,6 +309,42 @@ void MapCreator::ShowClearMapConfirmationDialog() {
         clear_map_dialog_ = false;
     }
 
+}
+
+bool MapCreator::MapValidationErrorPopup(const MapValidationError error) {
+    const Rectangle dialog = DrawDialogBackground();
+    const auto& config = ApplicationConfig::GetInstance();
+    std::string error_message;
+    switch (error) {
+        case MapValidationError::InvalidLength:
+            error_message = "Invalid Map Length";
+            break;
+        case MapValidationError::InvalidPlayerCount:
+            error_message = "There needs to be exactly one player";
+            break;
+        case MapValidationError::InvalidEnemyCount:
+            error_message = "There need to be between 1 and 4 enemies";
+            break;
+        case MapValidationError::UnresolvableSymbols:
+            error_message = "This shouldn't have happened";
+            break;
+        case MapValidationError::CoinsUnreachable:
+            error_message = "Some coins are unreachable"; // needs to be added later
+            break;
+        case MapValidationError::TooFewCoins:
+            error_message = "Too few coins. Minimum is 100";
+            break;
+        case MapValidationError::DatabaseError:
+            error_message = "Some database error";
+            break;
+    }
+    DrawText(std::format("Error: {}", error_message).c_str(), dialog.x, dialog.y+ 20, config.font_size - 10, RED);
+    if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "#113#Cancel")) {
+        test_map_error_ = std::nullopt;
+        return true;
+    }
+
+    return false;
 }
 
 // I want to return whether a map was created and then reset this variable so the GameMenu is updated only once.

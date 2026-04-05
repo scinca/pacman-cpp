@@ -16,23 +16,24 @@ Game::Game(Database *db) : db_(db), state(GameState::PLAYING), game_map(db_) {
 
 Game::~Game() = default;
 
-void Game::Initialize(const std::optional<int> map_number) {
-    if (map_number.has_value()) {
-        last_played_map_number_ = map_number.value();
+void Game::Initialize(const std::optional<int> map_number, const std::optional<std::string>& map_data) {
+
+    if (map_data.has_value()) {
+        game_map.LoadFromString(map_data.value());
     }
-    HideCursor();
-    enemy_players.clear();
-    is_game_running_ = true;
-   if (map_number.has_value()) {
-       game_map.LoadMapFromDB(map_number.value());
-   }
-   else {
+    else if (map_number.has_value()) {
+        last_played_map_number_ = map_number.value();
+        game_map.LoadMapFromDB(map_number.value());
+    }
+    else {
         game_map.LoadMapFromDB(last_played_map_number_);
    }
 
 
 
-
+    HideCursor();
+    enemy_players.clear();
+    is_game_running_ = true;
 
     const int player_starting_position = game_map.FindPlayerStartTile();
     const std::vector<int> enemy_starting_positions = game_map.FindEnemyStartTiles();

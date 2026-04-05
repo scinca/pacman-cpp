@@ -39,6 +39,8 @@ class MapCreator {
     void ShowSaveMapDialog();
     bool MapCreated();
 
+    bool MapValidationErrorPopup(MapValidationError error);
+
     void SetCurrentTool(const Tile tool){current_tool_ = tool;}
     [[nodiscard]] bool IsActive() const{return is_active_;}
 
@@ -62,6 +64,7 @@ private:
     SaveDialogState save_dialog_state_ = SaveDialogState::Hidden;
     bool clear_map_dialog_ = false;
     bool map_created_ = false;
+    std::optional<MapValidationError> test_map_error_= std::nullopt;
 
 };
 

@@ -25,7 +25,7 @@ public:
 
     ~Game();
 
-    void Initialize(std::optional<int> map_number = 1);
+    void Initialize(std::optional<int> map_number = 1, const std::optional<std::string>& map_data = {});
     void HandlePlayerInput();
     void Update();
     void DrawFrame();
