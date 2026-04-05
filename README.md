@@ -29,7 +29,7 @@ TODO
 ## How to Run
 
 ### Prerequisites
-- CMake 4.1 or higher
+- CMake 3.20 or higher
 - C++23 compatible compiler  (This is required for std::expected)
 - git
 - an internet connection (cmake will download raylib and raygui)
