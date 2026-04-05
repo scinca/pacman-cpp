@@ -55,30 +55,31 @@ void GameMenu::Show() {
 void GameMenu::DrawMapInfo(const MapInfo& data, const int i) const {
     const auto& config = ApplicationConfig::GetInstance();
 
-    constexpr float row_height = 40;
-    const float start_y = static_cast<float>(GetScreenHeight()) / 3.0f;
-    const float start_x = static_cast<float>(GetScreenWidth()) / 10.0f * 2;
+    constexpr int row_height = 40;
+    constexpr int padding = 5;
+    constexpr int id     = 60;
+    constexpr int name   = 250;
+    constexpr int author = 250;
+    constexpr int date   = 200;
+    constexpr int button    = 100;
+    const int start_x = static_cast<int>(static_cast<float>(GetScreenWidth()) / 5.0f ) + padding;
+    const int start_y = static_cast<int>(static_cast<float>(GetScreenWidth()) / 3.0f);
+    constexpr int total_width = id + name + author + date+ button + padding;
 
-    constexpr float id     = 60;
-    constexpr float name   = 250;
-    constexpr float author = 250;
-    constexpr float date   = 200;
-    constexpr float button    = 100;
-    constexpr float total_width = id + name + author + date+ button;
-
-    const float y = start_y + row_height * i;
+    const int y = start_y + row_height * i;
 
     const Color background = (i % 2 == 0) ? LIGHTGRAY : GRAY;
 
-    DrawRectangle(start_x, y, total_width, row_height, background);
+    DrawRectangle(start_x - padding, y, total_width, row_height, background);
 
     const int text_y = y + (row_height - config.font_size) / 2;
-    DrawText(std::to_string(i).c_str(),    start_x,                              text_y, config.font_size/2, BLACK);
-    DrawText(data.name.c_str(),                  start_x + id,                     text_y, config.font_size/2, BLACK);
-    DrawText(data.author.c_str(),                start_x + id + name,          text_y, config.font_size/2, BLACK);
-    DrawText(data.creation_date.c_str(),         start_x + id + name + author, text_y, config.font_size/2, BLACK);
+    DrawText(std::to_string(i).c_str(),    start_x,                              text_y, config.font_size_small, BLACK);
+    DrawText(data.name.c_str(),                  start_x + id,                     text_y, config.font_size_small, BLACK);
+    DrawText(data.author.c_str(),                start_x + id + name,          text_y, config.font_size_small, BLACK);
+    DrawText(data.creation_date.c_str(),         start_x + id + name + author, text_y, config.font_size_small, BLACK);
 
-    if (GuiButton({start_x + total_width, y, button, row_height}, "#131#Play")) {
+    if (GuiButton({static_cast<float>(start_x + total_width),
+        static_cast<float>(y), button, row_height}, "#131#Play")) {
         game_->Initialize(data.id);
 
         std::cout<<data.content << std::endl;

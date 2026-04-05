@@ -6,7 +6,6 @@
 #define PACMAN_CPP_CONFIG_H
 #include <string>
 
-
 class ApplicationConfig {
 public:
     static ApplicationConfig& GetInstance() {
@@ -27,13 +26,13 @@ public:
 
     float TileWidth;
     float PointRadius;
-
     int failure_percentage { 15 };
-    int font_size { 40 };
-    int button_width;
-    int button_height;
-    int button_spacing;
-    int button_y = 20;
+    int font_size;
+    int font_size_small;
+    float button_width;
+    float button_height;
+    float button_spacing;
+    float button_y = 20;
     float velocity_;
     float margin_;
 

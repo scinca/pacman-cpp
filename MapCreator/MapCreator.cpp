@@ -43,65 +43,65 @@ void MapCreator::DrawToolBox() {
 
 
     const Rectangle wall_button = {
-        static_cast<float>(20 + 0 * (config.button_width + config.button_spacing)),
-        static_cast<float>(config.button_y),
-        static_cast<float>(config.button_width),
-        static_cast<float>(config.button_height)
+        20 + 0 * (config.button_width + config.button_spacing),
+        config.button_y,
+        config.button_width,
+        config.button_height
     };
     const Rectangle coin_button = {
-        static_cast<float>(20 + 1 * (config.button_width + config.button_spacing)),
-        static_cast<float>(config.button_y),
-        static_cast<float>(config.button_width),
-        static_cast<float>(config.button_height)
+        20 + 1 * (config.button_width + config.button_spacing),
+        config.button_y,
+       config.button_width,
+        config.button_height
     };
     const Rectangle player_start_button = {
-        static_cast<float>(20 + 2 * (config.button_width + config.button_spacing)),
-        static_cast<float>(config.button_y),
-        static_cast<float>(config.button_width),
-        static_cast<float>(config.button_height)
+       20 + 2 * (config.button_width + config.button_spacing),
+        config.button_y,
+        config.button_width,
+        config.button_height
     };
     const Rectangle enemy_start_button = {
-        static_cast<float>(20 + 3 * (config.button_width + config.button_spacing)),
-        static_cast<float>(config.button_y),
-        static_cast<float>(config.button_width),
-        static_cast<float>(config.button_height)
+        20 + 3 * (config.button_width + config.button_spacing),
+        config.button_y,
+        config.button_width,
+        config.button_height
     };
     const Rectangle empty_button = {
-        static_cast<float>(20 + 4 * (config.button_width + config.button_spacing)),
-        static_cast<float>(config.button_y),
-        static_cast<float>(config.button_width),
-        static_cast<float>(config.button_height)
+        20 + 4 * (config.button_width + config.button_spacing),
+        config.button_y,
+        config.button_width,
+        config.button_height
     };
     const Rectangle clear_button = {
-        static_cast<float>(20 + 5 * (config.button_width + config.button_spacing)),
-        static_cast<float>(config.button_y),
-        static_cast<float>(config.button_width),
-        static_cast<float>(config.button_height)
+      20 + 5 * (config.button_width + config.button_spacing),
+       config.button_y,
+        config.button_width,
+        config.button_height
     };
     const Rectangle autofill_button = {
-       static_cast<float>(20 + 6 * (config.button_width + config.button_spacing)),
-       static_cast<float>(config.button_y),
-       static_cast<float>(config.button_width),
-       static_cast<float>(config.button_height)
+       20 + 6 * (config.button_width + config.button_spacing),
+       config.button_y,
+       config.button_width,
+       config.button_height
    };
     const Rectangle save_map_button = {
-       static_cast<float>(20 + 7 * (config.button_width + config.button_spacing)),
-        static_cast<float>(config.button_y),
-        static_cast<float>(config.button_width),
-        static_cast<float>(config.button_height)
+       20 + 7 * (config.button_width + config.button_spacing),
+        config.button_y,
+        config.button_width,
+        config.button_height
    };
     const Rectangle test_game_button = {
-        static_cast<float>(20 + 9 * (config.button_width + config.button_spacing)),
-      static_cast<float>(config.button_y),
-      static_cast<float>(config.button_width),
-      static_cast<float>(config.button_height)
+        20 + 9 * (config.button_width + config.button_spacing),
+        config.button_y,
+      config.button_width,
+      config.button_height
 
     };
     const Rectangle back_to_main_menu = {
-        static_cast<float>(20 + 10 * (config.button_width + config.button_spacing)),
-        static_cast<float>(config.button_y),
-        static_cast<float>(config.button_width),
-        static_cast<float>(config.button_height)
+        20 + 10 * (config.button_width + config.button_spacing),
+        config.button_y,
+        config.button_width,
+        config.button_height
 
     };
 
@@ -226,8 +226,8 @@ Rectangle MapCreator::DrawDialogBackground() {
     const Rectangle dialog = {
         .x = static_cast<float>(GetScreenWidth()) / 2 - dialog_width / 2,
         .y = static_cast<float>(GetScreenHeight()) / 2 - dialog_height / 2,
-        .width = static_cast<float>(dialog_width),
-        .height = static_cast<float>(dialog_height)
+        .width = dialog_width,
+        .height = dialog_height
     };
     DrawRectangle(dialog.x, dialog.y, dialog_width, dialog_height, LIGHTGRAY);
     return dialog;

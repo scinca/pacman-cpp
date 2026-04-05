@@ -137,23 +137,19 @@ void Game::Resume() {
 void Game::DrawFrame() {
     const auto& config = ApplicationConfig::GetInstance();
 
-    constexpr int button_width = 150;
-    constexpr int button_height = 50;
-    constexpr int button_y = 20; // top bar
-
 
     const Rectangle test_game_button = {
-        static_cast<float>(20 + 9 * (button_width + config.button_spacing)),
-      static_cast<float>(button_y),
-      static_cast<float>(button_width),
-      static_cast<float>(button_height)
+        20 + 9 * (config.button_width + config.button_spacing),
+      config.button_y,
+      config.button_width,
+      config.button_height
 
     };
     const Rectangle back_to_main_menu = {
-        static_cast<float>(20 + 10 * (button_width + config.button_spacing)),
-        static_cast<float>(button_y),
-        static_cast<float>(button_width),
-        static_cast<float>(button_height)
+        20 + 10 * (config.button_width + config.button_spacing),
+        config.button_y,
+        config.button_width,
+        config.button_height
 
     };
     if (init_from_creator_) {

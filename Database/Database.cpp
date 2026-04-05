@@ -35,7 +35,7 @@ Database::~Database() {
     }
 }
 
-std::expected<std::string, MapError> Database::GetMap(const int map_number) const {
+std::expected<std::string, DatabaseError> Database::GetMap(const int map_number) const {
     const Statement stmt("SELECT map_data FROM maps WHERE id = ?;", db_);
 
     sqlite3_bind_int(stmt.Get(), 1, map_number);
@@ -48,9 +48,9 @@ std::expected<std::string, MapError> Database::GetMap(const int map_number) cons
         );
         return std::string(data);
     }else if (rc == SQLITE_DONE) {
-        return std::unexpected(MapError::NotFound); // No rows matched
+        return std::unexpected(DatabaseError::NotFound); // No rows matched
     }
-    return std::unexpected(MapError::DatabaseUnavailable);
+    return std::unexpected(DatabaseError::DatabaseUnavailable);
 }
 
 std::vector<MapInfo> Database::GetAllMaps() const {
@@ -104,12 +104,12 @@ std::expected<std::int64_t, MapValidationError> Database::AddMap(std::string map
 
 
 
-std::expected<void, MapError> Database::InitDB() const {
+std::expected<void, DatabaseError> Database::InitDB() const {
     const auto sql = R"sql(
     CREATE TABLE IF NOT EXISTS maps (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     map_data TEXT NOT NULL UNIQUE,
-    map_name TEXT NOT NULL,
+    map_name TEXT NOT NULL DEFAULT 'My Map',
     map_author TEXT NOT NULL DEFAULT 'You',
     created_at TEXT DEFAULT (datetime('now'))
     ))sql";
@@ -118,7 +118,7 @@ std::expected<void, MapError> Database::InitDB() const {
     if (sqlite3_exec(db_, sql, nullptr, nullptr, &error) != SQLITE_OK) {
         const std::string error_message = std::format("InitDB failed: {}", error);
         sqlite3_free(error);
-        return std::unexpected(MapError::DatabaseUnavailable);
+        return std::unexpected(DatabaseError::DatabaseUnavailable);
     }
     const std::string map_2 {"################000000##########000000###000000000##########0000000####0###00000000####000#0#######0#########00#####0000000000#0#0##000000#0#0#######0#########0###0000##########0#0##0####0#000#######0######0000##00#########00000#00#000000#0#0#######0#####00#####0##000000000#0#0##000####00000#######0#####0##00000##0#######0#0#0#00#000000###000000000#####0##0######0#0000?### #0#0##0####000000######0#####0##00X00000#00000000 #0#0#0000000####0######0#####0##00000##0#00####    0#0#0##0##000000######0#####00#####00#0#0000?#        0##0##0####0######0######00000##0#0#0#######0#0#0#0##0##0####0######0#####00###0000#0#000000000#00000##0##0####00000000000000000##0#0#0#000000##0#0###000000000000#######0###0###0000#0#00000000##0#00##0#####0####0#######0###000####000#00000000000##0##0#####0####0#######0###0#0#####0######0##0#####0##0#####0####0#######0###0#0#####00000000000000000#0000000000##00######00000000#######0##############0#0####0#00000######0####0#000##0000000000000000000#0####0#0###0######0####0###00#0#####0#####0####0##0####0#0###0######0####0####0#0#####000000000##0##0####0#0###0######0####0####0#0#####0#######0##000000000#0###0######00000000000#0####00#######0000##0##0###0###0###########0####00000000000000##0##0##00000000###0###########000000#0####0#####0##0##0###0####0####0##################0####0#####0000000###0####0####0##################000000#####000###000000000000000######"};
 

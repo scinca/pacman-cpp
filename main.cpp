@@ -7,11 +7,10 @@
 
 int main() {
 
-    Database database;
     ApplicationConfig::GetInstance();
+    Database database;
     Game game{&database};
     MapCreator map_creator{&database, &game};
-
     GameMenu game_menu{&game, &map_creator, &database};
 
 

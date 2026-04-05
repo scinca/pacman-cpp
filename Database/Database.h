@@ -26,7 +26,7 @@ struct MapInfo {
 
 };
 
-enum class MapError {
+enum class DatabaseError {
     NotFound,
     DatabaseUnavailable,
     InvalidData,
@@ -36,12 +36,12 @@ class Database {
     public:
     explicit Database(const std::string& db_path= "pacman.db");
     ~Database();
-    [[nodiscard]] std::expected<std::string, MapError> GetMap(int map_number) const;
+    [[nodiscard]] std::expected<std::string, DatabaseError> GetMap(int map_number) const;
     [[nodiscard]] std::expected<std::int64_t, MapValidationError> AddMap(std::string map, const std::string &map_name, const std::string &author) const;
     [[nodiscard]] std::vector<MapInfo> GetAllMaps() const;
 
     private:
-    [[nodiscard]] std::expected<void, MapError> InitDB() const;
+    [[nodiscard]] std::expected<void, DatabaseError> InitDB() const;
     sqlite3* db_{};
 
 };
@@ -51,7 +51,7 @@ class Statement {
     explicit Statement(std::string_view SQL, sqlite3* database);
     ~Statement();
 
-    [[nodiscard]] sqlite3_stmt* Get() const { return sql_statement_; } // might be useful later.
+    [[nodiscard]] sqlite3_stmt* Get() const { return sql_statement_; }
 
     private:
     sqlite3_stmt* sql_statement_{};
