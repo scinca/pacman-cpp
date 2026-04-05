@@ -37,11 +37,18 @@ TODO
 ### Build and Run
 ```bash
 git clone https://github.com/scinca/pacman-cpp.git
+
+ 
 cd pacman-cpp
 mkdir build && cd build
 cmake ..
 cmake --build .
+
+#linux / macos 
 ./pacman_cpp
+
+#windows
+.\pacman_cpp.exe
 ```
 
 **Note:** If dependencies aren't installed it automatically downloaded and compiled. This takes a looong time.

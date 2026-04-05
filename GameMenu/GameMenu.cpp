@@ -70,7 +70,7 @@ void GameMenu::DrawMapInfo(const MapInfo& data, const int i) const {
 
     const Color background = (i % 2 == 0) ? LIGHTGRAY : GRAY;
 
-    DrawRectangle(start_x - padding, y, total_width, row_height, background);
+    DrawRectangle(start_x - padding, y, total_width + button, row_height, background);
 
     const int text_y = y + (row_height - config.font_size) / 2;
     DrawText(std::to_string(i).c_str(),    start_x,                              text_y, config.font_size_small, BLACK);
