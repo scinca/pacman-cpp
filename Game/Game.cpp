@@ -4,7 +4,6 @@
 
 
 #include <iostream>
-#include <ctime>
 #include <raygui.h>
 #include <raylib.h>
 #include "Game.h"
@@ -171,14 +170,14 @@ void Game::DrawFrame() {
 
         case GameState::PAUSED: {
                 ClearBackground(RAYWHITE);
-                DrawText("Game is paused, click P to restart", 100, 100, 40, BLACK);
+                DrawText("Game is paused, click P to continue", 100, 100, 40, BLACK);
                 const Rectangle resume_game_button = {
                     static_cast<float>(config.GameMapWidth) / 2 - 100,
                     static_cast<float>(config.GameMapHeight) / 2 - 50,
                     200,
                     50
                 };
-                if (GuiButton(resume_game_button, "Resume game")) {
+                if (GuiButton(resume_game_button, "#131#Resume game")) {
                     Resume();
                 }
             break;
@@ -214,7 +213,7 @@ void Game::DrawWinScreen() {
         200,
         50
     };
-    if (GuiButton(back_to_menu_button, "Back to Menu")) {
+    if (GuiButton(back_to_menu_button, "#185#Back to Menu")) {
         Stop();
     }
 
@@ -237,7 +236,7 @@ void Game::DrawLoseScreen() {
         200,
         50
     };
-    if (GuiButton(back_to_menu_button, "Back to Menu")) {
+    if (GuiButton(back_to_menu_button, "#185#Back to Menu")) {
     Stop();
     }
 

@@ -91,8 +91,15 @@ void MapCreator::DrawToolBox() {
         static_cast<float>(button_width),
         static_cast<float>(button_height)
    };
+    constexpr Rectangle test_game_button = {
+        static_cast<float>(20 + 9 * (button_width + spacing)),
+      static_cast<float>(button_y),
+      static_cast<float>(button_width),
+      static_cast<float>(button_height)
+
+    };
     constexpr Rectangle back_to_main_menu = {
-        static_cast<float>(20 + 8 * (button_width + spacing)),
+        static_cast<float>(20 + 10 * (button_width + spacing)),
         static_cast<float>(button_y),
         static_cast<float>(button_width),
         static_cast<float>(button_height)
@@ -100,32 +107,35 @@ void MapCreator::DrawToolBox() {
     };
 
 
-    if (GuiButton(wall_button, "Wall")) {
+    if (GuiButton(wall_button, "#162#Wall")) {
         SetCurrentTool(Tile::Wall);
     }
-    if (GuiButton(player_start_button, "PlayerStart")) {
+    if (GuiButton(player_start_button, "#149#PlayerStart")) {
         SetCurrentTool(Tile::PlayerStart);
     }
-    if (GuiButton(coin_button, "Coin")) {
+    if (GuiButton(coin_button, "#146#Coin")) {
         SetCurrentTool(Tile::Coin);
     }
-    if (GuiButton(enemy_start_button, "Enemy")) {
+    if (GuiButton(enemy_start_button, "#152#Enemy")) {
         SetCurrentTool(Tile::EnemyStart);
     }
-    if (GuiButton(empty_button, "Empty")) {
+    if (GuiButton(empty_button, "#28#Empty")) {
         SetCurrentTool(Tile::None);
     }
-    if (GuiButton(clear_button, "Empty Map")) {
+    if (GuiButton(clear_button, "#56#Clear Map")) {
         clear_map_dialog_ = true;
     }
-    if (GuiButton(autofill_button, "Autofill Empty Tiles with coins")) {
+    if (GuiButton(autofill_button, "#101#Autofill Empty Tiles")) {
         std::ranges::replace(temporary_map_, ' ', '0');
         map_class_.LoadFromString(temporary_map_);
     }
-    if (GuiButton(save_map_button, "Save Map")) {
+    if (GuiButton(save_map_button, "#2#Save Map")) {
         save_dialog_state_ = SaveDialogState::Form;
     }
-    if (GuiButton(back_to_main_menu, "Back to Main Menu")) {
+    if (GuiButton(test_game_button, "#131#Test Map")) {
+        return;
+    }
+    if (GuiButton(back_to_main_menu, "#185#Back to Main Menu")) {
         is_active_ = false;
 
     }
@@ -227,7 +237,7 @@ void MapCreator::ShowSaveMapDialog() {
                 edit_name_ = false;
             }
 
-            if (GuiButton({dialog.x, dialog.y + 160, dialog.width / 2 - 5, 30}, "Save")) {
+            if (GuiButton({dialog.x, dialog.y + 160, dialog.width / 2 - 5, 30}, "#2#Save")) {
 
                 const auto res = db_->AddMap(temporary_map_, map_name_buffer_, map_author_buffer_);
                 if (res.has_value()) {
@@ -241,7 +251,7 @@ void MapCreator::ShowSaveMapDialog() {
 
                 }
             }
-            if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
+            if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "#113#Cancel")) {
                 save_dialog_state_ = SaveDialogState::Hidden;
             }
             break;
@@ -249,11 +259,11 @@ void MapCreator::ShowSaveMapDialog() {
 
         case SaveDialogState::Success: {
             DrawText("The map was saved successfully", dialog.x, dialog.y+ 20, config.font_size - 10, RED);
-            if (GuiButton({dialog.x, dialog.y + 160, dialog.width/2 -5, 30}, "Play")) {
+            if (GuiButton({dialog.x, dialog.y + 160, dialog.width/2 -5, 30}, "#131#Play")) {
                 is_active_ = false;
                 game_->Initialize(saved_map_id_);
             }
-            if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
+            if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "#113#Cancel")) {
                 save_dialog_state_ = SaveDialogState::Hidden;
             }
 
@@ -286,7 +296,7 @@ void MapCreator::ShowSaveMapDialog() {
                     break;
             }
             DrawText(std::format("Error: {}", error_message).c_str(), dialog.x, dialog.y+ 20, config.font_size - 10, RED);
-            if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
+            if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "#113#Cancel")) {
                 save_dialog_state_ = SaveDialogState::Hidden;
             }
         }
@@ -303,14 +313,14 @@ void MapCreator::ShowClearMapConfirmationDialog() {
     const Rectangle dialog = DrawDialogBackground();
 
     DrawText("Do you really want to clear the map?", dialog.x, dialog.y+ 20, config.font_size - 10, RED);
-    if (GuiButton({dialog.x, dialog.y + 160, dialog.width/2 -5, 30}, "Yes")) {
+    if (GuiButton({dialog.x, dialog.y + 160, dialog.width/2 -5, 30}, "#112#Yes")) {
         temporary_map_.assign(1400, ' ');
         map_class_.LoadFromString(temporary_map_);
         clear_map_dialog_ = false;
 
 
     }
-    if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "Cancel")) {
+    if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "#113#Cancel")) {
         clear_map_dialog_ = false;
     }
 

@@ -41,7 +41,7 @@ void GameMenu::Show() {
         button_height,
     };
 
-    if (GuiButton(create_map_button, "Create  your own Map")) {
+    if (GuiButton(create_map_button, "#23#Create  your own Map")) {
         map_creator_->Initialize();
     }
 
@@ -78,7 +78,7 @@ void GameMenu::DrawMapInfo(const MapInfo& data, const int i) const {
     DrawText(data.author.c_str(),                start_x + id + name,          text_y, config.font_size/2, BLACK);
     DrawText(data.creation_date.c_str(),         start_x + id + name + author, text_y, config.font_size/2, BLACK);
 
-    if (GuiButton({start_x + total_width, y, button, row_height}, "Play")) {
+    if (GuiButton({start_x + total_width, y, button, row_height}, "#131#Play")) {
         game_->Initialize(data.id);
 
         std::cout<<data.content << std::endl;
