@@ -1,4 +1,3 @@
-#include <ctime>
 #include <iostream>
 #include "Database/Database.h"
 #include "Game/Game.h"
@@ -6,7 +5,7 @@
 #include "ApplicationConfig.h"
 #include "MapCreator/MapCreator.h"
 
-int main(int argc, char* argv[]) {
+int main() {
 
     Database database;
     ApplicationConfig::GetInstance();
