@@ -36,16 +36,6 @@ void EnemyPlayer::Move() {
         }
             BreadthFirstSearch();
     }
-    /* This Block was used for an overshoot protection. I will to do some additional testing if the  CheckMoveValidity is enough.
-     * The HumanPlayer uses this check and it works but I need some more testing.
-
-    auto [x, y] = Map::GetTileCenter(GetPreviousTile());
-    float distance = std::abs(position_x_ - x) + std::abs(position_y_ - y);
-    else if (!map_->CanMove(current_tile_) && distance < config.margin_) {
-        current_tile_ = GetPreviousTile();
-        std::tie(position_x_, position_y_) = Map::GetTileCenter(current_tile_);
-        BreadthFirstSearch();
-    }*/
     UpdatePosition();
 }
 

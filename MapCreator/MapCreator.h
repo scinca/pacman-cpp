@@ -4,8 +4,6 @@
 
 #ifndef PACMAN_CPP_MAPCREATOR_H
 #define PACMAN_CPP_MAPCREATOR_H
-#include <vector>
-
 #include "../Database/Database.h"
 #include "../Map/Map.h"
 #include "../Game/Game.h"
@@ -53,10 +51,10 @@ private:
     static Rectangle DrawDialogBackground();
 
     Game *game_;
-    MapValidationError save_map_error_ = MapValidationError::UnresolvableSymbols;
+
     std::int64_t saved_map_id_ = 0;
     Map map_class_;
-    bool is_active_;
+    bool is_active_ = false;
     std::optional<std::string> temporarily_saved_map_ = std::nullopt;
     std::string temporary_map_;
     Database *db_{};
@@ -69,6 +67,7 @@ private:
     bool clear_map_dialog_ = false;
     bool map_created_ = false;
     std::optional<MapValidationError> test_map_error_= std::nullopt;
+    std::optional<MapValidationError> save_map_error_ = std::nullopt;
 
 };
 

@@ -4,7 +4,7 @@
 #include <memory>
 #include <optional>
 
-#include "../Map/Map.h"
+#include "Map/Map.h"
 #include "HumanPlayer/HumanPlayer.h"
 #include "EnemyAI/EnemyPlayer.h"
 #include "Time/DeltaTime.h"
@@ -38,6 +38,7 @@ public:
     void Stop(){is_game_running_ = false;}
     void AddSilentPause(){ silent_pause_ = true; }
     [[nodiscard]] bool StartedAsTest();
+
 private:
     void DrawWinScreen();
     void DrawLoseScreen();

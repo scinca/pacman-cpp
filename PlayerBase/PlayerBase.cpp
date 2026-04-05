@@ -10,10 +10,13 @@
 #include "Map/Map.h"
 
 PlayerBase::PlayerBase(Map *game_map, Time *time, const int tile, const Color color)
-    :position_x_(ApplicationConfig::GetInstance().GameMapRootX+ ApplicationConfig::GetInstance().TileWidth /2), position_y_(ApplicationConfig::GetInstance().GameMapRootY + ApplicationConfig::GetInstance().TileWidth/2), current_tile_(tile), color_(color), map_(game_map), time_(time)
-{
+    :position_x_(static_cast<float>(ApplicationConfig::GetInstance().GameMapRootX) + ApplicationConfig::GetInstance().TileWidth /2),
+    position_y_(static_cast<float>(ApplicationConfig::GetInstance().GameMapRootY) + ApplicationConfig::GetInstance().TileWidth/2),
+    current_tile_(tile), color_(color), map_(game_map), time_(time)
+{}
 
-}
+PlayerBase::~PlayerBase() = default;
+
 void PlayerBase::Draw() const {
     const auto& config = ApplicationConfig::GetInstance();
     DrawCircle(
@@ -25,9 +28,9 @@ void PlayerBase::Draw() const {
 void PlayerBase::GetTile() {
     const auto& config = ApplicationConfig::GetInstance();
 
-    const int tileX = (position_x_ - config.GameMapRootX) / config.TileWidth;
-    const int tileY = (position_y_ -  config.GameMapRootY) /  config.TileWidth;
-    current_tile_ = tileY * config.TilesX + tileX;
+    const int tile_x = ( static_cast<int>(position_x_) - config.GameMapRootX) / static_cast<int>(config.TileWidth);
+    const int tile_y = (static_cast<int>(position_y_) -  config.GameMapRootY) /  static_cast<int>(config.TileWidth);
+    current_tile_ = tile_y * config.TilesX + tile_x;
 }
 
 
@@ -38,32 +41,15 @@ void PlayerBase::GetTile() {
   |                      |
 (0, WindowHeight) ── (WindowWidth, WindowHeight)
  */
-int PlayerBase::GetPreviousTile() const {
-    const auto& config = ApplicationConfig::GetInstance();
-    switch (current_direction_) {
-        case Direction::UP:
-            return current_tile_ + config.TilesX;
-        case Direction::DOWN:
-            return current_tile_ - config.TilesX;
-        case Direction::LEFT:
-            return current_tile_ + 1;;
-        case Direction::RIGHT:
-            return current_tile_ - 1;
-        case Direction::NONE:
-            return current_tile_;
-    }
 
-    return current_tile_;
-}
-
-
-void PlayerBase::CheckSurroundingTiles() { // it's a 50x28 grid but arrays start at 0 so 49 and 27 aren't magic numbers.
+void PlayerBase::CheckSurroundingTiles() {
     const auto& config = ApplicationConfig::GetInstance();
     possible_moves_.clear();
 
-    const int tile_x = (position_x_ -config.GameMapRootX) / config.TileWidth;
-    const int tile_y = (position_y_ - config.GameMapRootY) / config.TileWidth;
+    const int tile_x = ( static_cast<int>(position_x_) - config.GameMapRootX) / static_cast<int>(config.TileWidth);
+    const int tile_y = (static_cast<int>(position_y_) -  config.GameMapRootY) /  static_cast<int>(config.TileWidth);
     const int tile = tile_y * config.TilesX + tile_x;
+
 
         if (tile_x > 0 && map_->CanMove(tile - 1)) {
             possible_moves_.push_back(Direction::LEFT);
@@ -83,14 +69,8 @@ void PlayerBase::CheckSurroundingTiles() { // it's a 50x28 grid but arrays start
 void PlayerBase::CenterPosition() {
     auto [center_x, center_y] = Map::GetTileCenter(current_tile_);
     switch (current_direction_) {
+        //the fallthrough is intentional so that my IDE doesn't give a warning for consecutive identical branches
         case Direction::UP:
-            if (position_x_ > center_x) {
-                position_x_--;
-            }
-           if (position_x_ < center_x) {
-               position_x_++;
-           }
-            break;
         case Direction::DOWN:
             if (position_x_ > center_x) {
                 position_x_--;
@@ -100,13 +80,6 @@ void PlayerBase::CenterPosition() {
             }
             break;
         case Direction::LEFT:
-            if (position_y_ > center_y) {
-                position_y_--;
-            }
-            if (position_y_ < center_y) {
-                position_y_++;
-            }
-            break;
         case Direction::RIGHT:
             if (position_y_ > center_y) {
                 position_y_--;
@@ -118,14 +91,13 @@ void PlayerBase::CenterPosition() {
         case Direction::NONE:
             break;
     }
-
 }
 
 bool PlayerBase::CheckMoveValidity(const Direction move) {
     return std::ranges::contains(possible_moves_, move);
 }
 
-bool PlayerBase::IsAtTileCenter() {
+bool PlayerBase::IsAtTileCenter() const {
     const auto& config = ApplicationConfig::GetInstance();
     auto [tile_center_x, tile_center_y] = Map::GetTileCenter(current_tile_);
     return std::abs(position_x_ - tile_center_x) < config.margin_ &&
@@ -154,7 +126,6 @@ void PlayerBase::UpdatePosition() {
     }
 }
 
-PlayerBase::~PlayerBase() = default;
 
 void PlayerBase::ResetPosition() {
     current_tile_ = start_tile_;

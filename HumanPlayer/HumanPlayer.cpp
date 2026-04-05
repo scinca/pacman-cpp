@@ -7,7 +7,6 @@
 #include <raylib.h>
 #include "Time/DeltaTime.h"
 #include "Map/Map.h"
-#include "ApplicationConfig.h"
 
 HumanPlayer::HumanPlayer(Map *map, Time *time, const int starting_tile, const Color color)
     :PlayerBase(map, time, starting_tile, color){

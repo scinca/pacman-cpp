@@ -7,7 +7,7 @@
 #include <raygui.h>
 #include <raylib.h>
 #include "Game.h"
-#include "../ApplicationConfig.h"
+#include "ApplicationConfig.h"
 
 
 

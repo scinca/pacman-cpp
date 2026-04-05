@@ -17,28 +17,23 @@ enum class Direction {
 class PlayerBase {
     public:
     virtual ~PlayerBase();
-
     PlayerBase(Map *game_map, Time *time, int tile, Color color);
-
-    [[nodiscard]] int GetCurrentTile() const { return current_tile_; }
     virtual void Move() = 0;
+    [[nodiscard]] int GetCurrentTile() const { return current_tile_; }
+    void GetTile(); // one is used by player itself one by enemy
     void Draw() const;
     void ResetPosition();
-    [[nodiscard]] virtual bool IsAtTileCenter();
+    [[nodiscard]] bool IsAtTileCenter() const;
     void CenterPosition();
 
     protected:
     void UpdatePosition();
-    bool CheckMoveValidity(Direction move);
-    void GetTile();
-    [[nodiscard]] int GetPreviousTile() const;
-
-
     void CheckSurroundingTiles();
+    bool CheckMoveValidity(Direction move);
 
 
-    double position_x_;
-    double position_y_;
+    float position_x_;
+    float position_y_;
     int current_tile_;
     int start_tile_{};
     Color color_;

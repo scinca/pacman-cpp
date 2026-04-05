@@ -8,8 +8,8 @@
 #include <string>
 #include <vector>
 
-#include "../Database/Database.h"
-class Database;
+#include "Database/Database.h"
+
 enum class MapValidationError {
     InvalidLength,
     InvalidPlayerCount,
@@ -23,9 +23,10 @@ enum class MapValidationError {
 class Map {
 public:
     explicit Map(Database* db);
-    Map();
+    Map(); // needed for the MapCreator
 
     void LoadMapFromDB(int map_number);
+    void LoadFromString(const std::string &map);
     void Draw(bool editor = false) const;
     std::string GetMap();
     [[nodiscard]] bool AllExplored() const;
@@ -35,12 +36,11 @@ public:
     [[nodiscard]] int FindPlayerStartTile() const;
     [[nodiscard]] std::vector<int> FindEnemyStartTiles() const;
 
-    void LoadFromString(const std::string &map);
+
 
     static std::optional<MapValidationError> ValidateMap(const std::string& map);
     [[nodiscard]] int GetExploredTileCount() const {return score_;}
     [[nodiscard]] int GetFreeTileCount() const {return free_tile_count_;}
-
     static int GetTileFromXY(int x, int y);
 private:
     Database* db_{};
