@@ -22,6 +22,9 @@ ApplicationConfig::ApplicationConfig() {
     GameMapRootX = (screen_width_ - GameMapWidth) / 2;
     velocity_ = TileWidth * 4.0f;
     margin_ = TileWidth / 7.5f;
+    button_spacing = screen_width_ / 100;
+    button_width = screen_width_ / 13;
+    button_height = screen_height_ /20;
 
 }
 

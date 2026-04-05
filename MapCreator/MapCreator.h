@@ -32,6 +32,9 @@ class MapCreator {
     explicit MapCreator(Database *database, Game *game);
     void DrawFrame();
     void DrawToolBox();
+
+    void Activate();
+
     void HandlePlayerInput();
     void Initialize();
     static void DrawGrid();
@@ -54,6 +57,7 @@ private:
     std::int64_t saved_map_id_ = 0;
     Map map_class_;
     bool is_active_;
+    std::optional<std::string> temporarily_saved_map_ = std::nullopt;
     std::string temporary_map_;
     Database *db_{};
     Tile current_tool_ = Tile::None;

@@ -37,12 +37,13 @@ public:
     void Resume();
     void Stop(){is_game_running_ = false;}
     void AddSilentPause(){ silent_pause_ = true; }
+    [[nodiscard]] bool StartedAsTest();
 private:
     void DrawWinScreen();
     void DrawLoseScreen();
 
     Database* db_{};
-    GameState state;
+    GameState state_;
     Time time_;
     Map game_map;
     int last_played_map_number_ {1};

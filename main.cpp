@@ -19,6 +19,9 @@ int main() {
     while (!WindowShouldClose()) {
         BeginDrawing();
         if (!game.HasStarted()) {
+            if (game.StartedAsTest() && !map_creator.IsActive()) {
+                map_creator.Initialize();
+            }
             if (map_creator.IsActive()) {
                 map_creator.HandlePlayerInput();
                 map_creator.DrawFrame();
@@ -34,7 +37,6 @@ int main() {
             game.DrawFrame();
         }
         EndDrawing();
-
     }
     // WindowConfig destructor closes window
     return 0;

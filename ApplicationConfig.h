@@ -30,9 +30,13 @@ public:
 
     int failure_percentage { 15 };
     int font_size { 40 };
-
+    int button_width;
+    int button_height;
+    int button_spacing;
+    int button_y = 20;
     float velocity_;
     float margin_;
+
 
 private:
     std::string window_title_ {" Pacman Raylib Game"};

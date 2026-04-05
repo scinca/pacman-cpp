@@ -41,71 +41,67 @@ void MapCreator::DrawFrame() {
 void MapCreator::DrawToolBox() {
     const auto& config = ApplicationConfig::GetInstance();
 
-    constexpr int button_width = 150;
-    constexpr int button_height = 50;
-    constexpr int button_y = 20; // top bar
-    constexpr int spacing = 10;
 
-    constexpr Rectangle wall_button = {
-        static_cast<float>(20 + 0 * (button_width + spacing)),
-        static_cast<float>(button_y),
-        static_cast<float>(button_width),
-        static_cast<float>(button_height)
+    const Rectangle wall_button = {
+        static_cast<float>(20 + 0 * (config.button_width + config.button_spacing)),
+        static_cast<float>(config.button_y),
+        static_cast<float>(config.button_width),
+        static_cast<float>(config.button_height)
     };
-    constexpr Rectangle coin_button = {
-        static_cast<float>(20 + 1 * (button_width + spacing)),
-        static_cast<float>(button_y),
-        static_cast<float>(button_width),
-        static_cast<float>(button_height)
+    const Rectangle coin_button = {
+        static_cast<float>(20 + 1 * (config.button_width + config.button_spacing)),
+        static_cast<float>(config.button_y),
+        static_cast<float>(config.button_width),
+        static_cast<float>(config.button_height)
     };
-    constexpr Rectangle player_start_button = {
-        static_cast<float>(20 + 2 * (button_width + spacing)),
-        static_cast<float>(button_y),
-        static_cast<float>(button_width),
-        static_cast<float>(button_height)
+    const Rectangle player_start_button = {
+        static_cast<float>(20 + 2 * (config.button_width + config.button_spacing)),
+        static_cast<float>(config.button_y),
+        static_cast<float>(config.button_width),
+        static_cast<float>(config.button_height)
     };
-    constexpr Rectangle enemy_start_button = {
-        static_cast<float>(20 + 3 * (button_width + spacing)),
-        static_cast<float>(button_y),
-        static_cast<float>(button_width),
-        static_cast<float>(button_height)
+    const Rectangle enemy_start_button = {
+        static_cast<float>(20 + 3 * (config.button_width + config.button_spacing)),
+        static_cast<float>(config.button_y),
+        static_cast<float>(config.button_width),
+        static_cast<float>(config.button_height)
     };
-    constexpr Rectangle empty_button = {
-        static_cast<float>(20 + 4 * (button_width + spacing)),
-        static_cast<float>(button_y),
-        static_cast<float>(button_width),
-        static_cast<float>(button_height)
+    const Rectangle empty_button = {
+        static_cast<float>(20 + 4 * (config.button_width + config.button_spacing)),
+        static_cast<float>(config.button_y),
+        static_cast<float>(config.button_width),
+        static_cast<float>(config.button_height)
     };
-    constexpr Rectangle clear_button = {
-        static_cast<float>(20 + 5 * (button_width + spacing)),
-        static_cast<float>(button_y),
-        static_cast<float>(button_width),
-        static_cast<float>(button_height)
+    const Rectangle clear_button = {
+        static_cast<float>(20 + 5 * (config.button_width + config.button_spacing)),
+        static_cast<float>(config.button_y),
+        static_cast<float>(config.button_width),
+        static_cast<float>(config.button_height)
     };
-    constexpr Rectangle autofill_button = {
-       static_cast<float>(20 + 6 * (button_width + spacing)),
-       static_cast<float>(button_y),
-       static_cast<float>(button_width),
-       static_cast<float>(button_height)
+    const Rectangle autofill_button = {
+       static_cast<float>(20 + 6 * (config.button_width + config.button_spacing)),
+       static_cast<float>(config.button_y),
+       static_cast<float>(config.button_width),
+       static_cast<float>(config.button_height)
    };
-    constexpr Rectangle save_map_button = {
-       static_cast<float>(20 + 7 * (button_width + spacing)),
-        static_cast<float>(button_y),
-        static_cast<float>(button_width),
-        static_cast<float>(button_height)
+    const Rectangle save_map_button = {
+       static_cast<float>(20 + 7 * (config.button_width + config.button_spacing)),
+        static_cast<float>(config.button_y),
+        static_cast<float>(config.button_width),
+        static_cast<float>(config.button_height)
    };
-    constexpr Rectangle test_game_button = {
-        static_cast<float>(20 + 9 * (button_width + spacing)),
-      static_cast<float>(button_y),
-      static_cast<float>(button_width),
-      static_cast<float>(button_height)
+    const Rectangle test_game_button = {
+        static_cast<float>(20 + 9 * (config.button_width + config.button_spacing)),
+      static_cast<float>(config.button_y),
+      static_cast<float>(config.button_width),
+      static_cast<float>(config.button_height)
 
     };
-    constexpr Rectangle back_to_main_menu = {
-        static_cast<float>(20 + 10 * (button_width + spacing)),
-        static_cast<float>(button_y),
-        static_cast<float>(button_width),
-        static_cast<float>(button_height)
+    const Rectangle back_to_main_menu = {
+        static_cast<float>(20 + 10 * (config.button_width + config.button_spacing)),
+        static_cast<float>(config.button_y),
+        static_cast<float>(config.button_width),
+        static_cast<float>(config.button_height)
 
     };
 
@@ -141,13 +137,18 @@ void MapCreator::DrawToolBox() {
             test_map_error_ = res.value();
         }else {
             test_map_error_ = std::nullopt;
+            temporarily_saved_map_ = temporary_map_;
             game_->Initialize(std::nullopt, temporary_map_);
+            is_active_= false;
         }
     }
     if (GuiButton(back_to_main_menu, "#185#Back to Main Menu")) {
         is_active_ = false;
 
     }
+}
+void MapCreator::Activate() {
+    is_active_ = true;
 }
 
 void MapCreator::HandlePlayerInput() {
@@ -195,8 +196,14 @@ void MapCreator::HandlePlayerInput() {
 
 
 void MapCreator::Initialize() {
-    is_active_ = true;
-    temporary_map_.assign(1400, ' ');
+    ShowCursor();
+    Activate();
+    if (temporarily_saved_map_.has_value()) {
+        temporary_map_ = temporarily_saved_map_.value();
+    }else {
+        temporary_map_.assign(1400, ' ');
+    }
+
     map_class_.LoadFromString(temporary_map_);
 
 }
