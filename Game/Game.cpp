@@ -222,6 +222,9 @@ void Game::DrawFrame() {
                 };
 
             if (GuiButton(back_to_menu_button, "#185#Back to Menu")) {
+                if (init_from_creator_) {
+                    init_from_creator_ = false;  // take back to main menu not creator
+                }
                 Stop();
             }
             break;

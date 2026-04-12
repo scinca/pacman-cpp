@@ -22,18 +22,12 @@ enum class GameState {
 class Game {
 public:
     explicit Game(Database* db);
-
-
-
     ~Game();
-
     void Initialize(std::optional<int> map_number = 1, const std::optional<std::string>& map_data = {});
     void HandlePlayerInput();
     void Update();
     void DrawFrame();
-
     [[nodiscard]] bool HasStarted() const;
-
     void SetCurrentMapNumber(const int number) {last_played_map_number_ = number;}
     void Pause();
     void Resume();
