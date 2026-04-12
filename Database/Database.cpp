@@ -81,18 +81,12 @@ std::vector<MapInfo> Database::GetAllMaps() const {
 
 
 
-std::expected<std::int64_t, MapValidationError> Database::AddMap(std::string map, const std::string &map_name, const std::string &author) const {
+std::expected<std::int64_t, MapValidationError> Database::AddMap(const std::string &map, const std::string &map_name, const std::string &author) const {
     const Statement stmt("INSERT OR IGNORE INTO maps (map_data, map_name, map_author) VALUES (?, ?, ?);", db_);
-    std::erase(map, '\n');
-    std::erase(map, '\r');
-
     const auto result = Map::ValidateMap(map);
     if (result.has_value()) {
         return std::unexpected(result.value());
-
     }
-
-
     sqlite3_bind_text(stmt.Get(),1,map.c_str(),-1,SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt.Get(),2,map_name.c_str(),-1,SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt.Get(),3,author.c_str(),-1,SQLITE_TRANSIENT);
@@ -101,9 +95,7 @@ std::expected<std::int64_t, MapValidationError> Database::AddMap(std::string map
         return std::unexpected(MapValidationError::DatabaseError);
     }
 
-
     return sqlite3_last_insert_rowid(db_);
-
 }
 
 

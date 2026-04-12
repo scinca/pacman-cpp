@@ -14,6 +14,7 @@ class EnemyPlayer : public PlayerBase {
     public:
     explicit EnemyPlayer(Map *map, Time *time, HumanPlayer *player, int starting_tile, Color color);
     void Move() override;
+
     private:
     void CheckSurroundingTiles(int tile, Direction direction, std::queue<std::pair<int, Direction>> *to_be_explored, std::vector<bool> *explored_set) const;
     int GetRandomInt(){ return std::uniform_int_distribution(0, 99)(random_number_generator_); }

@@ -13,7 +13,7 @@
 
 
 
-#include "../third_party/sqlite/sqlite3.h"
+#include "third_party/sqlite/sqlite3.h"
 
 
 enum class MapValidationError;
@@ -38,7 +38,7 @@ class Database {
     explicit Database(const std::string& db_path= "pacman.db");
     ~Database();
     [[nodiscard]] std::expected<std::string, DatabaseError> GetMap(int map_number) const;
-    [[nodiscard]] std::expected<std::int64_t, MapValidationError> AddMap(std::string map, const std::string &map_name, const std::string &author) const;
+    [[nodiscard]] std::expected<std::int64_t, MapValidationError> AddMap(const std::string &map, const std::string &map_name, const std::string &author) const;
     [[nodiscard]] std::vector<MapInfo> GetAllMaps() const;
 
     private:
@@ -51,7 +51,6 @@ class Statement {
     public:
     explicit Statement(std::string_view SQL, sqlite3* database);
     ~Statement();
-
     [[nodiscard]] sqlite3_stmt* Get() const { return sql_statement_; }
 
     private:
