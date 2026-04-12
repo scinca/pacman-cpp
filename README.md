@@ -15,16 +15,24 @@ If you want to distribute this program, you need to comply with the license ( as
 
 This project features:
 
-+ a few maps
++ a default map
 + a map creator that lets you make your own maps
 + a score system ( to collect coins and display a win message)
 + player movement via both arrow and WASD keys
-+ two enemy AIs that finds shortest path to the player (you) via a Breadth-First-Search algorithm
++ Enemy 'AI' that finds shortest path to the player (you) via a Breadth-First-Search algorithm
 + a *great* way to have fun
 
 
 ## Screenshots
-TODO
+### Game Menu
+![Game Menu](AAScreenshots/ui.png)
+### Map Editor
+![Map Editor](AAScreenshots/mapeditor.png)
+### Gameplay
+![Gameplay](AAScreenshots/gameplay.png)
+### Win Screen
+![Win Screen](AAScreenshots/winscreen.png)
+
 
 ## How to Run
 
@@ -51,7 +59,7 @@ cmake --build .
 .\pacman_cpp.exe
 ```
 
-**Note:** If dependencies aren't installed it automatically downloaded and compiled. This takes a looong time.
+**Note:** If dependencies aren't installed it automatically downloads and compiles them. This takes a looong time.
 
 ## Disclosure of AI usage
 
