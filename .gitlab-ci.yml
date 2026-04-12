@@ -1,7 +1,0 @@
-# .gitlab-ci.yml
-
-stages:
-  - build
-
-include:
-  - local: .gitlab/.gitlab-ci.yml
