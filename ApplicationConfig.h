@@ -26,7 +26,7 @@ public:
 
     float TileWidth;
     float PointRadius;
-    int FailurePercentage { 15 };
+    int FailurePercentage { 5 };
     int FontSize;
     int FontSizeSmall;
     float ButtonWidth;

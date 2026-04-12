@@ -86,6 +86,22 @@ void EnemyPlayer::CheckSurroundingTiles(const int tile, const Direction directio
 
 void EnemyPlayer::BreadthFirstSearch() {
     const auto& config = ApplicationConfig::GetInstance();
+
+    if (scattering_) {
+        if (current_tile_ == start_tile_) {
+            scattering_ = false;
+            random_move_count_ = 0;
+        }
+        else if (random_move_count_ <= 0) {
+            random_move_count_ = 0;
+            scattering_ = false;
+        }else {
+            random_move_count_--;
+        }
+    }
+
+    const int target = scattering_ ? start_tile_ : player_->GetCurrentTile();
+
     std::queue<std::pair<int, Direction>>to_be_explored ;
     std::vector<bool>explored_set;
     explored_set.assign(config.TilesX * config.TilesY, false);
@@ -95,9 +111,10 @@ void EnemyPlayer::BreadthFirstSearch() {
     while (!to_be_explored.empty()) {
         auto [tile , direction] = to_be_explored.front();
 
-        if (tile == player_->GetCurrentTile()) {
-            if (GetRandomInt() < config.FailurePercentage && !possible_moves_.empty()) {
-                current_direction_ = possible_moves_.at(GetRandomValue(0, static_cast<int>(possible_moves_.size()) -1));
+        if (tile == target) {
+            if (GetRandomInt() < config.FailurePercentage && !possible_moves_.empty() && !scattering_) {
+                scattering_ = true;
+                random_move_count_ = GetRandomInt(1, 4);
                 return;
             }
 

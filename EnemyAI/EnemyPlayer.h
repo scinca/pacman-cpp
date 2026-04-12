@@ -14,17 +14,19 @@ class EnemyPlayer : public PlayerBase {
     public:
     explicit EnemyPlayer(Map *map, Time *time, HumanPlayer *player, int starting_tile, Color color);
     void Move() override;
-
-
     private:
     void CheckSurroundingTiles(int tile, Direction direction, std::queue<std::pair<int, Direction>> *to_be_explored, std::vector<bool> *explored_set) const;
-    int GetRandomInt(){ return std::uniform_int_distribution<int>(0, 99)(random_number_generator_); }
+    int GetRandomInt(){ return std::uniform_int_distribution(0, 99)(random_number_generator_); }
+    int GetRandomInt(const int min, const int max){ return std::uniform_int_distribution(min, max)(random_number_generator_);}
     void BreadthFirstSearch();
 
     HumanPlayer *player_;
     std::vector<int> surrounding_tiles_;
     int last_known_player_tile_{};
     std::mt19937 random_number_generator_;
+    int random_move_count_ = 0;
+    bool scattering_ = false;
+
 };
 
 
