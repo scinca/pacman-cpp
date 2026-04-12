@@ -3,6 +3,8 @@ I made this project in order to improve in c++ programming.
 This is first and foremost a learning project made by me.
 If you want to distribute this program, you need to comply with the license ( as seen in this repo).
 
+> I use Linux so I couldn't test against Window/Macos specific bugs. But according to github actions it compiles on these plattforms so it should be fine.
+
 ## Technologies uses
 
 + C++ 23
