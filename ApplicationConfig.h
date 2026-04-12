@@ -26,15 +26,15 @@ public:
 
     float TileWidth;
     float PointRadius;
-    int failure_percentage { 15 };
-    int font_size;
-    int font_size_small;
-    float button_width;
-    float button_height;
-    float button_spacing;
-    float button_y = 20;
-    float velocity_;
-    float margin_;
+    int FailurePercentage { 15 };
+    int FontSize;
+    int FontSizeSmall;
+    float ButtonWidth;
+    float ButtonHeight;
+    float ButtonSpacing;
+    float ButtonY = 20;
+    float Velocity;
+    float Margin;
 
 
 private:

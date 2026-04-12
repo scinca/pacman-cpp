@@ -16,17 +16,10 @@
 
 
 enum class Tile {
-    Coin,
-    Wall,
-    PlayerStart,
-    EnemyStart,
-    None
+    Coin, Wall, PlayerStart, EnemyStart, None
 };
 enum class SaveDialogState {
-    Hidden,
-    Form,
-    Success,
-    Error
+    Hidden, Form, Success, Error
 };
 
 

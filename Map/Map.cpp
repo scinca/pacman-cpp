@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <utility>
 #include <raylib.h>
+#include <optional>
 #include <regex>
 #include "ApplicationConfig.h"
 
@@ -94,17 +95,17 @@ bool Map::CanMove(const int tile) const {
 }
 
 
-std::pair<float, float> Map::GetTileCenter(const int tile) {
+std::optional<std::pair<float, float>> Map::GetTileCenter(const int tile) {
     const auto& config = ApplicationConfig::GetInstance();
 
-    if ( tile > config.TilesX * config.TilesY) {
-        return {-1.f,-1.f};
+    if ( tile<0 || tile > config.TilesX * config.TilesY) {
+        return std::nullopt;
     }
 
     const float center_x = static_cast<float>(config.GameMapRootX) + static_cast<float>(tile % config.TilesX) * config.TileWidth + config.TileWidth / 2;
     const float center_y = static_cast<float>(config.GameMapRootY) + static_cast<float>(tile / config.TilesX) * config.TileWidth + config.TileWidth / 2;
 
-    return {center_x, center_y};
+    return std::make_pair(center_x, center_y);
 }
 
 int Map::FindPlayerStartTile() const {
@@ -146,9 +147,10 @@ void Map::LoadMapFromDB(const int map_number) {
 }
 
 std::optional<MapValidationError> Map::ValidateMap(const std::string& map) {
+    const auto& config = ApplicationConfig::GetInstance();
     static const std::regex valid_chars(R"(^[X#0? ]+$)");
 
-    if (map.length() != 1400) {
+    if (map.length() != config.TilesX * config.TilesY) {
         return MapValidationError::InvalidLength;
     }
     if (std::ranges::count(map, '0')<=100) {

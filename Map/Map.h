@@ -33,13 +33,10 @@ public:
     std::string GetMap();
     [[nodiscard]] bool AllExplored() const;
     void Explore(int tile);
-    static std::pair<float, float> GetTileCenter(int tile) ;
+    static std::optional<std::pair<float, float>> GetTileCenter(int tile) ;
     [[nodiscard]] bool CanMove(int tile) const;
     [[nodiscard]] int FindPlayerStartTile() const;
     [[nodiscard]] std::vector<int> FindEnemyStartTiles() const;
-
-
-
     static std::optional<MapValidationError> ValidateMap(const std::string& map);
     [[nodiscard]] int GetExploredTileCount() const {return score_;}
     [[nodiscard]] int GetFreeTileCount() const {return free_tile_count_;}

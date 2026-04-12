@@ -32,7 +32,7 @@ void GameMenu::Show() {
     DrawText("PAC-MAN GAME",
              config.GameMapWidth / 2 - 150,
              100,
-             config.font_size,
+             config.FontSize,
              BLACK);
 
 
@@ -74,11 +74,11 @@ void GameMenu::DrawMapInfo(const MapInfo& data, const int i) const {
 
     DrawRectangle(start_x - padding, y, total_width + button, row_height, background);
 
-    const int text_y = y + (row_height - config.font_size) / 2;
-    DrawText(std::to_string(i).c_str(),    start_x,                              text_y, config.font_size_small, BLACK);
-    DrawText(data.name.c_str(),                  start_x + id,                     text_y, config.font_size_small, BLACK);
-    DrawText(data.author.c_str(),                start_x + id + name,          text_y, config.font_size_small, BLACK);
-    DrawText(data.creation_date.c_str(),         start_x + id + name + author, text_y, config.font_size_small, BLACK);
+    const int text_y = y + (row_height - config.FontSize) / 2;
+    DrawText(std::to_string(i).c_str(),    start_x,                              text_y, config.FontSizeSmall, BLACK);
+    DrawText(data.name.c_str(),                  start_x + id,                     text_y, config.FontSizeSmall, BLACK);
+    DrawText(data.author.c_str(),                start_x + id + name,          text_y, config.FontSizeSmall, BLACK);
+    DrawText(data.creation_date.c_str(),         start_x + id + name + author, text_y, config.FontSizeSmall, BLACK);
 
     if (GuiButton({static_cast<float>(start_x + total_width),
         static_cast<float>(y), button, row_height}, "#131#Play")) {

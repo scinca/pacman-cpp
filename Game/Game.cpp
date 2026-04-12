@@ -142,17 +142,17 @@ void Game::DrawFrame() {
 
 
     const Rectangle test_game_button = {
-        20 + 9 * (config.button_width + config.button_spacing),
-      config.button_y,
-      config.button_width,
-      config.button_height
+        20 + 9 * (config.ButtonWidth + config.ButtonSpacing),
+      config.ButtonY,
+      config.ButtonWidth,
+      config.ButtonHeight
 
     };
     const Rectangle back_to_main_menu = {
-        20 + 10 * (config.button_width + config.button_spacing),
-        config.button_y,
-        config.button_width,
-        config.button_height
+        20 + 10 * (config.ButtonWidth + config.ButtonSpacing),
+        config.ButtonY,
+        config.ButtonWidth,
+        config.ButtonHeight
 
     };
     if (init_from_creator_) {
@@ -179,7 +179,7 @@ void Game::DrawFrame() {
 
             if (silent_pause_) {
                 DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
-                DrawText("The game hasn't started, press any of the Direction Keys to continue",config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
+                DrawText("The game hasn't started, press any of the Direction Keys to continue",config.WindowRoot + 5, config.WindowRoot+20, config.FontSize, SKYBLUE);
                 if (IsKeyPressed(KEY_W)||IsKeyPressed(KEY_A)|| IsKeyPressed(KEY_S)|| IsKeyPressed(KEY_D) || IsKeyPressed(KEY_UP)|| IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_RIGHT)) {
                     silent_pause_ = false;
                     Resume();
@@ -191,7 +191,7 @@ void Game::DrawFrame() {
                 }
             }else {
                 DrawFPS(config.WindowRoot + 5, config.WindowRoot+5);
-                DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),config.WindowRoot + 5, config.WindowRoot+20, config.font_size, SKYBLUE);
+                DrawText(std::format("Your current score: {} / {}", game_map.GetExploredTileCount(), game_map.GetFreeTileCount()).c_str(),config.WindowRoot + 5, config.WindowRoot+20, config.FontSize, SKYBLUE);
             }
                 game_map.Draw(false);
                 player->Draw();
@@ -244,8 +244,8 @@ void Game::DrawFrame() {
 void Game::DrawWinScreen() {
     const auto& config = ApplicationConfig::GetInstance();
     ClearBackground(RAYWHITE);
-    DrawText("You won!", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, BLACK);
-    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 350, config.font_size, SKYBLUE);
+    DrawText("You won!", config.WindowRoot + 300, config.WindowRoot + 300, config.FontSize, BLACK);
+    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 350, config.FontSize, SKYBLUE);
 
     if (IsKeyDown(KEY_R)) {
         Initialize(last_played_map_number_);
@@ -266,8 +266,8 @@ void Game::DrawWinScreen() {
 void Game::DrawLoseScreen() {
     const auto& config = ApplicationConfig::GetInstance();
     ClearBackground(RAYWHITE);
-    DrawText(std::format("You lost. Your Score was {}/{}", game_map.GetExploredTileCount(),game_map.GetFreeTileCount()).c_str(), 100, 100, config.font_size, BLACK);
-    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 300, config.font_size, SKYBLUE);
+    DrawText(std::format("You lost. Your Score was {}/{}", game_map.GetExploredTileCount(),game_map.GetFreeTileCount()).c_str(), 100, 100, config.FontSize, BLACK);
+    DrawText("Press r to restart", config.WindowRoot + 300, config.WindowRoot + 300, config.FontSize, SKYBLUE);
 
 
     if (IsKeyDown(KEY_R)) {

@@ -4,12 +4,20 @@
 
 #include "HumanPlayer.h"
 #include <raylib.h>
+#include <stdexcept>
+#include <utility>
+#include <optional>
 #include "Time/DeltaTime.h"
 #include "Map/Map.h"
 
 HumanPlayer::HumanPlayer(Map *map, Time *time, const int starting_tile, const Color color)
     :PlayerBase(map, time, starting_tile, color){
-    std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
+    const auto temp_positions = Map::GetTileCenter(starting_tile);
+    if (temp_positions.has_value()) {
+        std::tie(position_x_, position_y_) = temp_positions.value();
+    }else {
+        throw std::runtime_error("starting position invalid ( This shouldn't have happened since Map should have been validated");
+    }
     start_tile_ = starting_tile;
     GetTile();
     color_ = color;

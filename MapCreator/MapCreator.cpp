@@ -42,10 +42,10 @@ void MapCreator::DrawToolBox() {
     const auto& config = ApplicationConfig::GetInstance();
     auto rectangle = [&](const float i) -> Rectangle {
         return Rectangle{
-            20 + i * (config.button_width + config.button_spacing),
-            config.button_y,
-            config.button_width,
-            config.button_height
+            20 + i * (config.ButtonWidth + config.ButtonSpacing),
+            config.ButtonY,
+            config.ButtonWidth,
+            config.ButtonHeight
         };
     };
 
@@ -173,13 +173,13 @@ void MapCreator::ShowSaveMapDialog() {
     switch (save_dialog_state_) {
         case SaveDialogState::Form: {
             GuiLabel({dialog.x, dialog.y + 10, dialog.width, 30}, "Map Name:");
-            if (GuiTextBox({dialog.x, dialog.y + 40, dialog.width, 30},map_name_buffer_,config.font_size,edit_name_)) {
+            if (GuiTextBox({dialog.x, dialog.y + 40, dialog.width, 30},map_name_buffer_,config.FontSize,edit_name_)) {
                 edit_name_ = true;
                 edit_author_ = false;
             }
 
             GuiLabel({dialog.x, dialog.y + 80, dialog.width, 30}, "Map Author:");
-            if (GuiTextBox({dialog.x, dialog.y + 110, dialog.width, 30}, map_author_buffer_,config.font_size,edit_author_)) {
+            if (GuiTextBox({dialog.x, dialog.y + 110, dialog.width, 30}, map_author_buffer_,config.FontSize,edit_author_)) {
                 edit_author_ = true;
                 edit_name_ = false;
             }
@@ -205,7 +205,7 @@ void MapCreator::ShowSaveMapDialog() {
         }
 
         case SaveDialogState::Success: {
-            DrawText("The map was saved successfully", static_cast<int>(dialog.x), static_cast<int>(dialog.y) + 20, config.font_size_small, RED);
+            DrawText("The map was saved successfully", static_cast<int>(dialog.x), static_cast<int>(dialog.y) + 20, config.FontSizeSmall, RED);
             if (GuiButton({dialog.x, dialog.y + 160, dialog.width/2 -5, 30}, "#131#Play")) {
                 is_active_ = false;
                 game_->Initialize(saved_map_id_);
@@ -213,15 +213,14 @@ void MapCreator::ShowSaveMapDialog() {
             if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "#113#Cancel")) {
                 save_dialog_state_ = SaveDialogState::Hidden;
             }
-
-        }
             break;
-
+        }
         case SaveDialogState::Error: {
             const auto res = MapValidationErrorPopup(save_map_error_.value());
             if (res) {
                 save_dialog_state_ = SaveDialogState::Hidden;
             }
+            break;
         }
         case SaveDialogState::Hidden:
             break;
@@ -236,7 +235,7 @@ void MapCreator::ShowClearMapConfirmationDialog() {
 
     const Rectangle dialog = DrawDialogBackground();
 
-    DrawText("Do you really want to clear the map?", static_cast<int>(dialog.x), static_cast<int>(dialog.y) + 20, config.font_size_small, RED);
+    DrawText("Do you really want to clear the map?", static_cast<int>(dialog.x), static_cast<int>(dialog.y) + 20, config.FontSizeSmall, RED);
     if (GuiButton({dialog.x, dialog.y + 160, dialog.width/2 -5, 30}, "#112#Yes")) {
         temporary_map_.assign(1400, ' ');
         map_class_.LoadFromString(temporary_map_);
@@ -277,7 +276,7 @@ bool MapCreator::MapValidationErrorPopup(const MapValidationError error) {
             error_message = "Some database error";
             break;
     }
-    DrawText(std::format("Error: {}", error_message).c_str(), static_cast<int>(dialog.x), static_cast<int>(dialog.y) + 20, config.font_size_small, RED);
+    DrawText(std::format("Error: {}", error_message).c_str(), static_cast<int>(dialog.x), static_cast<int>(dialog.y) + 20, config.FontSizeSmall, RED);
     if (GuiButton({dialog.x + dialog.width / 2 + 5, dialog.y + 160, dialog.width / 2 - 5, 30}, "#113#Cancel")) {
         test_map_error_ = std::nullopt;
         return true;

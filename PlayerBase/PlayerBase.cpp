@@ -8,6 +8,9 @@
 #include <cmath>
 #include <tuple>
 #include <raylib.h>
+#include <utility>
+#include <stdexcept>
+#include <optional>
 #include "ApplicationConfig.h"
 #include "Map/Map.h"
 
@@ -69,7 +72,12 @@ void PlayerBase::CheckSurroundingTiles() {
 
 
 void PlayerBase::CenterPosition() {
-    auto [center_x, center_y] = Map::GetTileCenter(current_tile_);
+    const auto temp_positions = Map::GetTileCenter(current_tile_);
+    if (!temp_positions.has_value()) {
+        throw std::runtime_error("Current tile invalid (This shouldn't have happened since Map should have been validated)");
+    }
+    auto [center_x, center_y] = temp_positions.value();
+
     switch (current_direction_) {
         //the fallthrough is intentional so that my IDE doesn't give a warning for consecutive identical branches
         case Direction::UP:
@@ -101,9 +109,13 @@ bool PlayerBase::CheckMoveValidity(const Direction move) {
 
 bool PlayerBase::IsAtTileCenter() const {
     const auto& config = ApplicationConfig::GetInstance();
-    auto [tile_center_x, tile_center_y] = Map::GetTileCenter(current_tile_);
-    return std::abs(position_x_ - tile_center_x) < config.margin_ &&
-           std::abs(position_y_ - tile_center_y) < config.margin_;
+    const auto temp_centers = Map::GetTileCenter(current_tile_);
+    if (!temp_centers.has_value()) {
+     return false;
+    }
+    auto [tile_center_x, tile_center_y] = temp_centers.value();
+    return std::abs(position_x_ - tile_center_x) < config.Margin &&
+           std::abs(position_y_ - tile_center_y) < config.Margin;
 }
 
 
@@ -112,16 +124,16 @@ void PlayerBase::UpdatePosition() {
 
     switch (current_direction_) {
         case Direction::UP:
-            position_y_ -= config.velocity_ * time_->GetDeltaTime();
+            position_y_ -= config.Velocity * time_->GetDeltaTime();
             break;
         case Direction::DOWN:
-            position_y_ += config.velocity_ * time_->GetDeltaTime();
+            position_y_ += config.Velocity * time_->GetDeltaTime();
             break;
         case Direction::LEFT:
-            position_x_ -= config.velocity_ * time_->GetDeltaTime();
+            position_x_ -= config.Velocity * time_->GetDeltaTime();
             break;
         case Direction::RIGHT:
-            position_x_ += config.velocity_ * time_->GetDeltaTime();
+            position_x_ += config.Velocity * time_->GetDeltaTime();
             break;
         case Direction::NONE:
             break;
@@ -131,5 +143,11 @@ void PlayerBase::UpdatePosition() {
 
 void PlayerBase::ResetPosition() {
     current_tile_ = start_tile_;
-    std::tie(position_x_, position_y_) = Map::GetTileCenter(current_tile_);
+
+    const auto temp_positions = Map::GetTileCenter(current_tile_);
+    if (temp_positions.has_value()) {
+        std::tie(position_x_, position_y_) = temp_positions.value();
+    }else {
+        throw std::runtime_error("starting position invalid ( This shouldn't have happened since Map should have been validated");
+    }
 }

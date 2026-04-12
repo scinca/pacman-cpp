@@ -5,6 +5,8 @@
 #include "EnemyPlayer.h"
 #include <iostream>
 #include <algorithm>
+#include <optional>
+#include <stdexcept>
 #include "raylib.h"
 #include "ApplicationConfig.h"
 #include "Time/DeltaTime.h"
@@ -14,7 +16,13 @@
 EnemyPlayer::EnemyPlayer(Map *map, Time *time, HumanPlayer *player, const int starting_tile, const Color color) : PlayerBase(map, time, starting_tile, color), random_number_generator_(std::random_device{}()){
     player_ = player;
     color_ = color;
-    std::tie(position_x_, position_y_) = Map::GetTileCenter(starting_tile);
+    const auto temp_positions = Map::GetTileCenter(starting_tile);
+    if (temp_positions.has_value()) {
+        std::tie(position_x_, position_y_) = temp_positions.value();
+    }else {
+        throw std::runtime_error("starting position invalid ( This shouldn't have happened since Map should have been validated");
+    }
+
     start_tile_ = starting_tile;
     GetTile();
     last_known_player_tile_ = player_->GetCurrentTile();
@@ -88,7 +96,7 @@ void EnemyPlayer::BreadthFirstSearch() {
         auto [tile , direction] = to_be_explored.front();
 
         if (tile == player_->GetCurrentTile()) {
-            if (GetRandomInt() < config.failure_percentage && !possible_moves_.empty()) {
+            if (GetRandomInt() < config.FailurePercentage && !possible_moves_.empty()) {
                 current_direction_ = possible_moves_.at(GetRandomValue(0, static_cast<int>(possible_moves_.size()) -1));
                 return;
             }
