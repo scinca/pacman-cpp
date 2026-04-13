@@ -175,6 +175,7 @@ void Game::DrawFrame() {
                 }else {
                     DrawCircleLines(config.WindowRoot+ 100+  i* 30, config.WindowRoot+80,config.PointRadius, RED);
                 }
+            }
 
 
             if (silent_pause_) {
@@ -198,7 +199,7 @@ void Game::DrawFrame() {
                 for (const auto& enemy : enemy_players) {
                     enemy->Draw();
                 }
-            }
+
             break;
         }
 
