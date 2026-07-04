@@ -55,7 +55,6 @@ class Statement {
 
     private:
     sqlite3_stmt* sql_statement_{};
-    sqlite3* db_{};
 };
 
 

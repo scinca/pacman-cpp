@@ -27,13 +27,13 @@ This project features:
 
 ## Screenshots
 ### Game Menu
-![Game Menu](AAScreenshots/ui.png)
+![Game Menu](Assets/ui.png)
 ### Map Editor
-![Map Editor](AAScreenshots/mapeditor.png)
+![Map Editor](Assets/mapeditor.png)
 ### Gameplay
-![Gameplay](AAScreenshots/gameplay.png)
+![Gameplay](Assets/gameplay.png)
 ### Win Screen
-![Win Screen](AAScreenshots/winscreen.png)
+![Win Screen](Assets/winscreen.png)
 
 
 ## How to Run

@@ -104,7 +104,7 @@ std::expected<std::int64_t, MapValidationError> Database::AddMap(const std::stri
 std::expected<void, DatabaseError> Database::InitDB() const {
     const auto sql = R"sql(
     CREATE TABLE IF NOT EXISTS maps (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     map_data TEXT NOT NULL UNIQUE,
     map_name TEXT NOT NULL DEFAULT 'My Map',
     map_author TEXT NOT NULL DEFAULT 'You',
@@ -133,7 +133,7 @@ std::expected<void, DatabaseError> Database::InitDB() const {
 Statement::Statement(const std::string_view SQL, sqlite3 *database) {
     sqlite3_stmt* raw_statement = nullptr;
     if (sqlite3_prepare_v2(database, SQL.data(), -1, &raw_statement, nullptr) != SQLITE_OK) {
-        throw std::runtime_error(std::format("Failed to pepare statemement: {}", sqlite3_errmsg(database)));
+        throw std::runtime_error(std::format("Failed to prepare statemement: {}", sqlite3_errmsg(database)));
     }
     sql_statement_ = raw_statement;
 }
